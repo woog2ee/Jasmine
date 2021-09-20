@@ -1,8 +1,8 @@
 import React from "react";
-import logo from './logo.png';
-import home from './home.svg';
-import mypage from './mypage.svg';
-import contact from './contact.svg';
+import logo from './img/logo.png';
+import home from './img/home.svg';
+import mypage from './img/mypage.svg';
+import contact from './img/contact.svg';
 
 import './Navi.css';
 
