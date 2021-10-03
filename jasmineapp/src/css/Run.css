@@ -1,0 +1,84 @@
+.run {
+    width: 100%;
+    text-align: center;
+    font-size: 1.3rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.simpleNavi{
+    height: 100%;
+}
+.simpleNavi img{
+    width: 156px;
+    height: 80px;
+    margin: 1% 0 0 0;
+}
+
+.question {
+    padding: auto;
+    height: 80px;
+    border: none;
+    background-color: #C54AC7;
+}
+
+.question h2{
+    height:inherit;
+    width:inherit;
+    margin:0;
+    padding:0;
+    line-height: 80px;
+    color: papayawhip;
+}
+
+.face{
+    width: 92%;
+    height: 550px;
+    padding: 1% 2%;
+    margin: 1% 2%;
+    border: rebeccapurple 4px solid;
+    border-radius: 5px;
+}
+
+.facedetector {
+    width: 640px;
+}
+
+.facedetector test{
+    font-size: 10px;
+}
+.facedetector video{
+    float: left;
+    margin: auto;
+}
+
+.RTresult {
+    float: right;
+    margin: 1% 3% 1% 1%;
+    width: 40%;
+    height: 450px;
+    background-color: lightgrey;
+}
+
+#stopButton {
+    float: none;
+    width: 80%;
+    margin: 0;
+    padding: 0;
+    height: 60px;
+    /* background-color: lightgrey; */
+    position: fixed;
+    bottom: 3%;
+}
+
+#stopButton button{
+    cursor: pointer;
+    position: inherit;
+    margin: auto;
+    background-color: #C54AC7;
+    color: papayawhip;
+    width: 180px;
+    height: 60px;
+    border: none;
+    font-size: 1.3rem;
+    border-radius: 5px;
+}

@@ -4,7 +4,7 @@ import home from './img/home.svg';
 import mypage from './img/mypage.svg';
 import contact from './img/contact.svg';
 
-import './Navi.css';
+import './css/Navi.css';
 
 function Navi(){
     return(
@@ -14,9 +14,9 @@ function Navi(){
             </div>
             <div className="menu">
                 <ul>
-                    <li><button><img src={home}/></button></li>
-                    <li><button><img src={mypage}/></button></li>
-                    <li><button><img src={contact}/></button></li>
+                    <li><button><img src={home} alt='home'/></button></li>
+                    <li><button><img src={mypage} alt='mypage'/></button></li>
+                    <li><button><img src={contact} alt='contact'/></button></li>
                 </ul>
             </div>
         </div>
