@@ -1,0 +1,154 @@
+.body {
+    background: #F8DEFF;
+    padding-bottom: 5rem;
+}
+
+.title {
+    text-align: left;
+    padding: 10px 0 0 5%;
+    margin-top: 0;
+    line-height: 80px;
+    height: 80px;
+    font-size: 40px;
+    font-family: 'CookieRunOTF-Bold';
+}
+
+.content{
+    background: white;
+    margin: 0 5%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.mini-title {
+    border: #31859C 1px solid;
+    border-radius: 10px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    font-weight: 600;
+    font-family: 'CookieRunOTF-Bold';
+    align-items: center;
+    margin: 20px auto 50px auto;
+    padding: 0 10px;
+}
+
+.wordcloud {
+    display: flex;
+    justify-content: space-between;
+    /* background-color: blue; */
+}
+
+.wordcloud img{
+    margin: auto;
+}
+
+.rank{
+    /* background-color: blanchedalmond; */
+    width: 50%;
+}
+.rank ul{
+    padding: 0 0 0 10px;
+}
+.rank li{
+    display: flex;
+    flex-direction: row;
+    font-size: 35px;
+    font-weight: 250;
+    font-family: 'HSYuji-Regular';
+    margin: 25px 0;
+    overflow: auto;
+}
+#box1 {
+    /* background-color: hotpink; */
+}
+
+#box2 {
+    /* background-color: gold; */
+}
+
+.secondrow {
+    display: flex;
+    width: 100%;
+    height: 450px;
+    flex-direction: row;
+    justify-content:left;
+    /* background-color: cornsilk; */
+    margin: 70px 0 0 0;
+}
+
+.graph{
+    height: 100%;
+    width: 41%;
+    margin: 0 auto;
+    border: lightgray 3px solid ;
+    border-radius: 10px;
+    background-color: cornsilk;
+}
+
+.summary{
+    height: 100%;
+    width: 41%;
+    margin: 0 auto;
+    border: lightgray 3px solid ;
+    border-radius: 10px;
+    background-color: cornsilk;
+}
+
+.thirdrow {
+    display: flex;
+    width: 100%;
+    height: 450px;
+    flex-direction: column;
+    justify-content:left;
+    /* background-color: cornsilk; */
+    margin: 70px 0 0 0;
+    padding: 0 4%;
+}
+
+#feedback-title{
+    margin-left: 1%;
+}
+
+.feedback-content {
+    border: lightgray 3px solid ;
+    border-radius: 10px;
+    width: 100%;
+    overflow: auto;
+    font-size: 2rem;
+    font-family: 'HSYuji-Regular';
+    text-align: left;
+    padding: 20px;
+    line-height: 180%;
+    color: #999999;
+}
+
+.scoreboard{
+    width: 100%;
+    padding: 3rem 4% 10rem 4%;
+}
+
+.totalscore {
+    background-color: #D9AFE3;
+    width:100%;
+    height: 100px;
+    line-height: 100px;
+    font-size: 40px;
+    font-family: 'CookieRunOTF-Bold';
+    border-radius: 20px;
+}
+
+.subscore{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    font-size: 30px;
+    font-family: 'CookieRunOTF-Bold';
+}
