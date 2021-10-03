@@ -4,6 +4,7 @@ import './css/App.css';
 import Run from './Run';
 import AudioRecord from './AudioRecord';
 import RecordingList from './RecordingList';
+import Report from './Report';
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
       {/* <Navi/>
       <Home/> */}
       {/* <Run/> */}
-      <RecordingList/>
+      {/* <RecordingList/> */}
+      <Report date='2021.09.09' time='00:00:00'/>
+
 
     </div>
   );

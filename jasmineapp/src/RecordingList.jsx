@@ -34,7 +34,7 @@ function RecordingList(){
             <Navi/>
             <div className="question"></div>
             <div className='list_board'>
-                <h1>나의 스피치 기록</h1>
+                <h1 className='title'>나의 스피치 기록</h1>
                 <div className='list'>
                     {record_list.map(([date, time], idx) => (
                         <Record type='submit'>
