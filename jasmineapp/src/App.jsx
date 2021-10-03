@@ -8,10 +8,10 @@ import RecordingList from './RecordingList';
 function App() {
   return (
     <div className="App">
-      {/* <Navi/>
-      <Home/> */}
-      {/* <Run/> */}
-      <RecordingList/>
+      {/*<Navi/>
+      <Home/>*/}
+      {<Run/>}
+      {/*<RecordingList/>*/}
 
     </div>
   );
