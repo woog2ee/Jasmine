@@ -46,7 +46,8 @@ const FaceDetector = () => {
         while (true) {
             // let ctx = camera.getContext('2d');
             const img = await webcam.capture();
-            const predictions = await model.estimateFaces(img)
+            const returnTensors = false;
+            const predictions = await model.estimateFaces(img, returnTensors);
             let check = false;
 
             for (let i = 0; i < predictions.length; i++) {
@@ -64,6 +65,16 @@ const FaceDetector = () => {
             }
             if(figures.current && !check){
                 figures.current.innerText = '얼굴을 보여주세요';
+            }
+            if (check) {
+                for (let i = 0; i < predictions.length; i++) {
+                    if (figures.current) {
+                        const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
+                        if (predictions[i].landmarks[2][0] < face_center - 7 || predictions[i].landmarks[2][0] > face_center + 7) {
+                            figures.current.innerText = '정면을 바라봐주세요' + String(predictions[i].landmarks[2][0]).substring(0,5) + "/" + String(predictions[i].topLeft[0]).substring(0,5) + "/" + String(predictions[i].bottomRight[0]).substring(0,5) + "/" + String(face_center);
+                        }
+                    }
+                }
             }
             img.dispose();
             await tf.nextFrame();
