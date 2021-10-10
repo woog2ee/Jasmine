@@ -5,8 +5,9 @@ import RTresult from "./RTresult";
 import Dictaphone from './Dictaphone';
 import './css/Run.css';
 import AudioRecorder from "./AudioRecorder";
+import AudioRecord from "./AudioRecord";
 
-function Run(){
+function Run() {
     const question = '랜덤 질문';
     
     return(
@@ -20,7 +21,7 @@ function Run(){
             <div className="face">
                 <FaceDetector />
                 <RTresult/>
-                {/* <AudioRecorder/> */}
+                <AudioRecorder/>
                 <Dictaphone />
                 <div id="stopButton">
                     <button >끝내기</button>
