@@ -40,7 +40,7 @@
 }
 
 .facedetector {
-    width: 640px;
+    /* width: 640px; */
 }
 
 .facedetector test{
@@ -48,7 +48,10 @@
 }
 .facedetector video{
     float: left;
-    margin: auto;
+    background-color:#999999;
+    /* margin: auto; */
+    width: 640px;
+    height: 480px;
 }
 
 .RTresult {
@@ -81,4 +84,16 @@
     border: none;
     font-size: 1.3rem;
     border-radius: 5px;
+}
+
+.transcript {
+    border: lightgray 3px solid ;
+    width: 20px;
+    height: 20px;
+    overflow: auto;
+    font-size: 5px;
+    font-family: 'HSYuji-Regular';
+    text-align: left;
+    color: #999999;
+
 }
