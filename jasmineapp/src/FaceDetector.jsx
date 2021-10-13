@@ -39,15 +39,13 @@ const FaceDetector = () => {
     const startVideo = async () => {
         setClick(true);
 
-        // const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-        // if (camera && camera.current && !camera.current.srcObject) {
-        //     camera.current.srcObject = stream;
-        // }
-        //await gaze.setUpCamera(webcamElement);
+        const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
+        if (camera && camera.current && !camera.current.srcObject) {
+            camera.current.srcObject = stream;
+        }
     }
 
     const run = async () => {
-
         model = await blazeface.load();
         await gaze.loadModel();
 
@@ -56,14 +54,8 @@ const FaceDetector = () => {
             resizeHeight: 227,
         });
     
-        //const videoElement = camera;
-        const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-        if (camera && camera.current && !camera.current.srcObject) {
-            camera.current.srcObject = stream;
-        }
         await gaze.setUpCamera(camera.current);
         
-
         while (true) {
             // let ctx = camera.getContext('2d');
             const img = await webcam.capture();
@@ -87,8 +79,8 @@ const FaceDetector = () => {
                 for (let i = 0; i < predictions.length; i++) {
                     if (figures.current) {
                         const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
-                        if (predictions[i].landmarks[2][0] < face_center - 7 || predictions[i].landmarks[2][0] > face_center + 7) {
-                            figures.current.innerText = '정면을 바라봐주세요';
+                        if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
+                            figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                         }
                     }
                 }
@@ -98,8 +90,15 @@ const FaceDetector = () => {
         }
     };
 
+    const mounted = useRef(false);
+
     React.useEffect(() => {
-        run();
+        if (!mounted.current) {
+            mounted.current = true;
+        } else {
+            console.log("ready");
+            run();
+        }
     })
     if (click==false) {
         return(
@@ -112,7 +111,7 @@ const FaceDetector = () => {
         return (
             <div className='facedetector'>
                 <div className='test' ref={figures}></div>
-                <video autoPlay muted={true} ref={camera} width="640" height="480" poster={testImg}/>
+                <video autoPlay muted={true} ref={camera} width="640px" height="480px" poster={testImg}/>
             </div>
         );
     }
