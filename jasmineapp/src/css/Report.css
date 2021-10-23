@@ -1,26 +1,29 @@
 .body {
-    background: #F8DEFF;
+    background: url(../img/forest.jpeg) no-repeat; 
+    padding-top: 70px;
     padding-bottom: 5rem;
+    height: 100vh;
+    overflow: hidden;
 }
-
-.title {
-    text-align: left;
-    padding: 10px 0 0 5%;
-    margin-top: 0;
-    line-height: 80px;
-    height: 80px;
-    font-size: 40px;
-    font-family: 'CookieRunOTF-Bold';
+.question{
+    display: inline-flex;
+    flex-flow: row;
+    padding-left: 5%;
 }
 
 .content{
     background: white;
-    margin: 0 5%;
+    margin: 0 6%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    height: 100%;
+    overflow: scroll;
+    border-radius: 30px;
 }
-
+.question{
+    width: 100%;
+}
 .box {
     display: flex;
     flex-direction: column;

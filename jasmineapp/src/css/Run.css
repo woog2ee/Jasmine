@@ -1,13 +1,15 @@
 .run {
     width: 100%;
+    height: 100vh;
     text-align: center;
     font-size: 1.3rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background: url(../img/forest2.jpeg) no-repeat; 
 }
 
-.simpleNavi{
+/* .simpleNavi{
     height: 100%;
-}
+} */
 .simpleNavi img{
     width: 156px;
     height: 80px;
@@ -19,6 +21,7 @@
     height: 80px;
     border: none;
     background-color: #C54AC7;
+    
 }
 
 .question h2{
@@ -28,6 +31,17 @@
     padding:0;
     line-height: 80px;
     color: papayawhip;
+    font-family: 'CookieRunOTF-Bold';
+}
+
+.question h1{
+    height:inherit;
+    width:30%;
+    margin:0;
+    padding:0;
+    line-height: 80px;
+    color: papayawhip;
+    font-family: 'CookieRunOTF-Bold';
 }
 
 .face{
@@ -39,19 +53,14 @@
     border-radius: 5px;
 }
 
-.facedetector {
-    /* width: 640px; */
-}
-
 .facedetector test{
     font-size: 10px;
 }
 .facedetector video{
-    float: left;
-    background-color:#999999;
+    float: center;
     /* margin: auto; */
-    width: 640px;
-    height: 480px;
+    width: 640px !important;
+    height: 480px !important;
 }
 
 .RTresult {

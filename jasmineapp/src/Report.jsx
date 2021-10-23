@@ -7,16 +7,18 @@ function Report(props){
 
     return (
         <div className='report'>
-            <Navi/>
-            <div className="question">
-                <h2>
-                    <span className='date'>{props.date}</span>
-                    <span className='time'>{props.time}</span>
-                </h2>
-            </div>
+            {/* <Navi/> */}
+            
             <div className='body'>
-                <h1 className='title'>Report</h1>
+                
                 <div className='content'>
+                    <div className="question">
+                        <h1 className='title'>Report</h1>   
+                        <h2>
+                            <span className='date'>{props.date}</span>
+                            <span className='time'>{props.time}</span>
+                        </h2>
+                    </div>
                     <div className='box' id='box1'>
                         <span className='mini-title'>
                             키워드

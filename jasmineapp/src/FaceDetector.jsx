@@ -81,6 +81,10 @@ const FaceDetector = () => {
                         const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
                         if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
                             figures.current.innerText = '얼굴을 정면으로 향해주세요.';
+                            
+                        }
+                        else {
+                            figures.current.innerText = String(predictions[i].topLeft[0]).substr(0, 5) + "/" + String(predictions[i].landmarks[2][0]).substr(0, 5) + "/" + String(predictions[i].bottomRight[0]).substring(0, 5);
                         }
                     }
                 }
@@ -111,7 +115,8 @@ const FaceDetector = () => {
         return (
             <div className='facedetector'>
                 <div className='test' ref={figures}></div>
-                <video autoPlay muted={true} ref={camera} width="640px" height="480px" poster={testImg}/>
+                <video autoPlay muted={true} ref={camera} poster={testImg}/>
+                <video autoPlay muted={true} />
             </div>
         );
     }

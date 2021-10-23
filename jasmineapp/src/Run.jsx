@@ -4,6 +4,7 @@ import FaceDetector from "./FaceDetector";
 import RTresult from "./RTresult";
 import Dictaphone from './Dictaphone';
 import './css/Run.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import AudioRecorder from "./AudioRecorder";
 import AudioRecord from "./AudioRecord";
 
