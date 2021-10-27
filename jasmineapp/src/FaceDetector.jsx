@@ -4,7 +4,7 @@ import * as tf from '@tensorflow/tfjs';
 import testImg from './img/test.png';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
-import gaze from 'gaze-detection';
+import gaze from "gaze-detection";
 
 const CONSTRAINTS = { video: true };
 
@@ -84,8 +84,14 @@ const FaceDetector = () => {
                     if (figures.current) {
                         const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
                         if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
-                            //figures.current.innerText = '얼굴을 정면으로 향해주세요.';
-                            figures.current.innerText = '얼굴을 정면으로 향해주세요.' + String(predictions[i].topLeft[0]).substr(0, 5) + "/" + String(predictions[i].landmarks[2][0]).substr(0, 5) + "/" + String(predictions[i].bottomRight[0]).substring(0, 5);
+                            figures.current.innerText = '얼굴을 정면으로 향해주세요.';
+                            // figures.current.innerText = '얼굴을 정면으로 향해주세요.' + 
+                            // "\ntopLeft: " + String(predictions[i].topLeft[0]).substr(0, 5) + ", " + String(predictions[i].topLeft[1]).substr(0, 5) + 
+                            // "\nbottomRight: " + String(predictions[i].bottomRight[0]).substring(0, 5) + ", " + String(predictions[i].bottomRight[1]).substring(0, 5) + 
+                            // "\neyeLeft: " + String(predictions[i].landmarks[0][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[0][1]).substring(0, 5) + 
+                            // "\neyeRight: " + String(predictions[i].landmarks[1][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[1][1]).substring(0, 5) + 
+                            // "\nnose: " + String(predictions[i].landmarks[2][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[2][1]).substring(0, 5) + 
+                            // "\nmouth: " + String(predictions[i].landmarks[3][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[3][1]).substring(0, 5);
                         }
                     }
                 }

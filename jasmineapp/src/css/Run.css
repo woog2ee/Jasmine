@@ -50,6 +50,7 @@
     height: 700px;
 }
 .facedetector #hiddencam{
+    float: center;
     /* background-color:#999999; */
     /* margin: auto; */
     width: 500px;
