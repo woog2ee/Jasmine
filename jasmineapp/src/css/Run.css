@@ -39,19 +39,23 @@
     border-radius: 5px;
 }
 
-.facedetector {
-    /* width: 640px; */
-}
-
 .facedetector test{
     font-size: 10px;
 }
-.facedetector video{
-    float: left;
-    background-color:#999999;
+.facedetector #webcam{
+    float: center;
+    /* background-color:#999999; */
     /* margin: auto; */
-    width: 640px;
-    height: 480px;
+    width: 1200px;
+    height: 700px;
+}
+.facedetector #hiddencam{
+    float: center;
+    /* background-color:#999999; */
+    /* margin: auto; */
+    width: 500px;
+    height: 500px;
+    display: none;
 }
 
 .RTresult {

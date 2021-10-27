@@ -4,7 +4,7 @@ import * as tf from '@tensorflow/tfjs';
 import testImg from './img/test.png';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
-import gaze from 'gaze-detection';
+import gaze from "gaze-detection";
 
 const CONSTRAINTS = { video: true };
 
@@ -33,6 +33,7 @@ const FaceDetector = () => {
     let model;
     const [click,setClick] = useState(false);
     const camera = React.useRef();
+    const camera_temp = React.useRef();
     const figures = React.useRef();
     const webcamElement = camera.current;
 
@@ -42,6 +43,9 @@ const FaceDetector = () => {
         const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
         if (camera && camera.current && !camera.current.srcObject) {
             camera.current.srcObject = stream;
+        }
+        if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
+            camera_temp.current.srcObject = stream;
         }
     }
 
@@ -54,7 +58,7 @@ const FaceDetector = () => {
             resizeHeight: 227,
         });
     
-        await gaze.setUpCamera(camera.current);
+        await gaze.setUpCamera(camera_temp.current);
         
         while (true) {
             // let ctx = camera.getContext('2d');
@@ -81,6 +85,13 @@ const FaceDetector = () => {
                         const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
                         if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
                             figures.current.innerText = '얼굴을 정면으로 향해주세요.';
+                            // figures.current.innerText = '얼굴을 정면으로 향해주세요.' + 
+                            // "\ntopLeft: " + String(predictions[i].topLeft[0]).substr(0, 5) + ", " + String(predictions[i].topLeft[1]).substr(0, 5) + 
+                            // "\nbottomRight: " + String(predictions[i].bottomRight[0]).substring(0, 5) + ", " + String(predictions[i].bottomRight[1]).substring(0, 5) + 
+                            // "\neyeLeft: " + String(predictions[i].landmarks[0][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[0][1]).substring(0, 5) + 
+                            // "\neyeRight: " + String(predictions[i].landmarks[1][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[1][1]).substring(0, 5) + 
+                            // "\nnose: " + String(predictions[i].landmarks[2][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[2][1]).substring(0, 5) + 
+                            // "\nmouth: " + String(predictions[i].landmarks[3][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[3][1]).substring(0, 5);
                         }
                     }
                 }
@@ -111,7 +122,8 @@ const FaceDetector = () => {
         return (
             <div className='facedetector'>
                 <div className='test' ref={figures}></div>
-                <video autoPlay muted={true} ref={camera} width="640px" height="480px" poster={testImg}/>
+                <video id='webcam' autoPlay muted={true} ref={camera} poster={testImg}/>
+                <video id='hiddencam' autoPlay muted={true} ref={camera_temp} poster={testImg}/>
             </div>
         );
     }
