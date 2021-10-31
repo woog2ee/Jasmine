@@ -1,24 +1,39 @@
+.recordingList {
+    background: url(../img/download_forest1.jpg.jpeg) no-repeat; 
+    background-size: cover;
+    /* padding-bottom: 5rem; */
+    height: 100vh;
+    overflow: hidden;
+}
+
 .list_board{
     text-align: left;
-    margin: 10px 5%;
+    margin: 10px auto;
+    width: 60%;
+    height: 80vh;
+    background-color: azure;
+    border-radius: 10px;
+    overflow: scroll;
     /* border: aliceblue 6px solid; */
 }
 
-.title {
-    text-align: left;
-    padding: 10px 10%;
-}
 
 .date {
     display: inline-flex;
     font-size: 35px;
     font-family: 'Courier New', Courier, monospace;
-    margin: auto 0 auto 6%;
+    margin: auto 0;
+}
+#recording_date {
+    margin: auto 0 auto 4%;
 }
 
 .time {
     display: inline-flex;
     font-size: 35px;
     font-family: 'Courier New', Courier, monospace;
+    margin: auto 0;
+}
+#recording_time {
     margin: auto 0 auto 40%;
 }

@@ -19,7 +19,7 @@ const Dictaphone = () => {
             <button onClick={SpeechRecognition.startListening}>Start</button>
             <button onClick={SpeechRecognition.stopListening}>Stop</button>
             <button onClick={resetTranscript}>Reset</button>
-            <p className='transcript'>{transcript}</p>
+            {/* <p className='transcript'>{transcript}</p> */}
         </div>
     );
 };

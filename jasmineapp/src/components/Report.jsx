@@ -1,22 +1,25 @@
 import React, { useRef, useState } from "react";
-import Navi from "./Navi";
-import './css/Report.css'
-import wordCloud from './img/wordcloud.png';
+import logo from '../img/logo.png'
+import '../css/Report.css'
+import wordCloud from '../img/wordcloud.png';
 
 function Report(props){
 
     return (
         <div className='report'>
-            <Navi/>
-            <div className="question">
-                <h2>
-                    <span className='date'>{props.date}</span>
-                    <span className='time'>{props.time}</span>
-                </h2>
+            <div className="simpleNavi">
+                <img src={logo} alt='logo'/>
             </div>
             <div className='body'>
-                <h1 className='title'>Report</h1>
+                
                 <div className='content'>
+                    <div className="question" id="report_question">
+                        <h1 className='title'>Report</h1>   
+                        <h2>
+                            <span className='date' id="report_date">{props.date}</span>
+                            <span className='time' id="report_time">{props.time}</span>
+                        </h2>
+                    </div>
                     <div className='box' id='box1'>
                         <span className='mini-title'>
                             키워드
@@ -82,8 +85,12 @@ function Report(props){
                             <span id='contents'>내용 : 00점</span>
                         </div>
                     </div>
+                    <div className="stopButton" id="back">
+                        <button >뒤로 가기</button>
+                    </div>
                 </div>
             </div>
+            
         </div>
     )
 }
