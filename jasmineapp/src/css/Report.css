@@ -1,25 +1,45 @@
-.body {
-    background: #F8DEFF;
-    padding-bottom: 5rem;
+.report{
+    background: url(../img/download_forest1.jpg.jpeg) no-repeat; 
+    background-size: cover;
+    height: 100vh;
+    overflow: hidden;
 }
 
-.title {
-    text-align: left;
-    padding: 10px 0 0 5%;
-    margin-top: 0;
-    line-height: 80px;
-    height: 80px;
-    font-size: 40px;
-    font-family: 'CookieRunOTF-Bold';
+.body {
+    padding-top: 1%;
+    padding-bottom: 5rem;
+    height: 85vh;
+    overflow: hidden;
+}
+
+#report_question {
+    display: inline-flex;
+    flex-direction: row;
+    padding-left: 5%;
+    padding: 0;
+    margin: 0;
+    /* width: 100%; */
+    overflow: hidden;
+}
+#report_date{
+    padding-left: 300px;
+}
+#report_time{
+    padding-left: 120px;
 }
 
 .content{
     background: white;
-    margin: 0 5%;
+    margin: 0 auto;
+    width: 70%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    height: 100%;
+    overflow: scroll;
+    border-radius: 30px;
 }
+
 
 .box {
     display: flex;
@@ -151,4 +171,8 @@
     justify-content: space-evenly;
     font-size: 30px;
     font-family: 'CookieRunOTF-Bold';
+}
+
+#back {
+    width: 70%;
 }

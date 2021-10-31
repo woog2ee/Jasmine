@@ -1,43 +1,69 @@
 .run {
     width: 100%;
+    height: 100vh;
     text-align: center;
     font-size: 1.3rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background: url(../img/download_forest1.jpg.jpeg) no-repeat ;
+    background-size: cover;
+    overflow: hidden;
 }
 
-.simpleNavi{
+/* .simpleNavi{
     height: 100%;
-}
+} */
 .simpleNavi img{
     width: 156px;
     height: 80px;
     margin: 1% 0 0 0;
 }
 
+.face{
+    width: 60%;
+    /* height: 80vh; */
+    height: 950px;
+    /* padding: 1% 0; */
+    padding: 0;
+    margin: 25px auto 0 auto;
+    border-radius: 10px;
+    background-color: azure;
+}
+
 .question {
-    padding: auto;
+    margin: 0;
+    padding: 0;
+    width: 100%;
     height: 80px;
     border: none;
     background-color: #C54AC7;
+    border-radius: 10px;
+}
+
+#run_question{
+    width: 100%;
+    padding: 0;
 }
 
 .question h2{
     height:inherit;
-    width:inherit;
-    margin:0;
-    padding:0;
+    width: fit-content;
+    margin:auto;
     line-height: 80px;
     color: papayawhip;
+    font-family: 'CookieRunOTF-Bold';
 }
 
-.face{
-    width: 92%;
-    height: 550px;
-    padding: 1% 2%;
-    margin: 1% 2%;
-    border: rebeccapurple 4px solid;
-    border-radius: 5px;
+.question h1{
+    height:inherit;
+    width:fit-content;
+    margin:0;
+    padding-left: 10%;
+    line-height: 80px;
+    color: papayawhip;
+    font-family: 'CookieRunOTF-Bold';
 }
+
+
 
 .facedetector test{
     font-size: 10px;
@@ -46,8 +72,9 @@
     float: center;
     /* background-color:#999999; */
     /* margin: auto; */
+    margin-top: 1px;
     width: 1200px;
-    height: 700px;
+    height: 800px;
 }
 .facedetector #hiddencam{
     float: center;
@@ -66,21 +93,21 @@
     background-color: lightgrey;
 }
 
-#stopButton {
+.stopButton {
+    width: 60%;
     float: none;
-    width: 80%;
-    margin: 0;
+    margin: 0 auto;
+    text-align: center;
     padding: 0;
     height: 60px;
-    /* background-color: lightgrey; */
     position: fixed;
     bottom: 3%;
 }
 
-#stopButton button{
+.stopButton button{
     cursor: pointer;
     position: inherit;
-    margin: auto;
+    margin: 0 auto;
     background-color: #C54AC7;
     color: papayawhip;
     width: 180px;
@@ -88,6 +115,7 @@
     border: none;
     font-size: 1.3rem;
     border-radius: 5px;
+    position: static;
 }
 
 .transcript {

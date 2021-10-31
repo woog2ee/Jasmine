@@ -1,10 +1,10 @@
 import React from "react";
-import logo from './img/logo.png';
-import home from './img/home.svg';
-import mypage from './img/mypage.svg';
-import contact from './img/contact.svg';
+import logo from '../img/logo.png';
+import home from '../img/home.svg';
+import mypage from '../img/mypage.svg';
+import contact from '../img/contact.svg';
 
-import './css/Navi.css';
+import '../css/Navi.css';
 
 function Navi(){
     return(

@@ -1,8 +1,8 @@
 import React from "react";
-import testImg from './img/test.png';
-import './css/Home.css';
+import testImg from '../img/test.png';
+import '../css/Landing.css';
 
-function Home(){
+function LandingPage(){
     return(
         <div className="home">
             <img className="testImg" src={testImg} alt='testimg'/>
@@ -17,4 +17,4 @@ function Home(){
     )
 }
 
-export default Home;
+export default LandingPage;
