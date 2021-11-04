@@ -1,8 +1,11 @@
 const express = require('express')
 const app = express()
 const port = 5000
-// const bodyParser = require('body-parser')
-const { User } = require('./models/User')
+// const bodyParser = require('body-parser');
+
+const config = require('./config/key');
+
+const { User } = require('./models/User');
 
 
 // app.use(bodyParser.urlencoded({extended: true}));
@@ -12,8 +15,7 @@ app.use(express.json());
 
 
 const mongoose = require('mongoose');
-const { useReducer } = require('react');
-mongoose.connect('mongodb+srv://sangh:0000@jasmine.iqad5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+mongoose.connect(config.mongoURI, {
 	useNewUrlParser: true, useUnifiedTopology: true
 }).then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err))
