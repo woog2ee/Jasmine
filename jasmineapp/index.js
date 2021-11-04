@@ -19,6 +19,10 @@ mongoose
     .then(() => console.log('MongoDB Connected...'))
     .catch((err) => console.log(err));
 
+app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`);
+});
+
 app.get('/', (req, res) => {
     res.send('Hello World~!');
 });
@@ -56,18 +60,23 @@ app.post('/api/users/login', (req, res) => {
 });
 
 app.get('/api/users/auth', auth, (req, res) => {
-	res.status(200).json({ 
-		_id: req.user._id,
-		isAdmin: req.user.role === 0 ? false : true,
-		isAuth: true,
-		email: req.user.email,
-		name: req.user.name,
-		lastName: req.user.lastname,
-		role: req.user.role,
-		image: req.user.image
-	})
+    res.status(200).json({
+        _id: req.user._id,
+        isAdmin: req.user.role === 0 ? false : true,
+        isAuth: true,
+        email: req.user.email,
+        name: req.user.name,
+        lastName: req.user.lastname,
+        role: req.user.role,
+        image: req.user.image,
+    });
 });
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+app.get('/api/users/logout', auth, (req, res) => {
+    User.findOneAndUpdate({ _id: req.user._id }, { token: '' }, (err, user) => {
+        if (err) return res.json({ success: false, err });
+        return res.status(200).send({
+            success: true,
+        });
+    });
 });
