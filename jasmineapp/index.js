@@ -19,7 +19,7 @@ mongoose.connect('mongodb+srv://sangh:0000@jasmine.iqad5.mongodb.net/myFirstData
   .catch(err => console.log(err))
 
 app.get('/', (req, res) => {
-	res.send('Hello World!')
+	res.send('Hello World~!')
 })
 
 app.post('/register', (req, res) => {
