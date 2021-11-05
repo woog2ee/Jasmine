@@ -6,7 +6,7 @@ function Rock(props){
     let name = props.name
     let word;
     
-    if (name == "Run"){
+    if (name === "Run"){
         word = "발표 시작"
         return(
             <div className="rock" id="run_rock">
@@ -14,7 +14,7 @@ function Rock(props){
             </div>
         )
     }
-    else if (name == "RecordingList"){
+    else if (name === "RecordingList"){
         word = "발표 목록"
         return(
             <div className="rock" id="run_recording">

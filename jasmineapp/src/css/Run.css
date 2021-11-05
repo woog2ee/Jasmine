@@ -9,9 +9,7 @@
     overflow: hidden;
 }
 
-/* .simpleNavi{
-    height: 100%;
-} */
+
 .simpleNavi img{
     width: 156px;
     height: 80px;
@@ -19,14 +17,15 @@
 }
 
 .face{
-    width: 60%;
+    width: 950px;
     /* height: 80vh; */
-    height: 950px;
+    height: 800px;
     /* padding: 1% 0; */
     padding: 0;
-    margin: 25px auto 0 auto;
+    margin: 0px auto 0 auto;
     border-radius: 10px;
     background-color: azure;
+
 }
 
 .question {
@@ -63,7 +62,9 @@
     font-family: 'CookieRunOTF-Bold';
 }
 
-
+.facedetector{
+    
+}
 
 .facedetector test{
     font-size: 10px;
@@ -73,8 +74,8 @@
     /* background-color:#999999; */
     /* margin: auto; */
     margin-top: 1px;
-    width: 1200px;
-    height: 800px;
+    width: 960px;
+    height: 600px;
 }
 .facedetector #hiddencam{
     float: center;
@@ -85,16 +86,8 @@
     display: none;
 }
 
-.RTresult {
-    float: right;
-    margin: 1% 3% 1% 1%;
-    width: 40%;
-    height: 450px;
-    background-color: lightgrey;
-}
-
 .stopButton {
-    width: 60%;
+    width: 100vw;
     float: none;
     margin: 0 auto;
     text-align: center;
