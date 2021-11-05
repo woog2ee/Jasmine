@@ -25,9 +25,10 @@ function Run() {
                 
                 <AudioRecorder/>
                 <Dictaphone />
-                <div className="stopButton">
+                
+            </div>
+            <div className="stopButton">
                     <button >끝내기</button>
-                </div>
             </div>
             
         </div>

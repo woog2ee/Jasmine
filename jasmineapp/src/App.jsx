@@ -10,8 +10,8 @@ function App() {
   return (
     <div className="App">
       {/* <Landing/> */}
-      <Home/>
-      {/* <Run/> */}
+      {/* <Home/> */}
+      <Run/>
       {/* <RecordingList/> */}
       {/* < Report date='2021.09.09' time='00:00:00'/> */}
     </div>
