@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../img/logo.png';
+import logo from '../../../img/logo.png';
 import FaceDetector from './FaceDetector';
 import Dictaphone from './Dictaphone';
 import '../../../css/Run.css';

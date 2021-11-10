@@ -1,6 +1,6 @@
 import React from 'react';
 import {BrowserRouter, Link, Switch, Route} from 'react-router-dom';
-import Run from './Run';
+import Run from './../RunPage/Run';
 
 function Rock(props){
     let name = props.name

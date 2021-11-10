@@ -1,8 +1,8 @@
 import React from "react";
-import logo from '../img/logo.png'
+import logo from '../../../img/logo.png'
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
-import '../css/RecordingList.css';
+import '../../../css/RecordingList.css';
 
 const Record = styled.button`
     outline: none;

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
-import testImg from '../img/test.png';
+import testImg from '../../../img/test.png';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from "gaze-detection";

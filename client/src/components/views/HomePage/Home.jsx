@@ -1,5 +1,5 @@
 import React from "react";
-import logo from '../img/logo.png';
+import logo from '../../../img/logo.png';
 import '../../../css/Home.css';
 import Rock from "./Rock";
 

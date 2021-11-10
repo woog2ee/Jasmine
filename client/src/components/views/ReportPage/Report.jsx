@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import logo from '../img/logo.png'
-import '../css/Report.css'
-import wordCloud from '../img/wordcloud.png';
+import logo from '../../../img/logo.png'
+import '../../../css/Report.css'
+import wordCloud from '../../../img/wordcloud.png';
 
 function Report(props){
 
