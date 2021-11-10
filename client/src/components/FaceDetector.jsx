@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
-import testImg from './img/test.png';
+import testImg from '../img/test.png';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from "gaze-detection";
@@ -11,9 +11,13 @@ const CONSTRAINTS = { video: true };
 const ShowButton = styled.button`
     outline: none;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     color: white;
     font-weight: bold;
+    width: 20%;
+    height: 15%;
+    margin: 5%;
+    font-size: 30px;
     cursor: pointer;
     padding-left: 1rem;
     padding-right: 1rem;

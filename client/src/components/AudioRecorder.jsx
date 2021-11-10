@@ -21,8 +21,8 @@ function AudioRecorder(props) {
     return (
         <div className='audioRecord'>
             <AudioReactRecorder state={recordState} onStop={onStop}/>
-            <button onClick={start}>Start</button>
-            <button onClick={stop}>STOP</button>
+            {/* <button onClick={start}>Start</button>
+            <button onClick={stop}>STOP</button> */}
             
         </div>
     )
