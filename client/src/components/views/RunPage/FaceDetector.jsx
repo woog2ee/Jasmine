@@ -1,10 +1,14 @@
 import React, { useRef, useState } from "react";
+import AudioReactRecorder, { RecordState } from 'audio-react-recorder'
 import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
 import testImg from '../../../img/test.png';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from "gaze-detection";
+
+
+import axios from 'axios';
 
 const CONSTRAINTS = { video: true };
 
@@ -32,8 +36,25 @@ const ShowButton = styled.button`
     }
 `;
 
+
 // canvas 추가 시 찾은 얼굴 redbox 표시가능
-const FaceDetector = () => {
+const FaceDetector = (props) => {
+    // recording
+    const [recordState, setRecordState] = useState(null);
+
+    const onStop = (audioData) => {
+        console.log('audioData', audioData);
+        console.log(audioData.url);
+    }
+
+    if (props.isEnd == true){
+        console.log('end~~~');
+        setRecordState(RecordState.STOP);
+        axios.get('/home',{});
+    }
+
+
+
     let model;
     const [click,setClick] = useState(false);
     const camera = React.useRef();
@@ -43,6 +64,9 @@ const FaceDetector = () => {
 
     const startVideo = async () => {
         setClick(true);
+
+        // start recording
+        setRecordState(RecordState.START);
 
         const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
         if (camera && camera.current && !camera.current.srcObject) {
@@ -124,11 +148,16 @@ const FaceDetector = () => {
     }
     else {
         return (
-            <div className='facedetector'>
-                <div className='test' ref={figures}></div>
-                <video id='webcam' autoPlay muted={true} ref={camera} poster={testImg}/>
-                <video id='hiddencam' autoPlay muted={true} ref={camera_temp} poster={testImg}/>
-            </div>
+            <>
+                <div className='facedetector'>
+                    <div className='test' ref={figures}></div>
+                    <video id='webcam' autoPlay muted={true} ref={camera} poster={testImg}/>
+                    <video id='hiddencam' autoPlay muted={true} ref={camera_temp} poster={testImg}/>
+                </div>
+                <div className='audioRecord'>
+                    <AudioReactRecorder state={recordState} onStop={onStop}/>
+                </div>
+            </>
         );
     }
     
