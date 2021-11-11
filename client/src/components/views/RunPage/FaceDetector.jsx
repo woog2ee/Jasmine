@@ -1,10 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
+import AudioReactRecorder, { RecordState } from 'audio-react-recorder'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
 import testImg from '../../../img/test.png';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from "gaze-detection";
+
+
+import axios from 'axios';
 
 const CONSTRAINTS = { video: true };
 
@@ -32,8 +37,49 @@ const ShowButton = styled.button`
     }
 `;
 
+
 // canvas 추가 시 찾은 얼굴 redbox 표시가능
-const FaceDetector = () => {
+const FaceDetector = (props) => {
+    // dictaphone
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition
+    } = useSpeechRecognition();
+    const dictStart = () => {
+        SpeechRecognition.startListening({ continuous: true });
+        if (!browserSupportsSpeechRecognition) {
+            return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
+        }
+    }
+    const dictStop = () => {
+        SpeechRecognition.stopListening();
+        console.log({transcript})
+        // mongoDB 저장
+        resetTranscript();
+    }
+    
+    // recorder
+    const [recordState, setRecordState] = useState(null);
+    const onStop = (audioData) => {
+        console.log('audioData', audioData);
+        console.log(audioData.url);
+    }
+
+    // 종료 버튼 클릭 시
+    if (props.isEnd === true){
+        console.log('end~~~');
+        // stop recording
+        setRecordState(RecordState.STOP);
+        // stop dictaphone
+        dictStop();
+        // 여기서 다시 home으로
+        // axios.get('/home',{});
+    }
+
+
+
     let model;
     const [click,setClick] = useState(false);
     const camera = React.useRef();
@@ -43,7 +89,6 @@ const FaceDetector = () => {
 
     const startVideo = async () => {
         setClick(true);
-
         const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
         if (camera && camera.current && !camera.current.srcObject) {
             camera.current.srcObject = stream;
@@ -51,6 +96,16 @@ const FaceDetector = () => {
         if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
             camera_temp.current.srcObject = stream;
         }
+        if(RecordState !== 'START'){
+            // start dictaphone
+            dictStart();
+
+            // start recording
+            setRecordState(RecordState.START);
+        }
+        
+
+
     }
 
     const run = async () => {
@@ -124,11 +179,17 @@ const FaceDetector = () => {
     }
     else {
         return (
-            <div className='facedetector'>
-                <div className='test' ref={figures}></div>
-                <video id='webcam' autoPlay muted={true} ref={camera} poster={testImg}/>
-                <video id='hiddencam' autoPlay muted={true} ref={camera_temp} poster={testImg}/>
-            </div>
+            <>
+                <div className='facedetector'>
+                    <div className='test' ref={figures}></div>
+                    <video id='webcam' autoPlay muted={true} ref={camera} poster={testImg}/>
+                    <video id='hiddencam' autoPlay muted={true} ref={camera_temp} poster={testImg}/>
+                </div>
+                <div className='audio'>
+                    <AudioReactRecorder state={recordState} onStop={onStop}/>
+                    {/* <Dictaphone ref = {dictRef}/> */}
+                </div>
+            </>
         );
     }
     
