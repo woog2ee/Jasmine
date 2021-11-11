@@ -8,36 +8,13 @@ import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from 'gaze-detection';
 
-import axios from 'axios';
-
 const CONSTRAINTS = { video: true };
 
-const ShowButton = styled.button`
-    outline: none;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-weight: bold;
-    width: 20%;
-    height: 15%;
-    margin: 5%;
-    font-size: 30px;
-    cursor: pointer;
-    padding-left: 1rem;
-    padding-right: 1rem;
 
-    /* 색상 */
-    background: #228be6;
-    &:hover {
-        background: ${lighten(0.1, '#228be6')};
-    }
-    &:active {
-        background: ${darken(0.1, '#228be6')};
-    }
-`;
 
 // canvas 추가 시 찾은 얼굴 redbox 표시가능
 const FaceDetector = (props) => {
+
     // dictaphone
     const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
     const dictStart = () => {
@@ -55,35 +32,18 @@ const FaceDetector = (props) => {
 
     // recorder
     const [recordState, setRecordState] = useState(null);
-    const onStop = (audioData) => {
-        console.log('audioData', audioData);
-        console.log(audioData.url);
+    const onStop = async (audioData) => {
+        await console.log('audioData', audioData);
+        await console.log(audioData.url);
     };
 
     let model;
-    const [click, setClick] = useState(false);
+    const [btn,setBtn] = useState('');
+    let click_style = 'display: none';
     const camera = React.useRef();
     const camera_temp = React.useRef();
     const figures = React.useRef();
     const webcamElement = camera.current;
-
-    const startVideo = async () => {
-        setClick(true);
-        const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-        if (camera && camera.current && !camera.current.srcObject) {
-            camera.current.srcObject = stream;
-        }
-        if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
-            camera_temp.current.srcObject = stream;
-        }
-        if (RecordState !== 'START') {
-            // start dictaphone
-            dictStart();
-
-            // start recording
-            setRecordState(RecordState.START);
-        }
-    };
 
     const run = async () => {
         model = await blazeface.load();
@@ -104,7 +64,11 @@ const FaceDetector = (props) => {
                 setRecordState(RecordState.STOP);
                 // stop dictaphone
                 dictStop();
+                camera.parentNode.removeChild(camera);
+                camera_temp.parentNode.removeChild(camera_temp);
+                return;
                 break;
+                
                 // 여기서 다시 home으로
                 // axios.get('/home',{});
             }
@@ -151,37 +115,73 @@ const FaceDetector = (props) => {
             }
         }
     };
+    const ShowButton = styled.button`
+        display : ${btn};
+        outline: none;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        width: 20%;
+        height: 15%;
+        margin: 5%;
+        font-size: 30px;
+        cursor: pointer;
+        padding-left: 1rem;
+        padding-right: 1rem;
 
-    const mounted = useRef(false);
-
-    React.useEffect(() => {
-        if (!mounted.current) {
-            mounted.current = true;
-        } else {
-            console.log('ready');
-            run();
+        /* 색상 */
+        background: #228be6;
+        &:hover {
+            background: ${lighten(0.1, '#228be6')};
         }
-    });
-    if (click === false) {
-        return (
-            <>
-                <ShowButton onClick={startVideo}> 시작하기</ShowButton>
-            </>
-        );
-    } else {
-        return (
-            <>
-                <div className="facedetector">
-                    <div className="test" ref={figures}></div>
-                    <video id="webcam" autoPlay muted={true} ref={camera} poster={testImg} />
-                    <video id="hiddencam" autoPlay muted={true} ref={camera_temp} poster={testImg} />
-                </div>
-                <div className="audio">
-                    <AudioReactRecorder state={recordState} onStop={onStop} />
-                    {/* <Dictaphone ref = {dictRef}/> */}
-                </div>
-            </>
-        );
-    }
+        &:active {
+            background: ${darken(0.1, '#228be6')};
+        }
+    `;
+
+    const startVideo = async () => {
+        click_style = '';
+        setBtn('none');
+        const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
+        if (camera && camera.current && !camera.current.srcObject) {
+            camera.current.srcObject = stream;
+        }
+        if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
+            camera_temp.current.srcObject = stream;
+        }
+        if (RecordState !== 'START') {
+            // start dictaphone
+            dictStart();
+
+            // start recording
+            setRecordState(RecordState.START);
+        }
+        run();
+    };
+
+    
+
+    // const [mounted, setmounted] = useState(false);
+
+    // React.useEffect(() => {
+    //     if (!mounted) {
+    //         setmounted(true)
+    //         // mounted.current = true;
+    //     } else {
+    //         console.log('ready');
+    //         run();
+    //     }
+    // });
+    return (
+        <>
+            <ShowButton onClick={startVideo}> 시작하기</ShowButton>
+            <div className="facedetector" style={{click_style}}>
+                <div className="test" ref={figures}></div>
+                <video id="webcam" autoPlay muted={true} ref={camera} />
+                <video id="hiddencam" autoPlay muted={true} ref={camera_temp}/>
+            </div>
+        </>
+    );
 };
 export default FaceDetector;
