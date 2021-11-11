@@ -3,6 +3,7 @@ import logo from '../../../img/logo.png'
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import '../../../css/RecordingList.css';
+import { withRouter } from 'react-router-dom';
 
 const Record = styled.button`
     outline: none;
@@ -25,10 +26,17 @@ const Record = styled.button`
 
 `
 
-function RecordingList(){
+function RecordingList(props){
     // db에서 recording 가져오기
     const record_list = [['2021.01.01','01:01:01'], ['2021.02.02','02:02:02'], ['2021.03.03','03:03:03'], ['2021.04.04','04:04:04'], 
     ['2021.05.05','05:05:05'], ['2021.06.06','06:06:06'], ['2021.07.07','07:07:07'], ['2021.08.08','08:08:08'], ['2021.09.09','09:09:09'], ['2021.10.10','10:10:10']]
+    
+    const onSubmitHandler = (event) => {
+        event.preventDefault();
+
+        props.history.push('/home');
+    };
+
     return(
         <div className='recordingList'>
             <div className="simpleNavi">
@@ -47,11 +55,13 @@ function RecordingList(){
                     ))}
                 </div>
                 <div className="stopButton">
-                    <button >끝내기</button>
+                    <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
+                        <button type="submit">끝내기</button>
+                    </form>
                 </div>
             </div>
         </div>
     )
 }
 
-export default RecordingList;
+export default withRouter(RecordingList);

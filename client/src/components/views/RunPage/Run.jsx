@@ -4,9 +4,16 @@ import FaceDetector from './FaceDetector';
 import Dictaphone from './Dictaphone';
 import '../../../css/Run.css';
 import AudioRecorder from './AudioRecorder';
+import { withRouter } from 'react-router-dom';
 
-function Run() {
+function Run(props) {
     const question = '랜덤 질문';
+
+    const onSubmitHandler = (event) => {
+        event.preventDefault();
+
+        props.history.push('/home');
+    };
 
     return (
         <div className="run">
@@ -23,10 +30,12 @@ function Run() {
                 <Dictaphone />
             </div>
             <div className="stopButton">
-                <button>끝내기</button>
+                <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
+                    <button type="submit">끝내기</button>
+                </form>
             </div>
         </div>
     );
 }
 
-export default Run;
+export default withRouter(Run);

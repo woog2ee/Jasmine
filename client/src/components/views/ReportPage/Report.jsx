@@ -2,8 +2,14 @@ import React, { useRef, useState } from "react";
 import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
 import wordCloud from '../../../img/wordcloud.png';
+import { withRouter } from 'react-router-dom';
 
 function Report(props){
+    const onSubmitHandler = (event) => {
+        event.preventDefault();
+
+        props.history.push('/list');
+    };
 
     return (
         <div className='report'>
@@ -86,7 +92,9 @@ function Report(props){
                         </div>
                     </div>
                     <div className="stopButton" id="back">
-                        <button >뒤로 가기</button>
+                        <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
+                            <button type="submit">뒤로 가기</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -95,4 +103,4 @@ function Report(props){
     )
 }
 
-export default Report;
+export default withRouter(Report);
