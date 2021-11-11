@@ -20,6 +20,11 @@
     font-size: large;
     font-family: 'HSYuji-Regular';
     font-size: 3rem;
+    border: none;
+    border-right: 0px;
+    border-top: 0px;
+    border-left: 0px;
+    border-bottom: 0px;
 }
 #run_recording{
     margin: 27vh 0 0 110vh;

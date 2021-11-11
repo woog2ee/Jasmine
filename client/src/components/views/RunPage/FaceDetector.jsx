@@ -97,13 +97,6 @@ const FaceDetector = (props) => {
         await gaze.setUpCamera(camera_temp.current);
 
         while (true) {
-            // let ctx = camera.getContext('2d');
-            const img = await webcam.capture();
-            const returnTensors = false;
-            const predictions = await model.estimateFaces(img, returnTensors);
-            const gazePrediction = await gaze.getGazePrediction();
-            let check = false;
-
             // 종료 버튼 클릭 시
             if (props.isEnd === true) {
                 console.log('end~~~');
@@ -111,39 +104,51 @@ const FaceDetector = (props) => {
                 setRecordState(RecordState.STOP);
                 // stop dictaphone
                 dictStop();
+                break;
                 // 여기서 다시 home으로
                 // axios.get('/home',{});
             }
+            try {
+                // let ctx = camera.getContext('2d');
+                const img = await webcam.capture();
+                const returnTensors = false;
+                const predictions = await model.estimateFaces(img, returnTensors);
+                const gazePrediction = await gaze.getGazePrediction();
+                let check = false;
 
-            for (let i = 0; i < predictions.length; i++) {
-                if (figures.current) {
-                    figures.current.innerText = String(predictions[i].probability[0]).substring(0, 5);
-                    console.log('Gaze direction: ', gazePrediction); //will return 'RIGHT', 'LEFT', 'STRAIGHT' or 'TOP'
-                    check = true;
-                }
-            }
-            if (figures.current && !check) {
-                figures.current.innerText = '얼굴을 보여주세요';
-            }
-            if (check) {
                 for (let i = 0; i < predictions.length; i++) {
                     if (figures.current) {
-                        const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
-                        if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
-                            figures.current.innerText = '얼굴을 정면으로 향해주세요.';
-                            // figures.current.innerText = '얼굴을 정면으로 향해주세요.' +
-                            // "\ntopLeft: " + String(predictions[i].topLeft[0]).substr(0, 5) + ", " + String(predictions[i].topLeft[1]).substr(0, 5) +
-                            // "\nbottomRight: " + String(predictions[i].bottomRight[0]).substring(0, 5) + ", " + String(predictions[i].bottomRight[1]).substring(0, 5) +
-                            // "\neyeLeft: " + String(predictions[i].landmarks[0][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[0][1]).substring(0, 5) +
-                            // "\neyeRight: " + String(predictions[i].landmarks[1][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[1][1]).substring(0, 5) +
-                            // "\nnose: " + String(predictions[i].landmarks[2][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[2][1]).substring(0, 5) +
-                            // "\nmouth: " + String(predictions[i].landmarks[3][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[3][1]).substring(0, 5);
+                        figures.current.innerText = String(predictions[i].probability[0]).substring(0, 5);
+                        console.log('Gaze direction: ', gazePrediction); //will return 'RIGHT', 'LEFT', 'STRAIGHT' or 'TOP'
+                        check = true;
+                    }
+                }
+                if (figures.current && !check) {
+                    figures.current.innerText = '얼굴을 보여주세요';
+                }
+                if (check) {
+                    for (let i = 0; i < predictions.length; i++) {
+                        if (figures.current) {
+                            const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
+                            if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
+                                figures.current.innerText = '얼굴을 정면으로 향해주세요.';
+                                // figures.current.innerText = '얼굴을 정면으로 향해주세요.' +
+                                // "\ntopLeft: " + String(predictions[i].topLeft[0]).substr(0, 5) + ", " + String(predictions[i].topLeft[1]).substr(0, 5) +
+                                // "\nbottomRight: " + String(predictions[i].bottomRight[0]).substring(0, 5) + ", " + String(predictions[i].bottomRight[1]).substring(0, 5) +
+                                // "\neyeLeft: " + String(predictions[i].landmarks[0][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[0][1]).substring(0, 5) +
+                                // "\neyeRight: " + String(predictions[i].landmarks[1][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[1][1]).substring(0, 5) +
+                                // "\nnose: " + String(predictions[i].landmarks[2][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[2][1]).substring(0, 5) +
+                                // "\nmouth: " + String(predictions[i].landmarks[3][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[3][1]).substring(0, 5);
+                            }
                         }
                     }
                 }
+                img.dispose();
+                await tf.nextFrame();
+            } catch (e) {
+                console.error(e);
+                continue;
             }
-            img.dispose();
-            await tf.nextFrame();
         }
     };
 
@@ -157,7 +162,7 @@ const FaceDetector = (props) => {
             run();
         }
     });
-    if (click == false) {
+    if (click === false) {
         return (
             <>
                 <ShowButton onClick={startVideo}> 시작하기</ShowButton>

@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import logo from '../../../img/logo.png';
 import FaceDetector from './FaceDetector';
 import Dictaphone from './Dictaphone';
 import '../../../css/Run.css';
-import AudioRecorder from './AudioRecorder';
 import { withRouter } from 'react-router-dom';
 
 function Run(props) {
     const question = '랜덤 질문';
-    const [isEnd, setisEnd] = useState(false)
+    const [isEnd, setisEnd] = useState(false);
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
