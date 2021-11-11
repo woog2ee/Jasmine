@@ -3,6 +3,7 @@
     height: 944px;
     background-color: #F8DEFF;
 }
+
 .testImg {
     width: 50%;
     height: 600px;
@@ -12,28 +13,29 @@
     border: palevioletred 2px solid;
 }
 
-.about{
-    padding-top: 170px;
-    float:none;
-    margin-right: 10%;
-}
-
-.about h2{
-    margin-right: -4%;
-    font-family: monospace;
-    font-size: 2rem;
-}
-
-.home button {
+.rock{
+    height: 300px;
+    width: 300px;
+    display: flexbox;
+    background: url(../img/rock1.png) no-repeat;
+    background-size: contain;
+    line-height: 300px;
     cursor: pointer;
-    background-color: #C54AC7;
-    width: 20%;
-    height: 80px;
-    margin: 60px 8% 0 0;
-    border: none;
-    text-align: center;
-    color: papayawhip;
-    font-size: 1.7rem;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    border-radius: 5px;
 }
+
+.rock span{
+    margin: auto;
+    font-size: large;
+    font-family: 'HSYuji-Regular';
+    font-size: 3rem;
+}
+#run_recording{
+    margin: 27vh 0 0 110vh;
+}
+#run_rock{
+    margin: -7vh 0 0 40vh;
+}
+.rock:last-child, .rock:hover {
+    overflow: visible;
+}
+
