@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
 import testImg from '../../../img/test.png';
@@ -39,18 +40,42 @@ const ShowButton = styled.button`
 
 // canvas 추가 시 찾은 얼굴 redbox 표시가능
 const FaceDetector = (props) => {
-    // recording
+    // dictaphone
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition
+    } = useSpeechRecognition();
+    const dictStart = () => {
+        SpeechRecognition.startListening({ continuous: true });
+        if (!browserSupportsSpeechRecognition) {
+            return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
+        }
+    }
+    const dictStop = () => {
+        SpeechRecognition.stopListening();
+        console.log({transcript})
+        // mongoDB 저장
+        resetTranscript();
+    }
+    
+    // recorder
     const [recordState, setRecordState] = useState(null);
-
     const onStop = (audioData) => {
         console.log('audioData', audioData);
         console.log(audioData.url);
     }
 
-    if (props.isEnd == true){
+    // 종료 버튼 클릭 시
+    if (props.isEnd === true){
         console.log('end~~~');
+        // stop recording
         setRecordState(RecordState.STOP);
-        axios.get('/home',{});
+        // stop dictaphone
+        dictStop();
+        // 여기서 다시 home으로
+        // axios.get('/home',{});
     }
 
 
@@ -64,10 +89,6 @@ const FaceDetector = (props) => {
 
     const startVideo = async () => {
         setClick(true);
-
-        // start recording
-        setRecordState(RecordState.START);
-
         const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
         if (camera && camera.current && !camera.current.srcObject) {
             camera.current.srcObject = stream;
@@ -75,6 +96,16 @@ const FaceDetector = (props) => {
         if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
             camera_temp.current.srcObject = stream;
         }
+        if(RecordState !== 'START'){
+            // start dictaphone
+            dictStart();
+
+            // start recording
+            setRecordState(RecordState.START);
+        }
+        
+
+
     }
 
     const run = async () => {
@@ -154,8 +185,9 @@ const FaceDetector = (props) => {
                     <video id='webcam' autoPlay muted={true} ref={camera} poster={testImg}/>
                     <video id='hiddencam' autoPlay muted={true} ref={camera_temp} poster={testImg}/>
                 </div>
-                <div className='audioRecord'>
+                <div className='audio'>
                     <AudioReactRecorder state={recordState} onStop={onStop}/>
+                    {/* <Dictaphone ref = {dictRef}/> */}
                 </div>
             </>
         );
