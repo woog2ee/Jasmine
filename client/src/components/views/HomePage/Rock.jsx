@@ -30,7 +30,7 @@ function Rock(props) {
         word = '발표 목록';
         return (
             <div className="rock" id="run_recording">
-                <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
+                <form style={{ display: 'flex', flexDirection: 'column'}} onSubmit={onSubmitHandler}>
                     <span>
                         <button type="submit">{word}</button>
                     </span>

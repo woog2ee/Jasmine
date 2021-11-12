@@ -26,6 +26,10 @@
     border-left: 0px;
     border-bottom: 0px;
 }
+.rock button{
+    border: 0;
+    background: inherit;
+}
 #run_recording{
     margin: 27vh 0 0 110vh;
 }

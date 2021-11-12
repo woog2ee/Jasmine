@@ -30,7 +30,7 @@ function Run(props) {
                 <Dictaphone />
             </div>
             <div className="stopButton">
-                <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
+                <form style={{ display: 'flex', flexDirection: 'column'}} onSubmit={onSubmitHandler}>
                     <button type="submit">끝내기</button>
                 </form>
             </div>
