@@ -49,10 +49,9 @@ const FaceDetector = forwardRef((props, ref) => {
         onStopRecord();
         // stop dictaphone
         dictStop();
-        // camera.STOP
-        // camera_temp.STOP
-        // camera.parentNode.removeChild(camera);
-        // camera_temp.parentNode.removeChild(camera_temp);
+        camera.current = null
+        camera_temp.current = null
+        return
     };
 
     useImperativeHandle(ref, () => ({
@@ -76,9 +75,7 @@ const FaceDetector = forwardRef((props, ref) => {
         while (true) {
             // 종료 버튼 클릭 시
             if (props.isEnd === true) {
-                allStop();
                 return;
-                
                 // 여기서 다시 home으로
             }
             try {
