@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+/* eslint-disable */
+import React, { useState, useRef } from 'react';
 import logo from '../../../img/logo.png';
 import FaceDetector from './FaceDetector';
-import Dictaphone from './Dictaphone';
 import '../../../css/Run.css';
 import { withRouter } from 'react-router-dom';
 
 function Run(props) {
     const question = '랜덤 질문';
-    const [isEnd, setisEnd] = useState(false);
+    //const [isEnd, setisEnd] = useState(false);
+    const endRef = useRef({});
 
-    const onSubmitHandler = (event) => {
+    const onSubmitHandler = async (event) => {
         event.preventDefault();
-        setisEnd(true);
+        endRef.current.allStop();
+        // await setisEnd(true);
 
         props.history.push('/home');
     };
@@ -26,8 +28,7 @@ function Run(props) {
                 <div className="question" id="run_question">
                     <h2>{question}</h2>
                 </div>
-                <FaceDetector isEnd={isEnd} />
-                <Dictaphone />
+                <FaceDetector ref={endRef} />
             </div>
             <div className="stopButton">
                 <form style={{ display: 'flex', flexDirection: 'column'}} onSubmit={onSubmitHandler}>

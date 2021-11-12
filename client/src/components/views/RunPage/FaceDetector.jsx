@@ -1,9 +1,8 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
-import testImg from '../../../img/test.png';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from 'gaze-detection';
@@ -11,9 +10,13 @@ import gaze from 'gaze-detection';
 const CONSTRAINTS = { video: true };
 
 
-
-// canvas 추가 시 찾은 얼굴 redbox 표시가능
-const FaceDetector = (props) => {
+const FaceDetector = forwardRef((props, ref) => {
+    const [btn,setBtn] = useState('');
+    let click_style = 'display: none';
+    const camera = React.useRef();
+    const camera_temp = React.useRef();
+    const figures = React.useRef();
+    const webcamElement = camera.current;
 
     // dictaphone
     const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
@@ -32,21 +35,35 @@ const FaceDetector = (props) => {
 
     // recorder
     const [recordState, setRecordState] = useState(null);
-    const onStop = async (audioData) => {
-        await console.log('audioData', audioData);
-        await console.log(audioData.url);
+    const onStop = (audioData) => {
+        console.log('audioData', audioData);
+        console.log(audioData.url);
+    };
+    const onStopRecord = () => {
+        setRecordState(RecordState.STOP);
     };
 
-    let model;
-    const [btn,setBtn] = useState('');
-    let click_style = 'display: none';
-    const camera = React.useRef();
-    const camera_temp = React.useRef();
-    const figures = React.useRef();
-    const webcamElement = camera.current;
+    const allStop = () => {
+        console.log('end~~~');
+        // stop recording
+        onStopRecord();
+        // stop dictaphone
+        dictStop();
+        // camera.STOP
+        // camera_temp.STOP
+        // camera.parentNode.removeChild(camera);
+        // camera_temp.parentNode.removeChild(camera_temp);
+    };
+
+    useImperativeHandle(ref, () => ({
+        allStop,
+    }));
+
+    
+    
 
     const run = async () => {
-        model = await blazeface.load();
+        const model = await blazeface.load();
         await gaze.loadModel();
 
         const webcam = await tf.data.webcam(webcamElement, {
@@ -59,18 +76,10 @@ const FaceDetector = (props) => {
         while (true) {
             // 종료 버튼 클릭 시
             if (props.isEnd === true) {
-                console.log('end~~~');
-                // stop recording
-                setRecordState(RecordState.STOP);
-                // stop dictaphone
-                dictStop();
-                camera.parentNode.removeChild(camera);
-                camera_temp.parentNode.removeChild(camera_temp);
+                allStop();
                 return;
-                break;
                 
                 // 여기서 다시 home으로
-                // axios.get('/home',{});
             }
             try {
                 // let ctx = camera.getContext('2d');
@@ -159,29 +168,19 @@ const FaceDetector = (props) => {
         }
         run();
     };
-
-    
-
-    // const [mounted, setmounted] = useState(false);
-
-    // React.useEffect(() => {
-    //     if (!mounted) {
-    //         setmounted(true)
-    //         // mounted.current = true;
-    //     } else {
-    //         console.log('ready');
-    //         run();
-    //     }
-    // });
     return (
         <>
+            <div style={{display:'none'}}>
+                <AudioReactRecorder state={recordState} onStop={onStop} />
+            </div>
             <ShowButton onClick={startVideo}> 시작하기</ShowButton>
             <div className="facedetector" style={{click_style}}>
                 <div className="test" ref={figures}></div>
                 <video id="webcam" autoPlay muted={true} ref={camera} />
                 <video id="hiddencam" autoPlay muted={true} ref={camera_temp}/>
             </div>
+            
         </>
     );
-};
+});
 export default FaceDetector;
