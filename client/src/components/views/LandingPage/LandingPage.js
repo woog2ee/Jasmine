@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function LandingPage(props) {
     useEffect(() => {
@@ -20,7 +21,8 @@ function LandingPage(props) {
     };
 
     return (
-        <div
+        <div class="site-wrapper">
+        {/* <div
             style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -28,7 +30,7 @@ function LandingPage(props) {
                 width: '100%',
                 height: '100vh',
             }}
-        >
+        > */}
             <h2>시작 페이지</h2>
             <button onClick={onClickHandler}>로그아웃</button>
         </div>

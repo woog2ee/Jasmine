@@ -11,6 +11,7 @@ import Report from './components/views/ReportPage/Report';
 import Home from './components/views/HomePage/Home';
 import Auth from './hoc/auth';
 import './css/App.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
     return (
