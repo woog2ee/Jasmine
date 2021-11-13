@@ -1,16 +1,18 @@
-import React, { useRef, useState, forwardRef, useImperativeHandle } from 'react';
-import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
+import React, { useRef, useState} from 'react';
+import { withRouter } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from 'gaze-detection';
+import AudioRecorder from './AudioRecorder';
 
 const CONSTRAINTS = { video: true };
 
 
-const FaceDetector = forwardRef((props, ref) => {
+function FaceDetector(props) {
+    const recordRef = useRef({});
     const [btn,setBtn] = useState('');
     let click_style = 'display: none';
     const camera = React.useRef();
@@ -33,30 +35,13 @@ const FaceDetector = forwardRef((props, ref) => {
         resetTranscript();
     };
 
-    // recorder
-    const [recordState, setRecordState] = useState(null);
-    const onStop = (audioData) => {
-        console.log('audioData', audioData);
-        console.log(audioData.url);
-    };
-    const onStopRecord = () => {
-        setRecordState(RecordState.STOP);
-    };
-
-    const allStop = () => {
+    const allStop = async () => {
         console.log('end~~~');
-        // stop recording
-        onStopRecord();
         // stop dictaphone
         dictStop();
         camera.current = null
         camera_temp.current = null
-        return
     };
-
-    useImperativeHandle(ref, () => ({
-        allStop,
-    }));
 
     
     
@@ -79,7 +64,6 @@ const FaceDetector = forwardRef((props, ref) => {
                 // 여기서 다시 home으로
             }
             try {
-                // let ctx = camera.getContext('2d');
                 const img = await webcam.capture();
                 const returnTensors = false;
                 const predictions = await model.estimateFaces(img, returnTensors);
@@ -147,6 +131,7 @@ const FaceDetector = forwardRef((props, ref) => {
     `;
 
     const startVideo = async () => {
+        dictStart();
         click_style = '';
         setBtn('none');
         const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
@@ -156,28 +141,39 @@ const FaceDetector = forwardRef((props, ref) => {
         if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
             camera_temp.current.srcObject = stream;
         }
-        if (RecordState !== 'START') {
-            // start dictaphone
-            dictStart();
-
-            // start recording
-            setRecordState(RecordState.START);
-        }
+        
         run();
+    };
+
+    const onSubmitHandler = async (event) => {
+        event.preventDefault();
+        allStop();
+
+        props.history.push('/finish');
     };
     return (
         <>
             <div style={{display:'none'}}>
-                <AudioReactRecorder state={recordState} onStop={onStop} />
+                <AudioRecorder ref = {recordRef} />
+                {/* <AudioReactRecorder state={recordState} onStop={onStop}/> */}
             </div>
-            <ShowButton onClick={startVideo}> 시작하기</ShowButton>
+            <ShowButton onClick={
+                ()=>{
+                    recordRef.current.start();
+                    startVideo();
+                    }}> 시작하기</ShowButton>
             <div className="facedetector" style={{click_style}}>
                 <div className="test" ref={figures}></div>
                 <video id="webcam" autoPlay muted={true} ref={camera} />
                 <video id="hiddencam" autoPlay muted={true} ref={camera_temp}/>
             </div>
+            <div className="stopButton">
+                <form style={{ display: 'flex', flexDirection: 'column'}} onSubmit={onSubmitHandler}>
+                    <button onClick={recordRef.current.stop} type="submit">끝내기</button>
+                </form>
+            </div>
             
         </>
     );
-});
-export default FaceDetector;
+};
+export default withRouter(FaceDetector);

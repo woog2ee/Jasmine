@@ -1,7 +1,7 @@
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder'
-import React, {useState} from 'react'
+import React, {useState, forwardRef, useImperativeHandle} from 'react'
 
-function AudioRecorder(props) {
+const AudioRecorder = forwardRef((props, ref) => {
     const [recordState, setRecordState] = useState(null);
 
     const onStop = (audioData) => {
@@ -17,15 +17,21 @@ function AudioRecorder(props) {
         
     }
 
+    useImperativeHandle(ref, () => ({
+        start,
+        stop
+    }));
+
 
     return (
-        <div className='audioRecord'>
-            <AudioReactRecorder state={recordState} onStop={onStop}/>
-            {/* <button onClick={start}>Start</button>
-            <button onClick={stop}>STOP</button> */}
-            
+        <>
+        <div className='audioRecord' style={{display:'none'}}>
+            <AudioReactRecorder state={recordState} onStop={onStop} />
         </div>
+        <button onClick={start}>Start</button>
+        <button onClick={stop}>STOP</button>
+        </>
     )
-}
+});
 
 export default AudioRecorder;

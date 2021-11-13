@@ -87,7 +87,7 @@
 }
 
 .stopButton {
-    width: 100vw;
+    width: 950px;
     float: none;
     margin: 0 auto;
     text-align: center;
@@ -99,11 +99,10 @@
 
 .stopButton button{
     cursor: pointer;
-    position: inherit;
     margin: 0 auto;
     background-color: #C54AC7;
     color: papayawhip;
-    width: 180px;
+    width: 10%;
     height: 60px;
     border: none;
     font-size: 1.3rem;
