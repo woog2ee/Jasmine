@@ -15,7 +15,7 @@ function Run(props) {
         endRef.current.allStop();
         // await setisEnd(true);
 
-        props.history.push('/home');
+        props.history.push('/finish');
     };
 
     return (
