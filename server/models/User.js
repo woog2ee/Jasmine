@@ -26,6 +26,10 @@ const userSchema = mongoose.Schema({
         default: 0,
     },
     image: String,
+    flower: {
+        type: Number,
+        default: 0,
+    },
     token: {
         type: String,
     },
