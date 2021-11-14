@@ -1,4 +1,4 @@
-import React, { useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import * as blazeface from '@tensorflow-models/blazeface';
@@ -10,15 +10,15 @@ import AudioRecorder from './AudioRecorder';
 
 const CONSTRAINTS = { video: true };
 
-
 function FaceDetector(props) {
     const recordRef = useRef({});
-    const [btn,setBtn] = useState('');
+    const [btn, setBtn] = useState('');
     let click_style = 'display: none';
     const camera = React.useRef();
     const camera_temp = React.useRef();
     const figures = React.useRef();
     const webcamElement = camera.current;
+    let score = 50;
 
     // dictaphone
     const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
@@ -39,12 +39,9 @@ function FaceDetector(props) {
         console.log('end~~~');
         // stop dictaphone
         dictStop();
-        camera.current = null
-        camera_temp.current = null
+        camera.current = null;
+        camera_temp.current = null;
     };
-
-    
-    
 
     const run = async () => {
         const model = await blazeface.load();
@@ -60,7 +57,7 @@ function FaceDetector(props) {
         while (true) {
             // 종료 버튼 클릭 시
             if (props.isEnd === true) {
-                return;
+                break;
                 // 여기서 다시 home으로
             }
             try {
@@ -75,6 +72,11 @@ function FaceDetector(props) {
                         figures.current.innerText = String(predictions[i].probability[0]).substring(0, 5);
                         console.log('Gaze direction: ', gazePrediction); //will return 'RIGHT', 'LEFT', 'STRAIGHT' or 'TOP'
                         check = true;
+                        if (gazePrediction === 'LEFT' || gazePrediction === 'RIGHT') {
+                            score--;
+                        } else if (gazePrediction === 'STRAIGHT' || gazePrediction === 'TOP' || gazePrediction === 'BOTTOM') {
+                            score++;
+                        }
                     }
                 }
                 if (figures.current && !check) {
@@ -86,13 +88,9 @@ function FaceDetector(props) {
                             const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
                             if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
                                 figures.current.innerText = '얼굴을 정면으로 향해주세요.';
-                                // figures.current.innerText = '얼굴을 정면으로 향해주세요.' +
-                                // "\ntopLeft: " + String(predictions[i].topLeft[0]).substr(0, 5) + ", " + String(predictions[i].topLeft[1]).substr(0, 5) +
-                                // "\nbottomRight: " + String(predictions[i].bottomRight[0]).substring(0, 5) + ", " + String(predictions[i].bottomRight[1]).substring(0, 5) +
-                                // "\neyeLeft: " + String(predictions[i].landmarks[0][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[0][1]).substring(0, 5) +
-                                // "\neyeRight: " + String(predictions[i].landmarks[1][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[1][1]).substring(0, 5) +
-                                // "\nnose: " + String(predictions[i].landmarks[2][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[2][1]).substring(0, 5) +
-                                // "\nmouth: " + String(predictions[i].landmarks[3][0]).substr(0, 5) + ", " + String(predictions[i].landmarks[3][1]).substring(0, 5);
+                                score--;
+                            } else {
+                                score++;
                             }
                         }
                     }
@@ -106,7 +104,7 @@ function FaceDetector(props) {
         }
     };
     const ShowButton = styled.button`
-        display : ${btn};
+        display: ${btn};
         outline: none;
         border: none;
         border-radius: 10px;
@@ -141,7 +139,7 @@ function FaceDetector(props) {
         if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
             camera_temp.current.srcObject = stream;
         }
-        
+
         run();
     };
 
@@ -153,27 +151,32 @@ function FaceDetector(props) {
     };
     return (
         <>
-            <div style={{display:'none'}}>
-                <AudioRecorder ref = {recordRef} />
+            <div style={{ display: 'none' }}>
+                <AudioRecorder ref={recordRef} />
                 {/* <AudioReactRecorder state={recordState} onStop={onStop}/> */}
             </div>
-            <ShowButton onClick={
-                ()=>{
+            <ShowButton
+                onClick={() => {
                     recordRef.current.start();
                     startVideo();
-                    }}> 시작하기</ShowButton>
-            <div className="facedetector" style={{click_style}}>
+                }}
+            >
+                {' '}
+                시작하기
+            </ShowButton>
+            <div className="facedetector" style={{ click_style }}>
                 <div className="test" ref={figures}></div>
                 <video id="webcam" autoPlay muted={true} ref={camera} />
-                <video id="hiddencam" autoPlay muted={true} ref={camera_temp}/>
+                <video id="hiddencam" autoPlay muted={true} ref={camera_temp} />
             </div>
             <div className="stopButton">
-                <form style={{ display: 'flex', flexDirection: 'column'}} onSubmit={onSubmitHandler}>
-                    <button onClick={recordRef.current.stop} type="submit">끝내기</button>
+                <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
+                    <button onClick={recordRef.current.stop} type="submit">
+                        끝내기
+                    </button>
                 </form>
             </div>
-            
         </>
     );
-};
+}
 export default withRouter(FaceDetector);
