@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../../_actions/user_action';
 import { withRouter } from 'react-router-dom';
@@ -51,6 +52,7 @@ function RegisterPage(props) {
 
     return (
         <div
+        className="bg-primary bg-opacity-25"
             style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -60,16 +62,24 @@ function RegisterPage(props) {
             }}
         >
             <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
-                <label>Email</label>
-                <input type="email" value={Email} onChange={onEmailHandler} />
-                <label>Name</label>
-                <input type="text" value={Name} onChange={onNameHandler} />
-                <label>Password</label>
-                <input type="password" value={Password} onChange={onPasswordHandler} />
-                <label>Confirm Password</label>
-                <input type="password" value={ConfirmPassword} onChange={onConfirmPasswordHandler} />
+                <div className="row">
+                    <label htmlFor="colFormLabelLg" className="col-form-label">Email</label>
+                    <input type="email" className="form-control" value={Email} onChange={onEmailHandler} />
+                </div>
+                <div className="row">
+                    <label htmlFor="colFormLabelLg" className="col-form-label">Name</label>
+                    <input type="text" className="form-control" value={Name} onChange={onNameHandler} />
+                </div>
+                <div className="row">
+                    <label htmlFor="colFormLabelLg" className="col-form-label">Password</label>
+                    <input type="password" className="form-control" value={Password} onChange={onPasswordHandler} />
+                </div>
+                <div className="row">
+                    <label htmlFor="colFormLabelLg" className="col-form-label">Confirm Password</label>
+                    <input type="password" className="form-control" value={ConfirmPassword} onChange={onConfirmPasswordHandler} />
+                </div>
                 <br />
-                <button type="submit">회원 가입</button>
+                <button type="submit" className="btn btn-outline-primary">회원 가입</button>
             </form>
         </div>
     );
