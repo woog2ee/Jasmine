@@ -18,11 +18,11 @@ function FaceDetector(props) {
     const camera_temp = React.useRef();
     const figures = React.useRef();
     const webcamElement = camera.current;
-    let isEnd = false;
-    let score = 50;
+    const [score, setScore] = useState(50);
 
     const allStop = async () => {
         console.log('end~~~');
+        console.log(score);
         // stop dictaphone
         dictStop();
         camera.current = null;
@@ -30,10 +30,9 @@ function FaceDetector(props) {
     };
 
     const onSubmitHandler = async (event) => {
-        isEnd = true;
-        console.log(isEnd);
         event.preventDefault();
         allStop();
+        props.history.push('/finish');
     };
 
     // dictaphone
@@ -63,53 +62,46 @@ function FaceDetector(props) {
         await gaze.setUpCamera(camera_temp.current);
 
         while (true) {
-            // 종료 버튼 클릭 시
-            if (isEnd === true) {
-                console.log(score);
-                props.history.push('/finish');
-                // 여기서 다시 home으로
-            } else {
-                try {
-                    const img = await webcam.capture();
-                    const returnTensors = false;
-                    const predictions = await model.estimateFaces(img, returnTensors);
-                    const gazePrediction = await gaze.getGazePrediction();
-                    let check = false;
+            try {
+                const img = await webcam.capture();
+                const returnTensors = false;
+                const predictions = await model.estimateFaces(img, returnTensors);
+                const gazePrediction = await gaze.getGazePrediction();
+                let check = false;
 
+                for (let i = 0; i < predictions.length; i++) {
+                    if (figures.current) {
+                        figures.current.innerText = String(predictions[i].probability[0]).substring(0, 5);
+                        console.log('Gaze direction: ', gazePrediction); //will return 'RIGHT', 'LEFT', 'STRAIGHT' or 'TOP'
+                        check = true;
+                        if (gazePrediction === 'LEFT' || gazePrediction === 'RIGHT') {
+                            setScore(preScore => preScore - 1);
+                        } else if (gazePrediction === 'STRAIGHT' || gazePrediction === 'TOP' || gazePrediction === 'BOTTOM') {
+                            setScore(preScore => preScore + 1);
+                        }
+                    }
+                }
+                if (figures.current && !check) {
+                    figures.current.innerText = '얼굴을 보여주세요';
+                }
+                if (check) {
                     for (let i = 0; i < predictions.length; i++) {
                         if (figures.current) {
-                            figures.current.innerText = String(predictions[i].probability[0]).substring(0, 5);
-                            console.log('Gaze direction: ', gazePrediction); //will return 'RIGHT', 'LEFT', 'STRAIGHT' or 'TOP'
-                            check = true;
-                            if (gazePrediction === 'LEFT' || gazePrediction === 'RIGHT') {
-                                score--;
-                            } else if (gazePrediction === 'STRAIGHT' || gazePrediction === 'TOP' || gazePrediction === 'BOTTOM') {
-                                score++;
+                            const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
+                            if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
+                                figures.current.innerText = '얼굴을 정면으로 향해주세요.';
+                                setScore(preScore => preScore - 1);
+                            } else {
+                                setScore(preScore => preScore + 1);
                             }
                         }
                     }
-                    if (figures.current && !check) {
-                        figures.current.innerText = '얼굴을 보여주세요';
-                    }
-                    if (check) {
-                        for (let i = 0; i < predictions.length; i++) {
-                            if (figures.current) {
-                                const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
-                                if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
-                                    figures.current.innerText = '얼굴을 정면으로 향해주세요.';
-                                    score--;
-                                } else {
-                                    score++;
-                                }
-                            }
-                        }
-                    }
-                    img.dispose();
-                    await tf.nextFrame();
-                } catch (e) {
-                    console.error(e);
-                    continue;
                 }
+                img.dispose();
+                await tf.nextFrame();
+            } catch (e) {
+                console.error(e);
+                continue;
             }
         }
     };
