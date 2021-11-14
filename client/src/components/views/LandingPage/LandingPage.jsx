@@ -41,6 +41,7 @@ function LandingPage(props) {
                                         Learn more
                                     </a>
                                 </p>
+                                <button onClick={onClickHandler}>로그아웃</button>
                             </div>
                             <Foot/>
                         </div>

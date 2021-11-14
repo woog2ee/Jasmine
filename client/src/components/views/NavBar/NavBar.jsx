@@ -14,14 +14,14 @@ function Navbar() {
                 <nav>
                     <ul class="nav masthead-nav">
                         <li class="active">
-                            <a href="#" className="fs-3 li-a" id="list-1">홈</a>
+                            <a href="#" className="fs-3 li-a text-body" id="list-1">홈</a>
                         </li>
                         <li class="active">
-                            <a href="#" className="fs-3 li-a" id="list-2">회원가입</a>
+                            <a href="#" className="fs-3 li-a text-body" id="list-2">회원가입</a>
                             
                         </li>
                         <li class="active">
-                            <a href="#" className="fs-3 li-a" id="list-3">로그인</a>
+                            <a href="#" className="fs-3 li-a text-body" id="list-3">로그인</a>
                             
                         </li>
                     </ul>

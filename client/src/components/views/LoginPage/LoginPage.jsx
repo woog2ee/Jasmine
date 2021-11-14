@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../_actions/user_action';
 import { withRouter } from 'react-router-dom';
+import Navbar from '../NavBar/NavBar';
 
 function LoginPage(props) {
     const dispatch = useDispatch();
@@ -35,29 +36,32 @@ function LoginPage(props) {
     };
 
     return (
-        <div
-            className="bg-primary bg-opacity-25"
-            style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '100%',
-                height: '100vh',
-            }}
-        >
-            <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
-                <div className="row">
-                    <label htmlFor="colFormLabelLg" className="col-form-label">Email</label>
-                    <input type="email" className="form-control" value={Email} onChange={onEmailHandler} />
-                </div>
-                <div className="row">
-                    <label htmlFor="colFormLabelLg" className="col-form-label">Password</label>
-                    <input type="password" className="form-control" value={Password} onChange={onPasswordHandler} />
-                </div>
-                <br />
-                <button type="submit" className="btn btn-outline-primary">Login</button>
-            </form>
-        </div>
+        <body>
+            <div
+                className="bg-primary bg-opacity-25"
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100vh',
+                }}
+            >
+                <Navbar/>
+                <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
+                    <div className="row pdB">
+                        <label htmlFor="colFormLabelLg" className="col-form-label text-body">이메일</label>
+                        <input type="email" className="form-control" value={Email} onChange={onEmailHandler} />
+                    </div>
+                    <div className="row">
+                        <label htmlFor="colFormLabelLg" className="col-form-label text-body">비밀번호</label>
+                        <input type="password" className="form-control" value={Password} onChange={onPasswordHandler} />
+                    </div>
+                    <br />
+                    <button type="submit" className="btn btn-primary">로그인</button>
+                </form>
+            </div>
+        </body>
     );
 }
 
