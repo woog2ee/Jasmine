@@ -13,6 +13,8 @@ from sklearn.preprocessing import normalize
 from collections import Counter
 from wordcloud import WordCloud, ImageColorGenerator
 from PIL import Image
+from pymongo import MongoClient
+import certifi
 
 
 
@@ -26,6 +28,7 @@ class TextAnalyzer:
                 self.stopwords.append(line.strip())
                 
     
+
     # 어휘 다양도 반환
     def text2variety(self, text):
         pos = self.kkma.pos(text)
@@ -37,12 +40,14 @@ class TextAnalyzer:
         return round(ttr, 2)
              
             
+
     # 글을 문장 단위로 리턴
     def text2sentences(self, text):
         sentences = sent_tokenize(text)
         return sentences
     
     
+
     # 문장에서 명사 추출
     def sentences2nouns(self, sentences):
         nouns = []                      # 문장에 포함된 명사
@@ -56,6 +61,7 @@ class TextAnalyzer:
         return nouns
     
     
+
     # 공백 포함/제외 문장 길이 반환
     def sentences4count(self, sentences):
         num_sent = len(sentences)       # 전체 문장 개수
@@ -70,6 +76,7 @@ class TextAnalyzer:
         return num_sent, len_sent, len_sent_blank_removed   
     
     
+
     # 공백 포함/제외 문장 길이 시각화
     def visualize_text4count(self, text):
         sentences = self.text2sentences(text)
@@ -81,10 +88,12 @@ class TextAnalyzer:
         plt.ylabel('문장 길이')
         plt.bar(num_len_sent, len_sent, label='공백포함', color='#f99dff')
         plt.bar(num_len_sent_blank_removed, len_sent_blank_removed, label='공백제외', color='#c54ac7')
-        plt.tick_params(left=False, bottom=False)
+        #plt.tick_params(left=False, bottom=False)
+        plt.xticks([])
+        plt.yticks([])
         plt.legend(loc='upper left', frameon=False, fontsize=10)
         plt.savefig('./Jasmine_sentence_count.png')
-        return Image.open('./Jasmine_sentence_count.png')
+        return Image.open('./Jasmine_sentence_count.png'), num_sent, len_sent, len_sent_blank_removed
         
         #print(f' (공백포함) 문장 길이 평균값: {sum(len_sent)/len(len_sent)}')
         #print(f' (공백포함) 문장 길이 중앙값: {statistics.median(len_sent)}')
@@ -103,6 +112,7 @@ class WordAnalyzer:
         self.essential_josa = ['은', '는', '이', '가', '을', '를']
         
         
+
     ####################   키워드 선정  
     # 가중치 그래프 생성
     def build_word_graph(self, sentence):
@@ -111,6 +121,7 @@ class WordAnalyzer:
         return np.dot(countvec_mat.T, countvec_mat), {vocab[word]: word for word in vocab}
     
     
+
     # 가중치 그래프에 TextRank 적용
     def get_ranks(self, graph, d=0.85):
         A = graph
@@ -127,6 +138,7 @@ class WordAnalyzer:
         ranks = np.linalg.solve(A, B)
         return {idx: r[0] for idx, r in enumerate(ranks)}
     
+
     
     # 키워드 선정
     def text2keywords(self, text, word_num=15):        
@@ -146,12 +158,14 @@ class WordAnalyzer:
         return keywords
     
     
+
     ####################   불용어 선정   
     # 단어 품사 태깅
     def text2postag(self, text):
         postag = self.okt.pos(text)
         return postag
     
+
     
     # 불용어 선정
     def text2stopwords(self, text):
@@ -168,6 +182,7 @@ class WordAnalyzer:
                     stopwords_postag.append(postag[i][0])
         return stopwords_postag
     
+
     
     ####################   빈도수 높은 단어 선정   
     # 빈도수 높은 단어 선정
@@ -180,6 +195,7 @@ class WordAnalyzer:
                 countwords_postag.append(postag[i][0])
         return countwords_postag
     
+
     
     ####################   워드클라우드 시각화   
     # 워드클라우드에 넣기 위한 dict 리턴
@@ -213,6 +229,7 @@ class WordAnalyzer:
         return wordscount
     
 
+
     # 워드클라우드 시각화
     def visualize_wordcloud(self, text, wordtype):
         if wordtype == 'keywords':
@@ -243,28 +260,73 @@ class WordAnalyzer:
 
 
 
+def make_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords):
+    top3_keywords   = set_top3_words(top3_keywords)
+    top3_stopwords  = set_top3_words(top3_stopwords)
+    top3_countwords = set_top3_words(top3_countwords)
+
+    variety_comment    = f'이번 발표에서 아이의 어휘 다양도는 {variety}%로 확인됩니다. '
+    sentcount_comment  = f'아이가 발표에서 사용한 문장은 총 {num_sent}개로, 문장의 평균 길이는 {sum(len_sent)//len(len_sent)}입니다.'
+    keywords_comment   = f'아이의 발표에서 키워드로 인식된 단어는 {top3_keywords} 이었습니다. '
+    stopwords_comment  = f'아이의 발표에서 중요도가 낮으나 자주 사용된 단어는 {top3_stopwords} 이었습니다.'
+    countwords_comment = f'아이의 발표에서 자주 사용된 단어는 {top3_countwords} 이었습니다.'
+    return variety_comment, sentcount_comment, keywords_comment, stopwords_comment, countwords_comment
+
+def set_top3_words(words):
+    words = str(words)
+    words = re.sub(r'\[', '', words)
+    words = re.sub(r'\]', '', words)
+    words = re.sub(r'"', '', words)
+    return words
+
+
+
+def upload_speech_document(variety_comment, sentcount_comment, sentcount_image, keywords_comment, keywords_image,
+                           stopwords_comment, stopwords_image, countwords_comment, countwords_image):
+    host = 'mongodb+srv://seungukyu:0128@jasmine.iyjg6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    client = MongoClient(host, tlsCAFile=certifi.where())
+    database = client['myFirstDatabase']
+    collection = database['text_result']
+
+    text_analysis = {
+        'variety_comment': variety_comment,
+        'sentcount_comment': sentcount_comment,
+        'sentcount_image': sentcount_image,
+        'keywords_comment': keywords_comment,
+        'keywords_image': keywords_image,
+        'stopwords_comment': stopwords_comment,
+        'stopwords_image': stopwords_image,
+        'countwords_comment': countwords_comment,
+        'countwords_image': countwords_image
+    }
+    collection.insert(text_analysis)
+
+
+
 if __name__ == '__main__':
-    kidfullname = '자스민으로 발표하는 아이 이름' # '유승욱'
-    kidname = kidfullname[1:] # '승욱'
+    kidname = '로그인한 아이 이름' 
     stttext = 'stt로 db에서 받아올 텍스트'
     
     TA = TextAnalyzer()     # 텍스트 분석 클래스
     WA = WordAnalyzer()     # 단어 분석 클래스
 
     variety     = TA.text2variety(stttext)             # 어휘 다양도
-    sentcnt_img = TA.visualize_text4count(stttext)     # 문장 길이 통계
+    sentcount_image, num_sent, len_sent, len_sent_blank_removed = TA.visualize_text4count(stttext)     # 문장 길이 통계
 
     top3_keywords   = WA.text2keywords(stttext)[:3]       # 키워드 상위 3개
     top3_stopwords  = WA.text2keywords(stttext)[:3]       # 불용어 상위 3개
     top3_countwords = WA.text2countwords(stttext)[:3]     # 빈도수 높은 단어 상위 3개
-    wordcloud_keyword_img   = WA.visualize_wordcloud(stttext, 'keywords')       # 키워드 워드클라우드
-    wordcloud_stopword_img  = WA.visualize_wordcloud(stttext, 'stopwords')      # 불용어 워드클라우드
-    wordcloud_countword_img = WA.visualize_wordcloud(stttext, 'countwords')     # 빈도수 높은 단어 워드클라우드
+    wordcloud_keyword_image   = WA.visualize_wordcloud(stttext, 'keywords')       # 키워드 워드클라우드
+    wordcloud_stopword_image  = WA.visualize_wordcloud(stttext, 'stopwords')      # 불용어 워드클라우드
+    wordcloud_countword_image = WA.visualize_wordcloud(stttext, 'countwords')     # 빈도수 높은 단어 워드클라우드
 
-    # 학부모 인터페이스 코멘트 
-    variety_comment   = '아이의 '
-    sentcnt_comment   = ''
-    keyword_comment   = ''
-    stopword_comment  = ''
-    countword_comment = ''
+    # 학부모 인터페이스용 코멘트 생성
+    variety_comment, sentcount_comment, keywords_comment, stopwords_comment, countwords_comment =\
+        make_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords)
+
+    # DB에 학부모 인터페이스용 코멘트 및 분석 자료 등록
+    upload_speech_document(variety_comment, sentcount_comment, sentcount_image,\
+                          keywords_comment, wordcloud_keyword_image,\
+                          stopwords_comment, wordcloud_stopword_image,\
+                          countwords_comment, wordcloud_countword_image)
 
