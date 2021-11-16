@@ -17,7 +17,7 @@ function Run(props) {
                 <div className="question" id="run_question">
                     <h2>{question}</h2>
                 </div>
-                <FaceDetector/>
+                <FaceDetector userFrom={localStorage.getItem('userId')} />
             </div>
         </div>
     );
