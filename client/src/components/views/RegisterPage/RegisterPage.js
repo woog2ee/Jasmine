@@ -39,6 +39,7 @@ function RegisterPage(props) {
             email: Email,
             name: Name,
             password: Password,
+            flower: 0,
         };
 
         dispatch(registerUser(body)).then((response) => {

@@ -4,10 +4,8 @@ import logo from '../../../img/logo.png';
 import FaceDetector from './FaceDetector';
 import '../../../css/Run.css';
 
-
 function Run(props) {
     const question = '랜덤 질문';
-    const endRef = useRef({});
 
     return (
         <div className="run">
@@ -19,7 +17,7 @@ function Run(props) {
                 <div className="question" id="run_question">
                     <h2>{question}</h2>
                 </div>
-                <FaceDetector ref={endRef} />
+                <FaceDetector userFrom={localStorage.getItem('userId')} />
             </div>
         </div>
     );

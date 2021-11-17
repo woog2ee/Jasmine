@@ -1,4 +1,6 @@
 import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import Axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import * as blazeface from '@tensorflow-models/blazeface';
@@ -7,10 +9,13 @@ import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from 'gaze-detection';
 import AudioRecorder from './AudioRecorder';
+import { visionUser } from '../../../_actions/vision_action';
+import moment from 'moment';
 
 const CONSTRAINTS = { video: true };
 
 function FaceDetector(props) {
+    const userFrom = props.userFrom;
     const recordRef = useRef({});
     const [btn, setBtn] = useState('');
     let click_style = 'display: none';
@@ -18,7 +23,50 @@ function FaceDetector(props) {
     const camera_temp = React.useRef();
     const figures = React.useRef();
     const webcamElement = camera.current;
-    let score = 50;
+    const [score, setScore] = useState(50);
+    const [comment, setComment] = useState('');
+
+    const allStop = async () => {
+        console.log('end~~~');
+        // stop dictaphone
+        dictStop();
+        camera.current = null;
+        camera_temp.current = null;
+    };
+
+    const onSubmitHandler = async (event) => {
+        event.preventDefault();
+
+        if (score > 100) {
+            setScore(100);
+        } else if (score < 0) {
+            setScore(0);
+        }
+
+        if (score < 70) {
+            setComment('다음에는 앞을 많이 바라보며 발표해볼까요?');
+        } else {
+            setComment('앞을 잘 쳐다보고 발표했어요.');
+        }
+        console.log(score);
+
+        // const date = moment().format('YYYY-MM-DD HH:mm:ss');
+        let body = {
+            userFrom: userFrom,
+            score: score,
+            comment: comment,
+        };
+
+        allStop();
+
+        Axios.post('/api/run/vision', body).then((response) => {
+            if (response.data.success) {
+                props.history.push('/finish');
+            } else {
+                alert('Error');
+            }
+        });
+    };
 
     // dictaphone
     const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
@@ -35,14 +83,6 @@ function FaceDetector(props) {
         resetTranscript();
     };
 
-    const allStop = async () => {
-        console.log('end~~~');
-        // stop dictaphone
-        dictStop();
-        camera.current = null;
-        camera_temp.current = null;
-    };
-
     const run = async () => {
         const model = await blazeface.load();
         await gaze.loadModel();
@@ -55,11 +95,6 @@ function FaceDetector(props) {
         await gaze.setUpCamera(camera_temp.current);
 
         while (true) {
-            // 종료 버튼 클릭 시
-            if (props.isEnd === true) {
-                break;
-                // 여기서 다시 home으로
-            }
             try {
                 const img = await webcam.capture();
                 const returnTensors = false;
@@ -73,9 +108,9 @@ function FaceDetector(props) {
                         console.log('Gaze direction: ', gazePrediction); //will return 'RIGHT', 'LEFT', 'STRAIGHT' or 'TOP'
                         check = true;
                         if (gazePrediction === 'LEFT' || gazePrediction === 'RIGHT') {
-                            score--;
+                            setScore((preScore) => preScore - 1);
                         } else if (gazePrediction === 'STRAIGHT' || gazePrediction === 'TOP' || gazePrediction === 'BOTTOM') {
-                            score++;
+                            setScore((preScore) => preScore + 1);
                         }
                     }
                 }
@@ -88,9 +123,9 @@ function FaceDetector(props) {
                             const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
                             if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
                                 figures.current.innerText = '얼굴을 정면으로 향해주세요.';
-                                score--;
+                                setScore((preScore) => preScore - 1);
                             } else {
-                                score++;
+                                setScore((preScore) => preScore + 1);
                             }
                         }
                     }
@@ -143,17 +178,10 @@ function FaceDetector(props) {
         run();
     };
 
-    const onSubmitHandler = async (event) => {
-        event.preventDefault();
-        allStop();
-
-        props.history.push('/finish');
-    };
     return (
         <>
             <div style={{ display: 'none' }}>
                 <AudioRecorder ref={recordRef} />
-                {/* <AudioReactRecorder state={recordState} onStop={onStop}/> */}
             </div>
             <ShowButton
                 onClick={() => {
