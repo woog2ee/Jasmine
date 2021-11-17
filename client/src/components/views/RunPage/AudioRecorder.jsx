@@ -1,12 +1,13 @@
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder'
 import React, {useState, forwardRef, useImperativeHandle} from 'react'
 
+const mongoose = require('mongoose')
 const AudioRecorder = forwardRef((props, ref) => {
     const [recordState, setRecordState] = useState(null);
 
     const onStop = (audioData) => {
         console.log('audioData', audioData);
-        console.log(audioData.url);
+        console.log(audioData.blob);
     }
 
     const start = () => {
