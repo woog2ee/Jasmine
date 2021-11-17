@@ -15,6 +15,7 @@ from wordcloud import WordCloud, ImageColorGenerator
 from PIL import Image
 from pymongo import MongoClient
 import certifi
+import base64
 
 
 
@@ -93,7 +94,8 @@ class TextAnalyzer:
         plt.yticks([])
         plt.legend(loc='upper left', frameon=False, fontsize=10)
         plt.savefig('./Jasmine_sentence_count.png')
-        return Image.open('./Jasmine_sentence_count.png'), num_sent, len_sent, len_sent_blank_removed
+        sentcount_img = encode_image_tobase64('./Jasmine_sentence_count.png')
+        return sentcount_img, num_sent, len_sent, len_sent_blank_removed
         
         #print(f' (공백포함) 문장 길이 평균값: {sum(len_sent)/len(len_sent)}')
         #print(f' (공백포함) 문장 길이 중앙값: {statistics.median(len_sent)}')
@@ -214,7 +216,7 @@ class WordAnalyzer:
         count = Counter(words)
         wordscount = dict(count.most_common())
         
-        # countwoords 선정시 단어 길이, 빈도수인 1 단어 제거
+        # countwoords 선정시 단어 길이, 빈도수 1인 단어 제거
         if counttype == 'count':
             dict_key = list(wordscount.keys())
             for i in dict_key:
@@ -256,20 +258,62 @@ class WordAnalyzer:
         plt.imshow(cloud.recolor(color_func=image_colors), interpolation='bilinear')
         plt.axis('off')
         plt.savefig(f'./Jasmine_wordcloud_{wordtype}.png')
-        return Image.open(f'./Jasmine_wordcloud_{wordtype}'.png)
+        wordcloud_img = encode_image_tobase64(f'./Jasmine_wordcloud_{wordtype}.png')
+        return wordcloud_img
 
 
+
+def encode_image_tobase64(imagepath):
+    with open(imagepath, 'rb') as img_file:
+        base64_string = base64.b64encode(img_file.read())
+    return base64_string
 
 def make_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords):
     top3_keywords   = set_top3_words(top3_keywords)
     top3_stopwords  = set_top3_words(top3_stopwords)
     top3_countwords = set_top3_words(top3_countwords)
 
-    variety_comment    = f'이번 발표에서 아이의 어휘 다양도는 {variety}%로 확인됩니다. '
-    sentcount_comment  = f'아이가 발표에서 사용한 문장은 총 {num_sent}개로, 문장의 평균 길이는 {sum(len_sent)//len(len_sent)}입니다.'
-    keywords_comment   = f'아이의 발표에서 키워드로 인식된 단어는 {top3_keywords} 이었습니다. '
-    stopwords_comment  = f'아이의 발표에서 중요도가 낮으나 자주 사용된 단어는 {top3_stopwords} 이었습니다.'
-    countwords_comment = f'아이의 발표에서 자주 사용된 단어는 {top3_countwords} 이었습니다.'
+    variety_comment    = f'어휘 다양도는 아이가 사용한 전체 낱말 중에서 다르게 사용한 낱말의 비율이 얼마인지 측정합니다. \
+    쉽게 말해 아이가 얼마나 다양한 어휘를 구사했는지에 대한 지표로 유아의 경우 20 ~ 40으로 나타난다고 합니다. \
+    이번 발표에서 아이의 어휘 다양도는 {variety}%로 확인됩니다. '
+    if variety_comment < 30:
+        variety_comment += '아이의 어휘 다양도는 평균 혹은 조금 낮은 편으로 확인되며, 독서활동을 통해 아이가 더욱 다양한 단어를 구사할 수 있도록 지도해주세요.'
+    else:
+        variety_comment += '아이의 어휘 다양도가 평균 혹은 조금 높은 편으로 확인되며, 앞으로도 현재와 같이 다양한 단어를 구사할 수 있도록 격려해주세요.'
+
+    avg_sent   = sum(len_sent) // num_sent
+    short_sent = False
+    long_sent  = False
+    sentcount_comment  = f'아이가 발표에서 사용한 문장은 총 {num_sent}개로, 문장의 평균 길이는 {avg_sent}로 측정되었습니다. '
+    sentcount_comment += '그래프에서는 문장 순서에 따라 공백을 포함하거나 제외한 상태에서 전체 문장 길이를 한눈에 확인하실 수 있습니다. '
+    for i in range(num_sent):
+        if len_sent[i] <= avg_sent*0.6:
+            short_sent = True
+        elif avg_sent*1.4 <= len_sent[i]:
+            long_sent = True
+    if (short_sent == True and long_sent == True):
+        sentcount_comment += '특히 아이가 발표에서 평균 길이보다 짧거나 긴 문장을 자주 사용하는 것으로 보여집니다. '
+        sentcount_comment += '표현하는 문장에 너무 짧거나 긴 문장이 속하지는 않았는지 점검해주세요.'
+    elif short_sent == True:
+        sentcount_comment += '특히 아이가 발표에서 평균 길이보다 짧은 문장을 사용하는 것으로 보여집니다. '
+        sentcount_comment += '발표 중 너무 적은 내용의 불필요한 문장을 사용하지는 않았는지 점검해주세요.'
+    elif long_sent == True:
+        sentcount_comment += '특히 아이가 발표에서 평균 길이보다 긴 문장을 사용하는 것으로 보여집니다. '
+        sentcount_comment += '발표 중 너무 많은 내용을 담은 문장을 사용하지는 않았는지 점검해주세요.'
+    else:
+        sentcount_comment += '아이가 표현하는 문장에 있어 너무 짧거나 긴 문장을 사용하지 않고 일관된 문장 길이로 잘 표현해 주었습니다.'
+
+    keywords_comment   = f'아이의 발표에서 키워드로 인식된 단어는 {top3_keywords} 순이었습니다. '
+    keywords_comment   += '그림은 키워드를 시각화한 것으로, 단어 크기가 크거나 색깔이 눈에 띌 경우 아이가 자주 사용했음을 의미합니다. '
+    keywords_comment   += '아이가 발표에서 이 키워드들을 염두해서 발표하였는지 확인해주세요.'
+
+    stopwords_comment  = f'아이의 발표에서 중요도가 낮으나 자주 사용된 단어는 {top3_stopwords} 순이었습니다. '
+    stopwords_comment  += '그림은 중요도가 낮으나 자주 사용된 단어를 시각화한 것으로, 단어 크기가 크거나 색깔이 눈에 띌 경우 아이가 자주 사용했음을 의미합니다. '
+    stopwords_comment  += '아이가 발표에서 이 단어들을 은연 중에 자주 말하지는 않는지 확인해주세요.'
+    
+    countwords_comment = f'아이의 발표에서 자주 사용된 단어는 {top3_countwords} 순이었습니다. '
+    countwords_comment += '그림은 자주 사용된 단어를 시각화한 것으로, 단어 크기가 크거나 색깔이 눈에 띌 경우 아이가 자주 사용했음을 의미합니다. '
+    countwords_comment += '자주 사용된 단어가 키워드에 속하는 편인지, 중요도가 낮은 단어인지 확인해주세요.'
     return variety_comment, sentcount_comment, keywords_comment, stopwords_comment, countwords_comment
 
 def set_top3_words(words):
@@ -288,16 +332,18 @@ def upload_speech_document(variety_comment, sentcount_comment, sentcount_image, 
     database = client['myFirstDatabase']
     collection = database['text_result']
 
+    # comment는 아이의 발표 결과에 따라 선정되며,
+    # image는 발표 분석 통계 자료를 base64로 인코딩함
     text_analysis = {
-        'variety_comment': variety_comment,
-        'sentcount_comment': sentcount_comment,
-        'sentcount_image': sentcount_image,
-        'keywords_comment': keywords_comment,
-        'keywords_image': keywords_image,
-        'stopwords_comment': stopwords_comment,
-        'stopwords_image': stopwords_image,
+        'variety_comment'   : variety_comment,
+        'sentcount_comment' : sentcount_comment,
+        'sentcount_image'   : sentcount_image,
+        'keywords_comment'  : keywords_comment,
+        'keywords_image'    : keywords_image,
+        'stopwords_comment' : stopwords_comment,
+        'stopwords_image'   : stopwords_image,
         'countwords_comment': countwords_comment,
-        'countwords_image': countwords_image
+        'countwords_image'  : countwords_image
     }
     collection.insert(text_analysis)
 
