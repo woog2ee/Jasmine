@@ -1,28 +1,12 @@
-.navibar {
-    width: 100%;
-    height: 80px;
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@700&family=Noto+Sans+KR:wght@400;500;700&family=Poor+Story&display=swap');
 .logoImg {
-    width:156px;
-    height:80px;
+    width:130px;
+    height:70px;
     float:left;
-    margin-right: 20%;
+    margin-top: -15px;
     
 }
-.logo{
-    padding-left:10%;
-}
-
-ul li{
-    list-style: none;
-    display: inline-flex;
-    border: none;
-}
-
-.menu button{
-    border: none;
-    cursor: pointer;
-    color: white;
-    background-color: transparent;
+.li-a{
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 20px;
 }

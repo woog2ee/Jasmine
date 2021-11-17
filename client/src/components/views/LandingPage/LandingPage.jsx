@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-import '../../../css/bootstrap.min.css';
 import './cover.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Foot from '../Footer/Footer';
+import Navbar from '../NavBar/NavBar';
 
 function LandingPage(props) {
     useEffect(() => {
@@ -25,28 +26,10 @@ function LandingPage(props) {
     return (
         <html lang="en">
             <body>
-                <div class="site-wrapper">
+                <div class="site-wrapper bg-primary bg-opacity-25">
                     <div class="site-wrapper-inner">
                         <div class="cover-container">
-                            <div class="masthead clearfix">
-                                <div class="inner">
-                                    <h3 class="masthead-brand">Cover</h3>
-                                    <nav>
-                                        <ul class="nav masthead-nav">
-                                            <li class="active">
-                                                <a href="#">Home</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Features</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Contact</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-
+                            <Navbar/>
                             <div class="inner cover">
                                 <h1 class="cover-heading">Cover your page.</h1>
                                 <p class="lead">
@@ -58,16 +41,9 @@ function LandingPage(props) {
                                         Learn more
                                     </a>
                                 </p>
+                                <button onClick={onClickHandler}>로그아웃</button>
                             </div>
-
-                            <div class="mastfoot">
-                                <div class="inner">
-                                    <p>
-                                        Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by{' '}
-                                        <a href="https://twitter.com/mdo">@mdo</a>.
-                                    </p>
-                                </div>
-                            </div>
+                            <Foot/>
                         </div>
                     </div>
                 </div>
