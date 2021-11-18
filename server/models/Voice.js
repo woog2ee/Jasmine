@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const audioSchema = mongoose.Schema(
+const voiceSchema = mongoose.Schema(
     {
         userFrom: {
             type: Schema.Types.ObjectID,
@@ -14,5 +14,5 @@ const audioSchema = mongoose.Schema(
     { timestamps: true }
 );
 
-const Audio = mongoose.model('Audio', audioSchema);
-module.exports = { Audio };
+const Voice = mongoose.model('Audio', voiceSchema);
+module.exports = { Voice };
