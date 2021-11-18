@@ -7,7 +7,7 @@ const AudioRecorder = forwardRef((props, ref) => {
 
     const onStop = (audioData) => {
         console.log('audioData', audioData);
-        console.log(audioData.blob);
+        console.log(audioData.url);
     }
 
     const start = () => {

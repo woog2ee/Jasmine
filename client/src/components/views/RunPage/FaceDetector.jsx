@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSpring, animated } from 'react-spring';
 import Axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
@@ -9,12 +9,15 @@ import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from 'gaze-detection';
 import AudioRecorder from './AudioRecorder';
-import { visionUser } from '../../../_actions/vision_action';
-import moment from 'moment';
+
+
+
+
 
 const CONSTRAINTS = { video: true };
 
 function FaceDetector(props) {
+    
     const userFrom = props.userFrom;
     const recordRef = useRef({});
     const [btn, setBtn] = useState('');
