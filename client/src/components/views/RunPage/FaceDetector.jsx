@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { useSpring, animated } from 'react-spring';
+import React, { useRef, useState} from 'react';
+import { useSpring,useTransition, animated } from 'react-spring';
 import Axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
@@ -9,23 +9,50 @@ import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from 'gaze-detection';
 import AudioRecorder from './AudioRecorder';
+import sloth from '../../../img/sloth256.png';
 
-// import moment from 'moment';
 
 const CONSTRAINTS = { video: true };
+const ShowButton = styled.button`
+        outline: none;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        width: 20%;
+        height: 15%;
+        margin: 5%;
+        font-size: 30px;
+        cursor: pointer;
+        padding-left: 1rem;
+        padding-right: 1rem;
 
+        /* 색상 */
+        background: #228be6;
+        &:hover {
+            background: ${lighten(0.1, '#228be6')};
+        }
+        &:active {
+            background: ${darken(0.1, '#228be6')};
+        }
+    `;
 function FaceDetector(props) {
     
     const userFrom = props.userFrom;
     const recordRef = useRef({});
-    const [btn, setBtn] = useState('');
-    let click_style = 'display: none';
+    const [btnVisible, setBtn] = useState(true);
     const camera = React.useRef();
     const camera_temp = React.useRef();
     const figures = React.useRef();
     const webcamElement = camera.current;
     const [score, setScore] = useState(50);
     const [comment, setComment] = useState('');
+    const [isToggle, setToggle] = useState(false);
+    const appear = useSpring({
+        opacity: isToggle ? 1 : 0,
+        marginRight: isToggle ? -500 : -900,
+        marginTop: isToggle ? -100 : -500,
+    });
 
     const allStop = async () => {
         console.log('end~~~');
@@ -125,8 +152,12 @@ function FaceDetector(props) {
                             if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
                                 figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                                 setScore((preScore) => preScore - 1);
+                                
+                                if (!isToggle){setToggle((isToggle) => true);}
                             } else {
                                 setScore((preScore) => preScore + 1);
+                                
+                                if (isToggle){setToggle((isToggle) => false);}
                             }
                         }
                     }
@@ -139,35 +170,10 @@ function FaceDetector(props) {
             }
         }
     };
-    const ShowButton = styled.button`
-        display: ${btn};
-        outline: none;
-        border: none;
-        border-radius: 10px;
-        color: white;
-        font-weight: bold;
-        width: 20%;
-        height: 15%;
-        margin: 5%;
-        font-size: 30px;
-        cursor: pointer;
-        padding-left: 1rem;
-        padding-right: 1rem;
-
-        /* 색상 */
-        background: #228be6;
-        &:hover {
-            background: ${lighten(0.1, '#228be6')};
-        }
-        &:active {
-            background: ${darken(0.1, '#228be6')};
-        }
-    `;
+    
 
     const startVideo = async () => {
         dictStart();
-        click_style = '';
-        setBtn('none');
         const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
         if (camera && camera.current && !camera.current.srcObject) {
             camera.current.srcObject = stream;
@@ -175,29 +181,30 @@ function FaceDetector(props) {
         if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
             camera_temp.current.srcObject = stream;
         }
-
         run();
     };
 
     return (
         <>
-            <div style={{ display: 'none' }}>
+            <div >
                 <AudioRecorder ref={recordRef} />
             </div>
-            <ShowButton
+            {btnVisible && <ShowButton
                 onClick={() => {
                     recordRef.current.start();
+                    setBtn((btnVisible) => !btnVisible);
                     startVideo();
                 }}
-            >
-                {' '}
-                시작하기
-            </ShowButton>
-            <div className="facedetector" style={{ click_style }}>
+            >시작하기</ShowButton>}
+            {!btnVisible && isToggle &&
+                <animated.img src={sloth} style={appear}/>}
+            {!btnVisible && 
+            <div className="facedetector">
                 <div className="test" ref={figures}></div>
                 <video id="webcam" autoPlay muted={true} ref={camera} />
                 <video id="hiddencam" autoPlay muted={true} ref={camera_temp} />
             </div>
+            }
             <div className="stopButton">
                 <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
                     <button onClick={recordRef.current.stop} type="submit">

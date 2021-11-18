@@ -1,7 +1,6 @@
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder'
 import React, {useState, forwardRef, useImperativeHandle} from 'react'
 
-const mongoose = require('mongoose')
 const AudioRecorder = forwardRef((props, ref) => {
     const [recordState, setRecordState] = useState(null);
 

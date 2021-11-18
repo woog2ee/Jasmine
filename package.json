@@ -26,6 +26,7 @@
     "yarn": "^1.22.17"
   },
   "devDependencies": {
+    "@svgr/webpack": "^5.5.0",
     "nodemon": "^2.0.14"
   }
 }
