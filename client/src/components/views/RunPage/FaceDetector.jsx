@@ -10,9 +10,7 @@ import { darken, lighten } from 'polished';
 import gaze from 'gaze-detection';
 import AudioRecorder from './AudioRecorder';
 
-
-
-
+// import moment from 'moment';
 
 const CONSTRAINTS = { video: true };
 

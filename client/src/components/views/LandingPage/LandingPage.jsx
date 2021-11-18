@@ -13,7 +13,11 @@ function LandingPage(props) {
         });
     }, []);
 
-    const onClickHandler = () => {
+    const onHomeClickHandler = () => {
+        props.history.push('/home');
+    };
+
+    const onLogoutClickHandler = () => {
         axios.get('/api/users/logout').then((response) => {
             if (response.data.success) {
                 props.history.push('/login');
@@ -29,7 +33,7 @@ function LandingPage(props) {
                 <div class="site-wrapper bg-primary bg-opacity-25">
                     <div class="site-wrapper-inner">
                         <div class="cover-container">
-                            <Navbar/>
+                            <Navbar />
                             <div class="inner cover">
                                 <h1 class="cover-heading">Cover your page.</h1>
                                 <p class="lead">
@@ -37,13 +41,13 @@ function LandingPage(props) {
                                     add your own fullscreen background photo to make it your own.
                                 </p>
                                 <p class="lead">
-                                    <a href="#" class="btn btn-lg btn-default">
-                                        Learn more
+                                    <a class="btn btn-lg btn-default" onClick={onHomeClickHandler}>
+                                        시작하기
                                     </a>
                                 </p>
-                                <button onClick={onClickHandler}>로그아웃</button>
+                                <button onClick={onLogoutClickHandler}>로그아웃</button>
                             </div>
-                            <Foot/>
+                            <Foot />
                         </div>
                     </div>
                 </div>
