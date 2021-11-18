@@ -35,18 +35,18 @@ function FaceDetector(props) {
     const onSubmitHandler = async (event) => {
         event.preventDefault();
 
-        if (score > 100) {
-            setScore(100);
-        } else if (score < 0) {
-            setScore(0);
-        }
+        // if (score > 100) {
+        //     setScore(100);
+        // } else if (score < 0) {
+        //     setScore(0);
+        // }
 
-        if (score < 70) {
-            setComment('다음에는 앞을 많이 바라보며 발표해볼까요?');
-        } else {
-            setComment('앞을 잘 쳐다보고 발표했어요.');
-        }
-        console.log(score);
+        // if (score < 70) {
+        //     setComment('다음에는 앞을 많이 바라보며 발표해볼까요?');
+        // } else {
+        //     setComment('앞을 잘 쳐다보고 발표했어요.');
+        // }
+        // console.log(score);
 
         // const date = moment().format('YYYY-MM-DD HH:mm:ss');
         let body = {
@@ -61,7 +61,7 @@ function FaceDetector(props) {
             if (response.data.success) {
                 props.history.push('/finish');
             } else {
-                alert('Error');
+                alert('Vision error');
             }
         });
     };
@@ -179,7 +179,7 @@ function FaceDetector(props) {
     return (
         <>
             <div style={{ display: 'none' }}>
-                <AudioRecorder ref={recordRef} />
+                <AudioRecorder userFrom={userFrom} ref={recordRef} />
             </div>
             <ShowButton
                 onClick={() => {
