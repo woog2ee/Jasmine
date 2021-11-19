@@ -1,5 +1,5 @@
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import Axios from 'axios';
 
 const AudioRecorder = forwardRef((props, ref) => {
@@ -25,7 +25,7 @@ const AudioRecorder = forwardRef((props, ref) => {
 
     const start = () => {
         console.log('시작')
-        setRecordState((recordState) =>RecordState.START);
+        setRecordState((recordState) => RecordState.START);
     };
     const stop = () => {
         setRecordState((recordState) => RecordState.STOP);
@@ -36,9 +36,10 @@ const AudioRecorder = forwardRef((props, ref) => {
         stop,
     }));
 
+
     return (
         <>
-            <div className="audioRecord">
+            <div className="audioRecord" style={{display:'none'}}>
                 <AudioReactRecorder state={recordState} onStop={onStop} />
             </div>
             {/* <button onClick={start}>Start</button>

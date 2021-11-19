@@ -10,6 +10,7 @@ import { darken, lighten } from 'polished';
 import gaze from 'gaze-detection';
 import AudioRecorder from './AudioRecorder';
 import sloth from '../../../img/sloth256.png';
+import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 
 
 const CONSTRAINTS = { video: true };
@@ -39,7 +40,7 @@ const ShowButton = styled.button`
 function FaceDetector(props) {
     
     const userFrom = props.userFrom;
-    const recordRef = useRef({});
+    const [recordState, setRecordState] = useState(null);
     const [btnVisible, setBtn] = useState(true);
     const camera = React.useRef();
     const camera_temp = React.useRef();
@@ -48,6 +49,7 @@ function FaceDetector(props) {
     const [score, setScore] = useState(50);
     const [comment, setComment] = useState('');
     const [isToggle, setToggle] = useState(false);
+
     const appear = useSpring({
         opacity: isToggle ? 1 : 0,
         marginRight: isToggle ? -500 : -900,
@@ -97,7 +99,7 @@ function FaceDetector(props) {
     };
 
     // dictaphone
-    const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+    const { transcript, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
     const dictStart = () => {
         SpeechRecognition.startListening({ continuous: true });
         if (!browserSupportsSpeechRecognition) {
@@ -152,12 +154,12 @@ function FaceDetector(props) {
                             if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
                                 figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                                 setScore((preScore) => preScore - 1);
-                                setToggle((isToggle) => true);
-                                // if (!isToggle){setToggle((isToggle) => true);}
+                                //setToggle((isToggle) => true);
+                                if (!isToggle){setToggle((isToggle) => true);}
                             } else {
                                 setScore((preScore) => preScore + 1);
                                 setToggle((isToggle) => false);
-                                // if (isToggle){setToggle((isToggle) => false);}
+                                //if (isToggle){setToggle((isToggle) => false);}
                             }
                         }
                     }
@@ -173,7 +175,8 @@ function FaceDetector(props) {
     
 
     const startVideo = async () => {
-        dictStart();
+        setBtn((btnVisible) => !btnVisible);
+        
         const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
         if (camera && camera.current && !camera.current.srcObject) {
             camera.current.srcObject = stream;
@@ -181,23 +184,61 @@ function FaceDetector(props) {
         if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
             camera_temp.current.srcObject = stream;
         }
+
+        dictStart();
         run();
+    };
+
+    // audio recorder
+    const onStop = (audioData) => {
+        console.log('audioData', audioData);
+        console.log(audioData.url);
+
+        let body = {
+            userFrom: userFrom,
+            audioUrl: audioData.url,
+        };
+
+        Axios.post('/api/run/voice', body).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('Voice error');
+            }
+        });
+    };
+
+    const startAudio = () => {
+        console.log('시작')
+        setRecordState(RecordState.START);
+    };
+    const stopAudio = () => {
+        setRecordState(RecordState.STOP);
     };
 
     return (
         <>
-            <div >
-                <AudioRecorder userFrom={userFrom} ref={recordRef} />
+            <div className="audioRecord" style={{display:'none'}}>
+                <AudioReactRecorder state={recordState} onStop={onStop} />
             </div>
-            {btnVisible && <ShowButton
+            {/* <div >
+                <AudioRecorder userFrom={userFrom} ref={recordRef}/>
+            </div> */}
+            
+            {/* {btnVisible && <ShowButton
                 onClick={() => {
-                    recordRef.current.start();
-                    setBtn((btnVisible) => !btnVisible);
+                    startAudio();
                     startVideo();
                 }}
             >시작하기
-            </ShowButton>}
-            {/* <button onClick={recordRef.current.start}>{'    '}</button>} */}
+            </ShowButton>} */}
+            <ShowButton
+                onClick={() => {
+                    startAudio();
+                    startVideo();
+                }}
+            >시작하기
+            </ShowButton>
+            
             {!btnVisible && isToggle &&
                 <animated.img src={sloth} style={appear}/>}
             {!btnVisible && 
@@ -209,7 +250,7 @@ function FaceDetector(props) {
             }
             <div className="stopButton">
                 <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
-                    <button onClick={recordRef.current.stop} type="submit">
+                    <button onClick={stopAudio} type="submit">
                         끝내기
                     </button>
                 </form>
