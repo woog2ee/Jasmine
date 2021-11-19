@@ -123,4 +123,7 @@ class SlientAnalyzer():
                 calming = start_time[i] - end_time[i-1]
                 calming = round(calming, 3)
                 quiet_time.append(calming)
+        
+        speak_time = [time/2 for time in speak_time]
+        quiet_time = [time/2 for time in quiet_time]
         return speak_time, quiet_time
