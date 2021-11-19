@@ -3,6 +3,8 @@ import numpy as np
 import statistics
 import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'NanumGothic'
+import warnings
+warnings.filterwarnings(action='ignore')
 
 from konlpy.tag import Okt, Kkma
 from nltk.tokenize import sent_tokenize
@@ -276,7 +278,7 @@ def make_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top
     variety_comment    = f'어휘 다양도는 아이가 사용한 전체 낱말 중에서 다르게 사용한 낱말의 비율이 얼마인지 측정합니다. \
     쉽게 말해 아이가 얼마나 다양한 어휘를 구사했는지에 대한 지표로 유아의 경우 20 ~ 40으로 나타난다고 합니다. \
     이번 발표에서 아이의 어휘 다양도는 {variety}%로 확인됩니다. '
-    if variety_comment < 30:
+    if variety < 30:
         variety_comment += '아이의 어휘 다양도는 평균 혹은 조금 낮은 편으로 확인되며, 독서활동을 통해 아이가 더욱 다양한 단어를 구사할 수 있도록 지도해주세요.'
     else:
         variety_comment += '아이의 어휘 다양도가 평균 혹은 조금 높은 편으로 확인되며, 앞으로도 현재와 같이 다양한 단어를 구사할 수 있도록 격려해주세요.'
@@ -350,7 +352,6 @@ def upload_speech_document(variety_comment, sentcount_comment, sentcount_image, 
 
 
 if __name__ == '__main__':
-    kidname = '로그인한 아이 이름' 
     stttext = 'stt로 db에서 받아올 텍스트'
     
     TA = TextAnalyzer()     # 텍스트 분석 클래스
