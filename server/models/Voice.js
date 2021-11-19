@@ -14,5 +14,5 @@ const voiceSchema = mongoose.Schema(
     { timestamps: true }
 );
 
-const Voice = mongoose.model('Audio', voiceSchema);
+const Voice = mongoose.model('Voice', voiceSchema);
 module.exports = { Voice };
