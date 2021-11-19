@@ -276,25 +276,21 @@ def make_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top
     top3_stopwords  = set_top3_words(top3_stopwords)
     top3_countwords = set_top3_words(top3_countwords)
 
-    variety_comment    = f'어휘 다양도는 아이가 사용한 전체 낱말 중에서 다르게 사용한 낱말의 비율이 얼마인지 측정합니다. \
-    쉽게 말해 아이가 얼마나 다양한 어휘를 구사했는지에 대한 지표로 유아의 경우 20 ~ 40으로 나타난다고 합니다. \
-    이번 발표에서 아이의 어휘 다양도는 {variety}%로 확인됩니다. '
+    # 어휘 다양도 판단
+    variety_comment = f'어휘 다양도는 아이가 사용한 전체 낱말 중에서 다르게 사용한 낱말의 비율이 얼마인지 측정합니다. '
+    variety_comment += '쉽게 말해 아이가 얼마나 다양한 어휘를 구사했는지에 대한 지표로 유아의 경우 20 ~ 40으로 나타난다고 합니다. '
+    variety_comment += '이번 발표에서 아이의 어휘 다양도는 {variety}%로 확인됩니다. '
     if variety < 30:
         variety_comment += '아이의 어휘 다양도는 평균 혹은 조금 낮은 편으로 확인되며, 독서활동을 통해 아이가 더욱 다양한 단어를 구사할 수 있도록 지도해주세요.'
     else:
         variety_comment += '아이의 어휘 다양도가 평균 혹은 조금 높은 편으로 확인되며, 앞으로도 현재와 같이 다양한 단어를 구사할 수 있도록 격려해주세요.'
 
-    avg_sent   = sum(len_sent) // num_sent
-    short_sent = False
-    long_sent  = False
+    # 문장 길이 판단
+    short_sent, long_sent = check_area(len_sent)
     sentcount_comment  = f'아이가 발표에서 사용한 문장은 총 {num_sent}개로, 문장의 평균 길이는 {avg_sent}로 측정되었습니다. '
     sentcount_comment += '그래프에서는 문장 순서에 따라 공백을 포함하거나 제외한 상태에서 전체 문장 길이를 한눈에 확인하실 수 있습니다. '
-    for i in range(num_sent):
-        if len_sent[i] <= avg_sent*0.6:
-            short_sent = True
-        elif avg_sent*1.4 <= len_sent[i]:
-            long_sent = True
-    if (short_sent == True and long_sent == True):
+    
+    if (short_sent == True) and (long_sent == True):
         sentcount_comment += '특히 아이가 발표에서 평균 길이보다 짧거나 긴 문장을 자주 사용하는 것으로 보여집니다. '
         sentcount_comment += '표현하는 문장에 너무 짧거나 긴 문장이 속하지는 않았는지 점검해주세요.'
     elif short_sent == True:
@@ -306,14 +302,17 @@ def make_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top
     else:
         sentcount_comment += '아이가 표현하는 문장에 있어 너무 짧거나 긴 문장을 사용하지 않고 일관된 문장 길이로 잘 표현해 주었습니다.'
 
+    # 키워드 판단
     keywords_comment   = f'아이의 발표에서 키워드로 인식된 단어는 {top3_keywords} 순이었습니다. '
     keywords_comment   += '그림은 키워드를 시각화한 것으로, 단어 크기가 크거나 색깔이 눈에 띌 경우 아이가 자주 사용했음을 의미합니다. '
     keywords_comment   += '아이가 발표에서 이 키워드들을 염두해서 발표하였는지 확인해주세요.'
 
+    # 불용어 판단
     stopwords_comment  = f'아이의 발표에서 중요도가 낮으나 자주 사용된 단어는 {top3_stopwords} 순이었습니다. '
     stopwords_comment  += '그림은 중요도가 낮으나 자주 사용된 단어를 시각화한 것으로, 단어 크기가 크거나 색깔이 눈에 띌 경우 아이가 자주 사용했음을 의미합니다. '
     stopwords_comment  += '아이가 발표에서 이 단어들을 은연 중에 자주 말하지는 않는지 확인해주세요.'
     
+    # 자주 사용된 단어 판단
     countwords_comment = f'아이의 발표에서 자주 사용된 단어는 {top3_countwords} 순이었습니다. '
     countwords_comment += '그림은 자주 사용된 단어를 시각화한 것으로, 단어 크기가 크거나 색깔이 눈에 띌 경우 아이가 자주 사용했음을 의미합니다. '
     countwords_comment += '자주 사용된 단어가 키워드에 속하는 편인지, 중요도가 낮은 단어인지 확인해주세요.'
@@ -325,6 +324,19 @@ def set_top3_words(words):
     words = re.sub(r'\]', '', words)
     words = re.sub(r'"', '', words)
     return words
+
+def check_area(range):
+    avg   = sum(range) // len(range)
+    flag1 = False
+    flag2 = False
+    ratio = 0.4
+
+    for i in range(len(range)):
+        if range[i] <= avg*(1-ratio):
+            flag1 = True
+        elif avg*(1+ratio) <= range[i]:
+            flag2 = True
+    return flag1, flag2
 
 
 
@@ -378,4 +390,3 @@ if __name__ == '__main__':
                           keywords_comment, wordcloud_keyword_image,\
                           stopwords_comment, wordcloud_stopword_image,\
                           countwords_comment, wordcloud_countword_image)
-
