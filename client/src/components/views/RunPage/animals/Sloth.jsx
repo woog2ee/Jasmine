@@ -1,4 +1,3 @@
-import { set } from 'mongoose';
 import React, { useRef, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import sloth from '../../../../img/sloth256.png';

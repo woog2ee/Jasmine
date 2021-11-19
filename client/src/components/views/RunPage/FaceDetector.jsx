@@ -152,12 +152,12 @@ function FaceDetector(props) {
                             if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
                                 figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                                 setScore((preScore) => preScore - 1);
-                                
-                                if (!isToggle){setToggle((isToggle) => true);}
+                                setToggle((isToggle) => true);
+                                // if (!isToggle){setToggle((isToggle) => true);}
                             } else {
                                 setScore((preScore) => preScore + 1);
-                                
-                                if (isToggle){setToggle((isToggle) => false);}
+                                setToggle((isToggle) => false);
+                                // if (isToggle){setToggle((isToggle) => false);}
                             }
                         }
                     }
@@ -186,7 +186,7 @@ function FaceDetector(props) {
 
     return (
         <>
-            <div style={{ display: 'none' }}>
+            <div >
                 <AudioRecorder userFrom={userFrom} ref={recordRef} />
             </div>
             {btnVisible && <ShowButton
@@ -195,7 +195,9 @@ function FaceDetector(props) {
                     setBtn((btnVisible) => !btnVisible);
                     startVideo();
                 }}
-            >시작하기</ShowButton>}
+            >시작하기
+            </ShowButton>}
+            {/* <button onClick={recordRef.current.start}>{'    '}</button>} */}
             {!btnVisible && isToggle &&
                 <animated.img src={sloth} style={appear}/>}
             {!btnVisible && 

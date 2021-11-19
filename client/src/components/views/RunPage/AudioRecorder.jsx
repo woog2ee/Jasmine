@@ -24,10 +24,11 @@ const AudioRecorder = forwardRef((props, ref) => {
     };
 
     const start = () => {
-        setRecordState(RecordState.START);
+        console.log('시작')
+        setRecordState((recordState) =>RecordState.START);
     };
     const stop = () => {
-        setRecordState(RecordState.STOP);
+        setRecordState((recordState) => RecordState.STOP);
     };
 
     useImperativeHandle(ref, () => ({
@@ -40,8 +41,8 @@ const AudioRecorder = forwardRef((props, ref) => {
             <div className="audioRecord">
                 <AudioReactRecorder state={recordState} onStop={onStop} />
             </div>
-            <button onClick={start}>Start</button>
-            <button onClick={stop}>STOP</button>
+            {/* <button onClick={start}>Start</button>
+            <button onClick={stop}>STOP</button> */}
         </>
     );
 });
