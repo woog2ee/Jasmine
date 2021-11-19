@@ -224,20 +224,13 @@ function FaceDetector(props) {
                 <AudioRecorder userFrom={userFrom} ref={recordRef}/>
             </div> */}
             
-            {/* {btnVisible && <ShowButton
+            {btnVisible && <ShowButton
                 onClick={() => {
                     startAudio();
                     startVideo();
                 }}
             >시작하기
-            </ShowButton>} */}
-            <ShowButton
-                onClick={() => {
-                    startAudio();
-                    startVideo();
-                }}
-            >시작하기
-            </ShowButton>
+            </ShowButton>}
             
             {!btnVisible && isToggle &&
                 <animated.img src={sloth} style={appear}/>}
