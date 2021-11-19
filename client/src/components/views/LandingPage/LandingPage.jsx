@@ -7,11 +7,6 @@ import Foot from '../Footer/Footer';
 import Navbar from '../NavBar/NavBar';
 
 function LandingPage(props) {
-    useEffect(() => {
-        axios.get('/api/hello').then((response) => {
-            console.log(response.data);
-        });
-    }, []);
 
     const onHomeClickHandler = () => {
         props.history.push('/home');

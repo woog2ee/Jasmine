@@ -62,13 +62,27 @@
     font-family: 'CookieRunOTF-Bold';
 }
 
+#FD {
+    position: relative;
+}
+.animal {
+    position: absolute;
+}
 .facedetector{
+    position: absolute;
     
 }
 
-.facedetector test{
-    font-size: 10px;
+.facedetector text{
+    font-size: 50px;
+    position: absolute;
+    margin-top: 100px;
+    color: white;
+
 }
+
+
+
 .facedetector #webcam{
     float: center;
     /* background-color:#999999; */

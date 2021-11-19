@@ -50,9 +50,16 @@ function FaceDetector(props) {
     const [isToggle, setToggle] = useState(false);
 
     const appear = useSpring({
+        // reverse: isToggle,
+        // from: { factor: 10, opacity: 0, scale: 0.9, freq: '0.0175, 0.0' },
+        // to: { factor: 150, opacity: 1, scale: 1, freq: '0.0, 0.0' },
+        config: { duration: 100 },
+        // x: isToggle ? 150 : 700,
+        x : 150,
         opacity: isToggle ? 1 : 0,
-        marginRight: isToggle ? -500 : -900,
-        marginTop: isToggle ? -100 : -500,
+        factor: isToggle ? 150:10,
+        y: -150,
+        // duration: 50
     });
 
     const allStop = async () => {
@@ -207,7 +214,6 @@ function FaceDetector(props) {
     };
 
     const startAudio = () => {
-        console.log('시작')
         setRecordState(RecordState.START);
     };
     const stopAudio = () => {
@@ -215,11 +221,10 @@ function FaceDetector(props) {
     };
 
     return (
-        <>
+        <div id="FD">
             <div className="audioRecord" style={{display:'none'}}>
                 <AudioReactRecorder state={recordState} onStop={onStop} />
             </div>
-            
             {btnVisible && <ShowButton
                 onClick={() => {
                     startAudio();
@@ -228,15 +233,18 @@ function FaceDetector(props) {
             >시작하기
             </ShowButton>}
             
-            {!btnVisible && isToggle &&
-                <animated.img src={sloth} style={appear}/>}
             {!btnVisible && 
             <div className="facedetector">
-                <div className="test" ref={figures}></div>
                 <video id="webcam" autoPlay muted={true} ref={camera} />
                 <video id="hiddencam" autoPlay muted={true} ref={camera_temp} />
             </div>
             }
+            
+            {!btnVisible && 
+            <animated.div className="text" ref={figures} style={appear}/>}
+            {!btnVisible && 
+            <animated.img src={sloth} className="animal" style={appear}/>}
+            
             <div className="stopButton">
                 <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
                     <button onClick={stopAudio} type="submit">
@@ -244,7 +252,7 @@ function FaceDetector(props) {
                     </button>
                 </form>
             </div>
-        </>
+        </div>
     );
 }
 export default withRouter(FaceDetector);
