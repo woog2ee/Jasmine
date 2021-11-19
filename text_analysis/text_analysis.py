@@ -16,6 +16,7 @@ from collections import Counter
 from wordcloud import WordCloud, ImageColorGenerator
 from PIL import Image
 from pymongo import MongoClient
+import getpass
 import certifi
 import base64
 
@@ -337,6 +338,7 @@ def upload_speech_document(variety_comment, sentcount_comment, sentcount_image, 
     # comment는 아이의 발표 결과에 따라 선정되며,
     # image는 발표 분석 통계 자료를 base64로 인코딩함
     text_analysis = {
+        'user'              : getpass.getuser()
         'variety_comment'   : variety_comment,
         'sentcount_comment' : sentcount_comment,
         'sentcount_image'   : sentcount_image,
