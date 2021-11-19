@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Vision } = require('../models/Vision');
 const { Voice } = require('../models/Voice');
+const { Speechtext } = require('../models/Speechtext');
 
 router.post('/vision', (req, res) => {
     const vision = new Vision(req.body);
@@ -18,6 +19,17 @@ router.post('/voice', (req, res) => {
     const voice = new Voice(req.body);
 
     voice.save((err, voiceInfo) => {
+        if (err) return res.json({ success: false, err });
+        return res.status(200).json({
+            success: true,
+        });
+    });
+});
+
+router.post('/speechtext', (req, res) => {
+    const speechtext = new Speechtext(req.body);
+
+    speechtext.save((err, speechtextInfo) => {
         if (err) return res.json({ success: false, err });
         return res.status(200).json({
             success: true,

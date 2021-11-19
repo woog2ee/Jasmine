@@ -21,14 +21,6 @@ app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
 
-// app.get('/', (req, res) => {
-//     res.send('Hello World~!');
-// });
-
-// app.get('/api/hello', (req, res) => {
-//     res.send('안녕하세요~');
-// });
-
 app.use('/api/users', require('./routers/user'));
 app.use('/api/run', require('./routers/run'));
 //app.use('/api/report', require('./routers/report'));

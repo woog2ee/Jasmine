@@ -116,6 +116,18 @@ function FaceDetector(props) {
         SpeechRecognition.stopListening();
         console.log({ transcript });
         // mongoDB 저장
+        let body = {
+            userFrom: userFrom,
+            text: transcript,
+        };
+
+        Axios.post('/api/run/speechtext', body).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('Speechtext error');
+            }
+        });
+
         resetTranscript();
     };
 
@@ -198,11 +210,11 @@ function FaceDetector(props) {
     // audio recorder
     const onStop = (audioData) => {
         console.log('audioData', audioData);
-        console.log(audioData.url);
+        console.log(audioData.blob);
 
         let body = {
             userFrom: userFrom,
-            audioUrl: audioData.url,
+            audioUrl: audioData.blob,
         };
 
         Axios.post('/api/run/voice', body).then((response) => {
