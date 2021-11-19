@@ -49,7 +49,7 @@ function FaceDetector(props) {
     const [comment, setComment] = useState('');
     const [isToggle, setToggle] = useState(false);
 
-    const appear = useSpring({
+    const appearSloth = useSpring({
         // reverse: isToggle,
         // from: { factor: 10, opacity: 0, scale: 0.9, freq: '0.0175, 0.0' },
         // to: { factor: 150, opacity: 1, scale: 1, freq: '0.0, 0.0' },
@@ -59,7 +59,11 @@ function FaceDetector(props) {
         opacity: isToggle ? 1 : 0,
         factor: isToggle ? 150:10,
         y: -150,
-        // duration: 50
+    });
+    const appearSlothText = useSpring({
+        x : 150,
+        opacity: isToggle ? 1 : 0,
+        y: 0,
     });
 
     const allStop = async () => {
@@ -152,7 +156,7 @@ function FaceDetector(props) {
 
                 for (let i = 0; i < predictions.length; i++) {
                     if (figures.current) {
-                        figures.current.innerText = String(predictions[i].probability[0]).substring(0, 5);
+                        // figures.current.innerText = String(predictions[i].probability[0]).substring(0, 5);
                         console.log('Gaze direction: ', gazePrediction); //will return 'RIGHT', 'LEFT', 'STRAIGHT' or 'TOP'
                         check = true;
                         if (gazePrediction === 'LEFT' || gazePrediction === 'RIGHT') {
@@ -251,11 +255,11 @@ function FaceDetector(props) {
                 <video id="hiddencam" autoPlay muted={true} ref={camera_temp} />
             </div>
             }
-            
+        
             {!btnVisible && 
-            <animated.div className="text" ref={figures} style={appear}/>}
+            <animated.img src={sloth} className="animal" style={appearSloth}/>}
             {!btnVisible && 
-            <animated.img src={sloth} className="animal" style={appear}/>}
+            <animated.div className="text" ref={figures} style={appearSlothText}/>}
             
             <div className="stopButton">
                 <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
