@@ -8,7 +8,6 @@ import * as tf from '@tensorflow/tfjs';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from 'gaze-detection';
-import AudioRecorder from './AudioRecorder';
 import sloth from '../../../img/sloth256.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 
@@ -101,7 +100,7 @@ function FaceDetector(props) {
     // dictaphone
     const { transcript, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
     const dictStart = () => {
-        SpeechRecognition.startListening({ continuous: true });
+        SpeechRecognition.startListening({ continuous: true});
         if (!browserSupportsSpeechRecognition) {
             return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
         }
@@ -220,9 +219,6 @@ function FaceDetector(props) {
             <div className="audioRecord" style={{display:'none'}}>
                 <AudioReactRecorder state={recordState} onStop={onStop} />
             </div>
-            {/* <div >
-                <AudioRecorder userFrom={userFrom} ref={recordRef}/>
-            </div> */}
             
             {btnVisible && <ShowButton
                 onClick={() => {

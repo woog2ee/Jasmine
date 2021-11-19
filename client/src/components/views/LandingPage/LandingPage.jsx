@@ -30,20 +30,20 @@ function LandingPage(props) {
     return (
         <html lang="en">
             <body>
-                <div class="site-wrapper bg-primary bg-opacity-25">
-                    <div class="site-wrapper-inner">
-                        <div class="cover-container">
+                <div className="site-wrapper bg-primary bg-opacity-25">
+                    <div className="site-wrapper-inner">
+                        <div className="cover-container">
                             <Navbar />
-                            <div class="inner cover">
-                                <h1 class="cover-heading">Cover your page.</h1>
-                                <p class="lead">
+                            <div className="inner cover">
+                                <h1 className="cover-heading">Cover your page.</h1>
+                                <p className="lead">
                                     Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and
                                     add your own fullscreen background photo to make it your own.
                                 </p>
-                                <p class="lead">
-                                    <a class="btn btn-lg btn-default" onClick={onHomeClickHandler}>
+                                <p className="lead">
+                                    <button className="btn btn-lg btn-default" onClick={onHomeClickHandler}>
                                         시작하기
-                                    </a>
+                                    </button>
                                 </p>
                                 <button onClick={onLogoutClickHandler}>로그아웃</button>
                             </div>
