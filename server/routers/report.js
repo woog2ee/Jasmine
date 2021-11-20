@@ -5,15 +5,14 @@ const { Voice } = require('../models/Voice');
 const { Word } = require('../models/Word');
 
 router.get('/list', (req, res) => {
-    Vision.find({ userFrom: req.body.userFrom }, (err, list) => {
+    Vision.find({ userFrom: req.body.userFrom }).exec((err, list) => {
         if (err) {
-            return res.json({
-                success: false,
-                message: '해당 유저의 발표 기록이 없습니다.',
-            });
+            return res.status(400).send(err);
         } else {
-            return res.status(200).send(list);
-            // return res.status(200).json({ success: true });
+            return res.status(200).json({
+                success: true,
+                list: list,
+            });
         }
     });
 });

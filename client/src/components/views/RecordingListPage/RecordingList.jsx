@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
 import logo from '../../../img/logo.png';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import '../../../css/RecordingList.css';
 import { withRouter } from 'react-router-dom';
-import { reportList } from '../../../_actions/report_action';
 
 const Record = styled.button`
     outline: none;
@@ -29,7 +27,6 @@ const Record = styled.button`
 `;
 
 function RecordingList(props) {
-    const dispatch = useDispatch();
     // db에서 recording 가져오기
     //const record_list = [['2021.01.01','01:01:01'], ['2021.02.02','02:02:02'], ['2021.03.03','03:03:03'], ['2021.04.04','04:04:04'], ['2021.05.05','05:05:05'], ['2021.06.06','06:06:06'], ['2021.07.07','07:07:07'], ['2021.08.08','08:08:08'], ['2021.09.09','09:09:09'], ['2021.10.10','10:10:10']]
     const [recordList, setRecordList] = useState([]);
@@ -38,20 +35,14 @@ function RecordingList(props) {
         userFrom: localStorage.getItem('userId'),
     };
 
-    dispatch(reportList(body)).then((response) => {
-        if (response.payload.success) {
+    axios.get('/api/report/list', body).then((response) => {
+        if (response.data.success) {
         } else {
             alert('발표 기록을 불러오는 데 실패했습니다.');
         }
         setRecordList(response.data.list);
+        console.log(response.data);
     });
-
-    // const res = axios.get('/api/report/list').then((response) => {
-    //     if (response.data.success) {
-    //     } else {
-    //         alert('발표 기록을 불러오는 데 실패했습니다.');
-    //     }
-    // });
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
