@@ -1,5 +1,5 @@
-import React, { useRef, useState} from 'react';
-import { useSpring,useTransition, animated } from 'react-spring';
+import React, { useRef, useState } from 'react';
+import { useSpring, useTransition, animated } from 'react-spring';
 import Axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
@@ -11,33 +11,31 @@ import gaze from 'gaze-detection';
 import sloth from '../../../img/sloth256.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 
-
 const CONSTRAINTS = { video: true };
 const ShowButton = styled.button`
-        outline: none;
-        border: none;
-        border-radius: 10px;
-        color: white;
-        font-weight: bold;
-        width: 20%;
-        height: 15%;
-        margin: 5%;
-        font-size: 30px;
-        cursor: pointer;
-        padding-left: 1rem;
-        padding-right: 1rem;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    width: 20%;
+    height: 15%;
+    margin: 5%;
+    font-size: 30px;
+    cursor: pointer;
+    padding-left: 1rem;
+    padding-right: 1rem;
 
-        /* 색상 */
-        background: #228be6;
-        &:hover {
-            background: ${lighten(0.1, '#228be6')};
-        }
-        &:active {
-            background: ${darken(0.1, '#228be6')};
-        }
-    `;
+    /* 색상 */
+    background: #228be6;
+    &:hover {
+        background: ${lighten(0.1, '#228be6')};
+    }
+    &:active {
+        background: ${darken(0.1, '#228be6')};
+    }
+`;
 function FaceDetector(props) {
-    
     const userFrom = props.userFrom;
     const [recordState, setRecordState] = useState(null);
     const [btnVisible, setBtn] = useState(true);
@@ -55,13 +53,13 @@ function FaceDetector(props) {
         // to: { factor: 150, opacity: 1, scale: 1, freq: '0.0, 0.0' },
         config: { duration: 100 },
         // x: isToggle ? 150 : 700,
-        x : 150,
+        x: 150,
         opacity: isToggle ? 1 : 0,
-        factor: isToggle ? 150:10,
+        factor: isToggle ? 150 : 10,
         y: -150,
     });
     const appearSlothText = useSpring({
-        x : 150,
+        x: 150,
         opacity: isToggle ? 1 : 0,
         y: 0,
     });
@@ -111,7 +109,7 @@ function FaceDetector(props) {
     // dictaphone
     const { transcript, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
     const dictStart = () => {
-        SpeechRecognition.startListening({ continuous: true});
+        SpeechRecognition.startListening({ continuous: true });
         if (!browserSupportsSpeechRecognition) {
             return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
         }
@@ -177,7 +175,9 @@ function FaceDetector(props) {
                                 figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                                 setScore((preScore) => preScore - 1);
                                 //setToggle((isToggle) => true);
-                                if (!isToggle){setToggle((isToggle) => true);}
+                                if (!isToggle) {
+                                    setToggle((isToggle) => true);
+                                }
                             } else {
                                 setScore((preScore) => preScore + 1);
                                 setToggle((isToggle) => false);
@@ -194,11 +194,10 @@ function FaceDetector(props) {
             }
         }
     };
-    
 
     const startVideo = async () => {
         setBtn((btnVisible) => !btnVisible);
-        
+
         const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
         if (camera && camera.current && !camera.current.srcObject) {
             camera.current.srcObject = stream;
@@ -238,29 +237,30 @@ function FaceDetector(props) {
 
     return (
         <div id="FD">
-            <div className="audioRecord" style={{display:'none'}}>
+            <div className="audioRecord" style={{ display: 'none' }}>
                 <AudioReactRecorder state={recordState} onStop={onStop} />
             </div>
-            {btnVisible && <ShowButton
-                onClick={() => {
-                    startAudio();
-                    startVideo();
-                }}
-            >시작하기
-            </ShowButton>}
-            
-            {!btnVisible && 
-            <div className="facedetector">
-                <video id="webcam" autoPlay muted={true} ref={camera} />
-                <video id="hiddencam" autoPlay muted={true} ref={camera_temp} />
-            </div>
-            }
-        
-            {!btnVisible && 
-            <animated.img src={sloth} className="animal" style={appearSloth}/>}
-            {!btnVisible && 
-            <animated.div className="text" ref={figures} style={appearSlothText}/>}
-            
+            {btnVisible && (
+                <ShowButton
+                    onClick={() => {
+                        startAudio();
+                        startVideo();
+                    }}
+                >
+                    시작하기
+                </ShowButton>
+            )}
+
+            {!btnVisible && (
+                <div className="facedetector">
+                    <video id="webcam" autoPlay muted={true} ref={camera} />
+                    <video id="hiddencam" autoPlay muted={true} ref={camera_temp} />
+                </div>
+            )}
+
+            {!btnVisible && <animated.img src={sloth} className="animal" style={appearSloth} />}
+            {!btnVisible && <animated.div className="text" ref={figures} style={appearSlothText} />}
+
             <div className="stopButton">
                 <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
                     <button onClick={stopAudio} type="submit">

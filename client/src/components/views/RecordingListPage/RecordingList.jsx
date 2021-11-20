@@ -1,9 +1,12 @@
-import React from "react";
-import logo from '../../../img/logo.png'
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import logo from '../../../img/logo.png';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import '../../../css/RecordingList.css';
 import { withRouter } from 'react-router-dom';
+import { reportList } from '../../../_actions/report_action';
 
 const Record = styled.button`
     outline: none;
@@ -15,49 +18,65 @@ const Record = styled.button`
     margin: 1.7rem auto;
     display: flex;
 
-    background: #E7F4F8;
-    
+    background: #e7f4f8;
+
     &:hover {
         background: ${lighten(0.05, '#E7F4F8')};
     }
     &:active {
         background: ${darken(0.05, '#E7F4F8')};
     }
+`;
 
-`
-
-function RecordingList(props){
+function RecordingList(props) {
+    const dispatch = useDispatch();
     // db에서 recording 가져오기
-    const record_list = [['2021.01.01','01:01:01'], ['2021.02.02','02:02:02'], ['2021.03.03','03:03:03'], ['2021.04.04','04:04:04'], ['2021.05.05','05:05:05'], ['2021.06.06','06:06:06'], ['2021.07.07','07:07:07'], ['2021.08.08','08:08:08'], ['2021.09.09','09:09:09'], ['2021.10.10','10:10:10']]
-    // axios.get('/api/users/logout').then((response) => {
+    //const record_list = [['2021.01.01','01:01:01'], ['2021.02.02','02:02:02'], ['2021.03.03','03:03:03'], ['2021.04.04','04:04:04'], ['2021.05.05','05:05:05'], ['2021.06.06','06:06:06'], ['2021.07.07','07:07:07'], ['2021.08.08','08:08:08'], ['2021.09.09','09:09:09'], ['2021.10.10','10:10:10']]
+    const [recordList, setRecordList] = useState([]);
+
+    let body = {
+        userFrom: localStorage.getItem('userId'),
+    };
+
+    dispatch(reportList(body)).then((response) => {
+        if (response.payload.success) {
+        } else {
+            alert('발표 기록을 불러오는 데 실패했습니다.');
+        }
+        setRecordList(response.data.list);
+    });
+
+    // const res = axios.get('/api/report/list').then((response) => {
     //     if (response.data.success) {
-    //         props.history.push('/login');
     //     } else {
-    //         alert('로그아웃에 실패했습니다.');
+    //         alert('발표 기록을 불러오는 데 실패했습니다.');
     //     }
     // });
-    //const record_list = 
-    
+
     const onSubmitHandler = (event) => {
         event.preventDefault();
 
         props.history.push('/home');
     };
 
-    return(
-        <div className='recordingList'>
+    return (
+        <div className="recordingList">
             <div className="simpleNavi">
-                <img src={logo} alt='logo'/>
+                <img src={logo} alt="logo" />
             </div>
-            <div className='list_board'>
+            <div className="list_board">
                 <div className="question">
-                    <h1 className='title'>나의 스피치 기록</h1>
+                    <h1 className="title">나의 스피치 기록</h1>
                 </div>
-                <div className='list'>
-                    {record_list.map(([date, time], idx) => (
-                        <Record type='submit'>
-                            <span className='date' id="recording_date">{date}</span>
-                            <span className='time' id="recording_time">{time}</span>
+                <div className="list">
+                    {recordList?.map(([date, time], idx) => (
+                        <Record type="submit">
+                            <span className="date" id="recording_date">
+                                {date}
+                            </span>
+                            <span className="time" id="recording_time">
+                                {time}
+                            </span>
                         </Record>
                     ))}
                 </div>
@@ -68,7 +87,7 @@ function RecordingList(props){
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default withRouter(RecordingList);
