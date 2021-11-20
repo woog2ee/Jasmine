@@ -17,14 +17,14 @@
 }
 
 .face{
-    width: 950px;
+    width: 910px;
     /* height: 80vh; */
-    height: 800px;
+    height: 700px;
     /* padding: 1% 0; */
     padding: 0;
-    margin: 0px auto 0 auto;
+    margin: 0px auto;
     border-radius: 10px;
-    background-color: azure;
+    background-color: #B4C6A6;
 
 }
 
@@ -68,40 +68,59 @@
 .animal {
     position: absolute;
 }
+#sloth {
+    width: 400px;
+    height: 400px;
+}
+#koala {
+    width: 400px;
+    height: 400px;
+}
 .facedetector{
     position: absolute;
     
 }
 
 .text{
-    font-size: 50px;
     position: absolute;
     color: papayawhip;
     font-family: 'CookieRunOTF-Bold';
+}
 
+#sloth-text {
+    font-size: 50px;
+    white-space: pre;
+}
+
+#koala-text {
+    font-size: 45px;
+    padding: 5px 15px;
+    /* color: #C68B59; */
+    color: #C9CCD5;
+    border: #96C7C1 4px solid;
+    border-radius: 10px;
 }
 
 
 
 .facedetector #webcam{
-    float: center;
+    /* float: center; */
     /* background-color:#999999; */
-    /* margin: auto; */
-    margin-top: 1px;
+    margin: 1px -22px 0 -22px;
     width: 960px;
     height: 600px;
 }
 .facedetector #hiddencam{
-    float: center;
     /* background-color:#999999; */
     /* margin: auto; */
+    margin: 1px -22px 0 -22px;
     width: 500px;
     height: 500px;
     display: none;
 }
 
 .stopButton {
-    width: 950px;
+    width: 910px;
     float: none;
     margin: 0 auto;
     text-align: center;
@@ -119,7 +138,7 @@
     width: 10%;
     height: 60px;
     border: none;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     border-radius: 5px;
     position: static;
 }

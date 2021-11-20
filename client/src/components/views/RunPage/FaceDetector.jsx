@@ -1,5 +1,5 @@
 import React, { useRef, useState} from 'react';
-import { useSpring,useTransition, animated } from 'react-spring';
+import { useSpring,config, animated } from 'react-spring';
 import Axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
@@ -8,32 +8,34 @@ import * as tf from '@tensorflow/tfjs';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import gaze from 'gaze-detection';
-import sloth from '../../../img/sloth256.png';
+import sloth from '../../../img/sloth512.png';
+import koala from '../../../img/koala512.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 
 
+
 const CONSTRAINTS = { video: true };
-const ShowButton = styled.button`
+const ShowButton = styled(animated.button)`
         outline: none;
         border: none;
         border-radius: 10px;
         color: white;
-        font-weight: bold;
-        width: 20%;
-        height: 15%;
-        margin: 5%;
+        width: 300px;
+        padding: 2rem;
+        height: 30%;
+        margin: 8% auto;
         font-size: 30px;
         cursor: pointer;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        font-family: 'CookieRunOTF-Bold';
+        
 
         /* 색상 */
-        background: #228be6;
+        background: #C54AC7;
         &:hover {
-            background: ${lighten(0.1, '#228be6')};
+            background: ${lighten(0.1, '#C54AC7')};
         }
         &:active {
-            background: ${darken(0.1, '#228be6')};
+            background: ${darken(0.1, '#C54AC7')};
         }
     `;
 function FaceDetector(props) {
@@ -50,21 +52,37 @@ function FaceDetector(props) {
     const [isToggle, setToggle] = useState(false);
 
     const appearSloth = useSpring({
-        // reverse: isToggle,
-        // from: { factor: 10, opacity: 0, scale: 0.9, freq: '0.0175, 0.0' },
-        // to: { factor: 150, opacity: 1, scale: 1, freq: '0.0, 0.0' },
-        config: { duration: 100 },
-        // x: isToggle ? 150 : 700,
-        x : 150,
+        config: config.stiff,
+        x : 300,
         opacity: isToggle ? 1 : 0,
-        factor: isToggle ? 150:10,
         y: -150,
     });
     const appearSlothText = useSpring({
+        config: config.stiff,
         x : 150,
         opacity: isToggle ? 1 : 0,
         y: 0,
     });
+    const appearKoala = useSpring({
+        config: config.stiff ,
+        x : -740,
+        opacity: isToggle ? 0 : 1,
+        y: 270,
+    });
+    const appearKoalaText = useSpring({
+        config: config.stiff,
+        x : -350,
+        opacity: isToggle ? 0 : 1,
+        y: 170,
+    });
+
+
+    const { x } = useSpring({
+        loop: true,
+        from: { x: 0 },
+        to: { x: 1 },
+        config: { duration: 2000 },
+    })
 
     const allStop = async () => {
         console.log('end~~~');
@@ -167,7 +185,8 @@ function FaceDetector(props) {
                     }
                 }
                 if (figures.current && !check) {
-                    figures.current.innerText = '얼굴을 보여주세요';
+                    if (!isToggle){setToggle((isToggle) => true);}
+                    figures.current.innerText = '         얼굴을 보여주세요.';
                 }
                 if (check) {
                     for (let i = 0; i < predictions.length; i++) {
@@ -242,11 +261,17 @@ function FaceDetector(props) {
                 <AudioReactRecorder state={recordState} onStop={onStop} />
             </div>
             {btnVisible && <ShowButton
+                style={{
+                    scale: x.to({
+                    range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
+                    output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1],
+                    }),
+                }}
                 onClick={() => {
                     startAudio();
                     startVideo();
                 }}
-            >시작하기
+            >발표 시작하기
             </ShowButton>}
             
             {!btnVisible && 
@@ -256,10 +281,14 @@ function FaceDetector(props) {
             </div>
             }
         
+            
+            <animated.img src={sloth} className="animal" id="sloth" style={appearSloth}/>
+            
+            <animated.div className="text" id="sloth-text" ref={figures} style={appearSlothText}/>
             {!btnVisible && 
-            <animated.img src={sloth} className="animal" style={appearSloth}/>}
+            <animated.img src={koala} className="animal" id="koala" style={appearKoala}/>}
             {!btnVisible && 
-            <animated.div className="text" ref={figures} style={appearSlothText}/>}
+            <animated.div className="text" id="koala-text" style={appearKoalaText}>잘하고 있어요👍</animated.div>}
             
             <div className="stopButton">
                 <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
