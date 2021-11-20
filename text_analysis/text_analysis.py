@@ -269,9 +269,9 @@ class WordAnalyzer:
 def encode_image_tobase64(imagepath):
     with open(imagepath, 'rb') as img_file:
         base64_string = base64.b64encode(img_file.read())
-    return base64_string
+    return str(base64_string)
 
-def make_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords):
+def make_parent_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords):
     top3_keywords   = set_top3_words(top3_keywords)
     top3_stopwords  = set_top3_words(top3_stopwords)
     top3_countwords = set_top3_words(top3_countwords)
@@ -318,6 +318,16 @@ def make_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top
     countwords_comment += '자주 사용된 단어가 키워드에 속하는 편인지, 중요도가 낮은 단어인지 확인해주세요.'
     return variety_comment, sentcount_comment, keywords_comment, stopwords_comment, countwords_comment
 
+def make_child_comment(top3_keywords, top3_stopwords, top3_countwords):
+    top3_keywords   = set_top3_words(top3_keywords)
+    top3_stopwords  = set_top3_words(top3_stopwords)
+    top3_countwords = set_top3_words(top3_countwords)
+
+    keywords_comment_c   = f'이번 발표에는 {top3_keywords}를 주제로 발표했군요! 발표 잘 들었어요.'
+    stopwords_comment_c  = f'다음 발표에는 {top3_stopwords}를 조금 덜 써서 말해볼까요? 오늘 수고했어요.'
+    countwords_comment_c = f'이번 발표에는 {top3_countwords}라는 단어를 많이 사용했군요! 좋은 발표였어요.'
+    return keywords_comment_c, stopwords_comment_c, countwords_comment_c
+
 def set_top3_words(words):
     words = str(words)
     words = re.sub(r'\[', '', words)
@@ -325,48 +335,95 @@ def set_top3_words(words):
     words = re.sub(r'"', '', words)
     return words
 
-def check_area(range):
-    avg   = sum(range) // len(range)
+def check_area(scope):
+    avg   = sum(scope) // len(scope)
     flag1 = False
     flag2 = False
     ratio = 0.4
 
-    for i in range(len(range)):
-        if range[i] <= avg*(1-ratio):
+    for i in range(len(scope)):
+        if scope[i] <= avg*(1-ratio):
             flag1 = True
-        elif avg*(1+ratio) <= range[i]:
+        elif avg*(1+ratio) <= scope[i]:
             flag2 = True
     return flag1, flag2
 
 
 
-def upload_speech_document(variety_comment, sentcount_comment, sentcount_image, keywords_comment, keywords_image,
-                           stopwords_comment, stopwords_image, countwords_comment, countwords_image):
-    host = 'mongodb+srv://seungukyu:0128@jasmine.iyjg6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-    client = MongoClient(host, tlsCAFile=certifi.where())
-    database = client['myFirstDatabase']
-    collection = database['text_result']
+def mongodb_connection(host, collection_name):
+    client     = MongoClient(host, tlsCAFile=certifi.where())
+    database   = client['myFirstDatabase']
+    collection = database[collection_name]
+    return collection
+
+def mongodb_userinfo(docs):
+    userFrom_all  = []
+    createdAt_all = []
+    for doc in docs:
+        try:
+            userFrom  = doc['userFrom']
+            createdAt = doc['createdAt']
+            userFrom_all.append(userFrom)
+            createdAt_all.append(createdAt)
+        except:
+            pass
+    return userFrom_all, createdAt_all
+
+def get_stt_text():
+    # DB에 stt가 올려진 발표 정보
+    stt_host = 'mongodb+srv://sangh:0000@jasmine.iqad5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    stt_collection = mongodb_connection(stt_host, 'speechtexts')
+    stt_docs = list(stt_collection.find())
+    stt_userFrom, stt_createdAt = mongodb_userinfo(stt_docs)
+
+    # DB에 내용 분석이 올려진 발표 정보
+    text_host = 'mongodb+srv://seungukyu:0128@jasmine.iyjg6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    text_collection = mongodb_connection(text_host, 'text_result')
+    text_docs = list(text_collection.find())
+    text_userFrom, text_createdAt = mongodb_userinfo(text_docs)
+
+    # 'stt는 있으나 내용 분석이 안올려진 발표'라면 해당 정보를 리턴
+    complement_userFrom  = list(set(stt_userFrom) - set(text_userFrom))
+    complement_createdAt = list(set(stt_createdAt) - set(text_createdAt))
+    upload_userFrom  = complement_userFrom[0]
+    upload_createdAt = complement_createdAt[0]
+
+    upload_docs = stt_collection.find({'userFrom' : upload_userFrom,
+                                       'createdAt': upload_createdAt})
+    for doc in upload_docs:
+        stt_text = doc['text']
+    return stt_text, upload_userFrom, upload_createdAt
+
+def upload_speech_document(upload_userFrom, upload_createdAt, variety_comment, sentcount_comment, sentcount_image,
+                           keywords_comment, keywords_image, stopwords_comment, stopwords_image, countwords_comment, countwords_image,
+                           keywords_comment_c, stopwords_comment_c, countwords_comment_c):
+    text_host = 'mongodb+srv://seungukyu:0128@jasmine.iyjg6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    text_collection = mongodb_connection(text_host, 'text_result')
 
     # comment는 아이의 발표 결과에 따라 선정되며,
     # image는 발표 분석 통계 자료를 base64로 인코딩함
     text_analysis = {
-        'user'              : getpass.getuser()
-        'variety_comment'   : variety_comment,
-        'sentcount_comment' : sentcount_comment,
-        'sentcount_image'   : sentcount_image,
-        'keywords_comment'  : keywords_comment,
-        'keywords_image'    : keywords_image,
-        'stopwords_comment' : stopwords_comment,
-        'stopwords_image'   : stopwords_image,
-        'countwords_comment': countwords_comment,
-        'countwords_image'  : countwords_image
+        'userFrom'            : upload_userFrom,
+        'createdAt'           : upload_createdAt, 
+        'variety_comment'     : variety_comment,
+        'sentcount_comment'   : sentcount_comment,
+        'sentcount_image'     : sentcount_image,
+        'keywords_comment'    : keywords_comment,
+        'keywords_image'      : keywords_image,
+        'stopwords_comment'   : stopwords_comment,
+        'stopwords_image'     : stopwords_image,
+        'countwords_comment'  : countwords_comment,
+        'countwords_image'    : countwords_image,
+        'keywords_comment_c'  : keywords_comment_c,
+        'stopwords_comment_c' : stopwords_comment_c,
+        'countwords_comment_c': countwords_comment_c
     }
-    collection.insert(text_analysis)
+    text_collection.insert(text_analysis)
 
 
 
 if __name__ == '__main__':
-    stttext = 'stt로 db에서 받아올 텍스트'
+    stttext, upload_userFrom, upload_createdAt = get_stt_text()     # 발표 내용을 분석할 유저 및 발표 정보
     
     TA = TextAnalyzer()     # 텍스트 분석 클래스
     WA = WordAnalyzer()     # 단어 분석 클래스
@@ -384,9 +441,15 @@ if __name__ == '__main__':
     # 학부모 인터페이스용 코멘트 생성
     variety_comment, sentcount_comment, keywords_comment, stopwords_comment, countwords_comment =\
         make_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords)
-
+    
+    # 아이 인터페이스용 코멘트 생성
+    keywords_comment_c, stopwords_comment_c, countwords_comment_c =\
+        make_child_comment(top3_keywords, top3_stopwords, top3_countwords)
+    
     # DB에 학부모 인터페이스용 코멘트 및 분석 자료 등록
-    upload_speech_document(variety_comment, sentcount_comment, sentcount_image,\
-                          keywords_comment, wordcloud_keyword_image,\
-                          stopwords_comment, wordcloud_stopword_image,\
-                          countwords_comment, wordcloud_countword_image)
+    upload_speech_document(upload_userFrom, upload_createdAt,\
+                           variety_comment, sentcount_comment, sentcount_image,\
+                           keywords_comment, wordcloud_keyword_image,\
+                           stopwords_comment, wordcloud_stopword_image,\
+                           countwords_comment, wordcloud_countword_image,\
+                           keywords_comment_c, stopwords_comment_c, countwords_comment_c)
