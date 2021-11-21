@@ -2,8 +2,21 @@ import React from 'react';
 import logo from '../../../img/logo.png'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../css/Navi.css'
+import { withRouter } from 'react-router-dom';
 
-function Navbar() {
+function Navbar(props) {
+    const onHomeClickHandler = () => {
+        props.history.push('/home');
+    };
+
+    const onRegisterClickHandler = () => {
+        props.history.push('/register');
+    };
+
+    const onLoginClickHandler = () => {
+        props.history.push('/login');
+    };
+
     return (
         <div class="masthead clearfix">
             <div class="inner">
@@ -14,14 +27,13 @@ function Navbar() {
                 <nav>
                     <ul class="nav masthead-nav">
                         <li class="active">
-                            <a href="#" className="fs-3 li-a text-body" id="list-1">홈</a>
+                            <button className="fs-3 li-a text-body" id="list-1" onClick={onHomeClickHandler}>홈</button>
                         </li>
                         <li class="active">
-                            <a href="#" className="fs-3 li-a text-body" id="list-2">회원가입</a>
-                            
+                            <button className="fs-3 li-a text-body" id="list-2" onClick={onRegisterClickHandler}>회원가입</button>
                         </li>
                         <li class="active">
-                            <a href="#" className="fs-3 li-a text-body" id="list-3">로그인</a>
+                            <button className="fs-3 li-a text-body" id="list-3" onClick={onLoginClickHandler}>로그인</button>
                             
                         </li>
                     </ul>
@@ -31,4 +43,4 @@ function Navbar() {
     );
 }
 
-export default Navbar;
+export default withRouter(Navbar);

@@ -3,9 +3,12 @@ const router = express.Router();
 const { Vision } = require('../models/Vision');
 const { Voice } = require('../models/Voice');
 const { Word } = require('../models/Word');
+const { Speechtext } = require('../models/Speechtext');
+
+var ObjectId = require('mongodb').ObjectId;
 
 router.get('/list', (req, res) => {
-    Vision.find({ userFrom: req.body.userFrom }).exec((err, list) => {
+    Speechtext.find({ "userFrom": ObjectId(req.body.userFrom) }).exec((err, list) => {
         if (err) {
             return res.status(400).send(err);
         } else {
