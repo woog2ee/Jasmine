@@ -23,4 +23,4 @@ app.listen(port, () => {
 
 app.use('/api/users', require('./routers/user'));
 app.use('/api/run', require('./routers/run'));
-//app.use('/api/report', require('./routers/report'));
+app.use('/api/report', require('./routers/report'));

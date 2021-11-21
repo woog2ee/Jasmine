@@ -12,8 +12,6 @@ import sloth from '../../../img/sloth512.png';
 import koala from '../../../img/koala512.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 
-
-
 const CONSTRAINTS = { video: true };
 const ShowButton = styled(animated.button)`
         outline: none;
@@ -38,8 +36,8 @@ const ShowButton = styled(animated.button)`
             background: ${darken(0.1, '#C54AC7')};
         }
     `;
+
 function FaceDetector(props) {
-    
     const userFrom = props.userFrom;
     const [recordState, setRecordState] = useState(null);
     const [btnVisible, setBtn] = useState(true);
@@ -129,7 +127,7 @@ function FaceDetector(props) {
     // dictaphone
     const { transcript, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
     const dictStart = () => {
-        SpeechRecognition.startListening({ continuous: true});
+        SpeechRecognition.startListening({ continuous: true });
         if (!browserSupportsSpeechRecognition) {
             return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
         }
@@ -196,7 +194,9 @@ function FaceDetector(props) {
                                 figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                                 setScore((preScore) => preScore - 1);
                                 //setToggle((isToggle) => true);
-                                if (!isToggle){setToggle((isToggle) => true);}
+                                if (!isToggle) {
+                                    setToggle((isToggle) => true);
+                                }
                             } else {
                                 setScore((preScore) => preScore + 1);
                                 setToggle((isToggle) => false);
@@ -213,11 +213,10 @@ function FaceDetector(props) {
             }
         }
     };
-    
 
     const startVideo = async () => {
         setBtn((btnVisible) => !btnVisible);
-        
+
         const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
         if (camera && camera.current && !camera.current.srcObject) {
             camera.current.srcObject = stream;
@@ -257,7 +256,7 @@ function FaceDetector(props) {
 
     return (
         <div id="FD">
-            <div className="audioRecord" style={{display:'none'}}>
+            <div className="audioRecord" style={{ display: 'none' }}>
                 <AudioReactRecorder state={recordState} onStop={onStop} />
             </div>
             {btnVisible && <ShowButton
@@ -289,7 +288,6 @@ function FaceDetector(props) {
             <animated.img src={koala} className="animal" id="koala" style={appearKoala}/>}
             {!btnVisible && 
             <animated.div className="text" id="koala-text" style={appearKoalaText}>잘하고 있어요👍</animated.div>}
-            
             <div className="stopButton">
                 <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
                     <button onClick={stopAudio} type="submit">
