@@ -1,5 +1,6 @@
-import React from "react";
-import logo from '../../../img/logo.png'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import logo from '../../../img/logo.png';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import '../../../css/RecordingList.css';
@@ -15,49 +16,62 @@ const Record = styled.button`
     margin: 1.7rem auto;
     display: flex;
 
-    background: #E7F4F8;
-    
+    background: #e7f4f8;
+
     &:hover {
         background: ${lighten(0.05, '#E7F4F8')};
     }
     &:active {
         background: ${darken(0.05, '#E7F4F8')};
     }
+`;
 
-`
-
-function RecordingList(props){
+function RecordingList(props) {
     // db에서 recording 가져오기
-    const record_list = [['2021.01.01','01:01:01'], ['2021.02.02','02:02:02'], ['2021.03.03','03:03:03'], ['2021.04.04','04:04:04'], ['2021.05.05','05:05:05'], ['2021.06.06','06:06:06'], ['2021.07.07','07:07:07'], ['2021.08.08','08:08:08'], ['2021.09.09','09:09:09'], ['2021.10.10','10:10:10']]
-    // axios.get('/api/users/logout').then((response) => {
-    //     if (response.data.success) {
-    //         props.history.push('/login');
-    //     } else {
-    //         alert('로그아웃에 실패했습니다.');
-    //     }
-    // });
-    //const record_list = 
-    
+    const [recordTimeList, setRecordTimeList] = useState([]);
+
+    useEffect(() => {
+        axios.get('/api/report/list', {
+            params: {
+                userFrom: localStorage.getItem('userId')
+            },
+        }).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('발표 기록을 불러오는 데 실패했습니다.');
+            }
+            for (var i = 0; i < response.data.list.length; i++) {
+                var temp = (' ' + response.data.list[i]["createdAt"]).slice(1);
+                console.log(temp);
+                setRecordTimeList(list => [...list, temp]);
+            }
+        });
+    }, []);
+
     const onSubmitHandler = (event) => {
         event.preventDefault();
 
         props.history.push('/home');
     };
 
-    return(
-        <div className='recordingList'>
+    return (
+        <div className="recordingList">
             <div className="simpleNavi">
-                <img src={logo} alt='logo'/>
+                <img src={logo} alt="logo" />
             </div>
-            <div className='list_board'>
+            <div className="list_board">
                 <div className="question">
-                    <h1 className='title'>나의 스피치 기록</h1>
+                    <h1 className="title">나의 스피치 기록</h1>
                 </div>
-                <div className='list'>
-                    {record_list.map(([date, time], idx) => (
-                        <Record type='submit'>
-                            <span className='date' id="recording_date">{date}</span>
-                            <span className='time' id="recording_time">{time}</span>
+                <div className="list">
+                    {recordTimeList?.map((datetime) => (
+                        <Record type="submit">
+                            <span className="date" id="recording_date">
+                                {datetime.substring(0, 10)}
+                            </span>
+                            <span className="time" id="recording_time">
+                                {datetime.substring(11, 19)}
+                            </span>
                         </Record>
                     ))}
                 </div>
@@ -68,7 +82,7 @@ function RecordingList(props){
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default withRouter(RecordingList);

@@ -3,19 +3,21 @@ const router = express.Router();
 const { Vision } = require('../models/Vision');
 const { Voice } = require('../models/Voice');
 const { Word } = require('../models/Word');
+const { Speechtext } = require('../models/Speechtext');
 
-// router.get('/list', (req, res) => {
-//     Vision.find({ userFrom: req.body.userFrom }).toArray(function(err, list) {
-//         if (!list) {
-//             return res.json({
-//                 success: false,
-//                 message: '해당 유저의 발표 기록이 없습니다.',
-//             });
-//         } else {
-//             res.status(200).json({ success: true });
-//         }
-//     });
-// });
+router.get('/list', (req, res) => {
+    Vision.find({ userFrom: req.query.userFrom }, (err, list) => {
+        if (err) {
+            return res.status(400).send(err);
+        } else {
+            return res.status(200).json({
+                success: true,
+                user: req.body.userFrom,
+                list: list,
+            });
+        }
+    });
+});
 
 router.get('/vision', (req, res) => {
     Vision.findOne({ userFrom: req.body.userFrom, timestamp: req.body.timestamp }, (err, vision) => {
