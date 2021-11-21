@@ -5,15 +5,14 @@ const { Voice } = require('../models/Voice');
 const { Word } = require('../models/Word');
 const { Speechtext } = require('../models/Speechtext');
 
-var ObjectId = require('mongodb').ObjectId;
-
 router.get('/list', (req, res) => {
-    Speechtext.find({ "userFrom": ObjectId(req.body.userFrom) }).exec((err, list) => {
+    Vision.find({ userFrom: req.query.userFrom }, (err, list) => {
         if (err) {
             return res.status(400).send(err);
         } else {
             return res.status(200).json({
                 success: true,
+                user: req.body.userFrom,
                 list: list,
             });
         }

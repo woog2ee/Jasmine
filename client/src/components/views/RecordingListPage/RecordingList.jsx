@@ -28,22 +28,23 @@ const Record = styled.button`
 
 function RecordingList(props) {
     // db에서 recording 가져오기
-    //const record_list = [['2021.01.01','01:01:01'], ['2021.02.02','02:02:02'], ['2021.03.03','03:03:03'], ['2021.04.04','04:04:04'], ['2021.05.05','05:05:05'], ['2021.06.06','06:06:06'], ['2021.07.07','07:07:07'], ['2021.08.08','08:08:08'], ['2021.09.09','09:09:09'], ['2021.10.10','10:10:10']]
-    const [recordList, setRecordList] = useState([]);
+    const [recordTimeList, setRecordTimeList] = useState([]);
 
     useEffect(() => {
-        let body = {
-            userFrom: localStorage.getItem('userId'),
-        };
-        console.log(body)
-
-        axios.get('/api/report/list', body).then((response) => {
+        axios.get('/api/report/list', {
+            params: {
+                userFrom: localStorage.getItem('userId')
+            },
+        }).then((response) => {
             if (response.data.success) {
             } else {
                 alert('발표 기록을 불러오는 데 실패했습니다.');
             }
-            setRecordList(response.data.list);
-            console.log(response.data);
+            for (var i = 0; i < response.data.list.length; i++) {
+                var temp = (' ' + response.data.list[i]["createdAt"]).slice(1);
+                console.log(temp);
+                setRecordTimeList(list => [...list, temp]);
+            }
         });
     }, []);
 
@@ -63,13 +64,13 @@ function RecordingList(props) {
                     <h1 className="title">나의 스피치 기록</h1>
                 </div>
                 <div className="list">
-                    {recordList?.map(([date, time], idx) => (
+                    {recordTimeList?.map((datetime) => (
                         <Record type="submit">
                             <span className="date" id="recording_date">
-                                {date}
+                                {datetime.substring(0, 10)}
                             </span>
                             <span className="time" id="recording_time">
-                                {time}
+                                {datetime.substring(11, 19)}
                             </span>
                         </Record>
                     ))}
