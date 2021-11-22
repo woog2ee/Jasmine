@@ -70,7 +70,7 @@ function FaceDetector(props) {
     });
     const appearKoalaText = useSpring({
         config: config.stiff,
-        x : -350,
+        x : -240,
         opacity: isToggle ? 0 : 1,
         y: 170,
     });

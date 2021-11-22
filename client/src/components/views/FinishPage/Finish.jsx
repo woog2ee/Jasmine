@@ -11,10 +11,6 @@ function Finish(props){
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
 
-    // const date = props.date;
-    // const time = props.time;
-    const date = '2021-02-02';
-    const time = '23:12';
     let total_comment = "참 잘했어요! 오늘처럼 발표해주세요.";
     const flower_cnt = 5;
     

@@ -6,7 +6,7 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     background: url(../img/download_forest1.jpg.jpeg) no-repeat ;
     background-size: cover;
-    overflow: hidden;
+    overflow: auto;
 }
 
 
@@ -69,12 +69,12 @@
     position: absolute;
 }
 #sloth {
-    width: 400px;
-    height: 400px;
+    width: 25vw;
+    height: 25vw;
 }
 #koala {
-    width: 400px;
-    height: 400px;
+    width: 25vw;
+    height: 25vw;
 }
 .facedetector{
     position: absolute;
@@ -93,7 +93,7 @@
 }
 
 #koala-text {
-    font-size: 45px;
+    font-size: 2.5vw;
     padding: 5px 15px;
     /* color: #C68B59; */
     color: #C9CCD5;
