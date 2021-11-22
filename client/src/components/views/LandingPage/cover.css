@@ -24,13 +24,12 @@ a:hover {
  * Base structure
  */
 
-html,
-body, #root {
+#htmlID, #bodyID, #root {
   height: 100vh !important;
-  background-color: #333;
+  /* background-color: #333; */
 }
 body {
-  color: #fff;
+  color: black !important;
   text-align: center !important;
   /* text-shadow: 0 1px 3px rgba(0,0,0,.5) !important; */
 }
