@@ -7,6 +7,9 @@ const wordSchema = mongoose.Schema(
             type: Schema.Types.ObjectID,
             ref: 'User',
         },
+        score: {
+            type: Number,
+        },
         variety_comment: {
             type: String,
         },

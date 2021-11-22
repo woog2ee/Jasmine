@@ -12,6 +12,7 @@ const AudioRecorder = forwardRef((props, ref) => {
 
         let body = {
             userFrom: userFrom,
+            score: 100,
             audioUrl: audioData.url,
         };
 

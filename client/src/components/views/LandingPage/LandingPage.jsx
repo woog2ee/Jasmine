@@ -24,7 +24,7 @@ function LandingPage(props) {
 
     return (
         <div id="htmlID">
-            <body id="bodyID" className="bg-primary bg-opacity-25">
+            <div className="bg-primary bg-opacity-25" id="bodyID" >
                 <div className="site-wrapper ">
                     <div className="site-wrapper-inner">
                         <div className="cover-container">
@@ -46,7 +46,7 @@ function LandingPage(props) {
                         </div>
                     </div>
                 </div>
-            </body>
+            </div>
         </div>
     );
 }
