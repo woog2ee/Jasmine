@@ -4,8 +4,8 @@ const port = 4000;
 const cookieParser = require('cookie-parser');
 const config = require('./config/key');
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: true, limit: '30mb' }));
+app.use(express.json({ limit: '30mb' }));
 app.use(cookieParser());
 
 const mongoose = require('mongoose');
