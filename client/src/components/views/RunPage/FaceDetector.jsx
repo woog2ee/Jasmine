@@ -236,16 +236,15 @@ function FaceDetector(props) {
         console.log(audioData.blob.text());
 
         blobToDataURL(audioData.blob, function(dataurl) {
-            console.log(btoa(dataurl))
             let body = {
                 userFrom: userFrom,
-                audioUrl: btoa(dataurl),
+                audioUrl: dataurl,
             };
 
-            Axios.post('/api/run/voice', body).then((response) => {
+            Axios.post('/api/run/audio', body).then((response) => {
                 if (response.data.success) {
                 } else {
-                    alert('Voice error');
+                    alert('Audio error');
                 }
             });
         });
