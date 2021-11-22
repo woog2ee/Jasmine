@@ -7,32 +7,53 @@ import txtBsImg from '../../../img/bear.png';
 import { withRouter } from 'react-router-dom';
 
 function Finish(props){
+    const userFrom = localStorage.getItem('userId');
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
 
-    // const date = props.date;
-    // const time = props.time;
-    const date = '2021-02-02';
-    const time = '23:12';
     let total_comment = "참 잘했어요! 오늘처럼 발표해주세요.";
-    const flower_cnt = 5;
     
     //const total_comment = "발표하느라 수고했어요!"
     const mk_flowers = () => {
+        let flower_cnt = 5; // 점수에 따라 정해줘야 함.
         let flower_arr = [];
-        for(let i=0;i<flower_cnt;i++){
+
+        for (let i = 0; i < flower_cnt; i++) {
             flower_arr.push(<img src={miniFlower} alt='flower-rate'/>);
         }
+
+        axios.get('/api/report/user', {
+            params: {
+                userFrom: userFrom
+            }
+        }).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('사용자 정보를 불러오는 데 실패했습니다.');
+            }
+            flower_cnt += response.data.user["flower"];
+        })
+
+        axios.put('/api/report/flower', {
+            userFrom: userFrom,
+            flower: flower_cnt
+        }).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('자스민 개수를 업데이트하는 데 실패했습니다.');
+            }
+        })
+
         return flower_arr;
     }
 
     const mk_comments = () => {
         let comments = [];
-        if (vision['score'] >=70){
+        if (vision['score'] >=70) {
             comments.push(<><span>우와~ 오늘 정말 발표태도가 좋아요!<br/>눈과 고개를 앞으로 향해서 잘 발표했어요.</span><br/></>)
         }else{
-            comments.push(<><span>발표하는 모습이 멋있어요!<br/>다음에는 앞을 많이 쳐다보면 더욱 좋을 것 같아요</span><br/></>)
+            comments.push(<><span>발표하는 모습이 멋있어요!<br/>다음에는 앞을 많이 쳐다보면 더욱 좋을 것 같아요.</span><br/></>)
         }
         comments.push(<><span>{voice['comment']}</span><br/></>)
         comments.push(<><span>{word['comment']}</span><br/></>)
@@ -44,7 +65,7 @@ function Finish(props){
     useEffect(() => {
         axios.get('/api/report/vision', {
             params: {
-                userFrom: localStorage.getItem('userId'),
+                userFrom: userFrom,
                 timestamp: props.timestamp
             },
         }).then((response) => {
@@ -57,7 +78,7 @@ function Finish(props){
 
         axios.get('/api/report/voice', {
             params: {
-                userFrom: localStorage.getItem('userId'),
+                userFrom: userFrom,
                 timestamp: props.timestamp
             },
         }).then((response) => {
@@ -70,7 +91,7 @@ function Finish(props){
 
         axios.get('/api/report/vision', {
             params: {
-                userFrom: localStorage.getItem('userId'),
+                userFrom: userFrom,
                 timestamp: props.timestamp
             },
         }).then((response) => {
@@ -80,7 +101,6 @@ function Finish(props){
             }
             setWord(response.data.list);
         });
-
 
         total_comment = ""
     }, []);
@@ -117,7 +137,7 @@ function Finish(props){
                     
                     <div className="stopButton" id="back">
                         <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
-                            <button type="submit">뒤로 가기</button>
+                            <button type="submit">끝내기</button>
                         </form>
                     </div>
                 </div>

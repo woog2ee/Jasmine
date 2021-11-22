@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { User } = require('../models/User');
 const { Vision } = require('../models/Vision');
 const { Voice } = require('../models/Voice');
 const { Word } = require('../models/Word');
@@ -12,8 +13,33 @@ router.get('/list', (req, res) => {
         } else {
             return res.status(200).json({
                 success: true,
-                user: req.body.userFrom,
                 list: list,
+            });
+        }
+    });
+});
+
+router.get('/user', (req, res) => {
+    User.findOne({ _id: req.query.userFrom }, (err, user) => {
+        if (err) {
+            return res.status(400).send(err);
+        } else {
+            return res.status(200).json({
+                success: true,
+                user: user,
+            });
+        }
+    });
+});
+
+router.put('/flower', (req, res) => {
+    User.findOneAndUpdate({ userFrom: req.body.userFrom }, {$set: {flower: req.body.flower}}, (err, user) => {
+        if (err) {
+            return res.status(400).send(err);
+        } else {
+            return res.status(200).json({
+                success: true,
+                user: user,
             });
         }
     });
@@ -26,7 +52,6 @@ router.get('/vision', (req, res) => {
         } else {
             return res.status(200).json({
                 success: true,
-                user: req.body.userFrom,
                 list: vision,
             });
         }
@@ -40,7 +65,6 @@ router.get('/voice', (req, res) => {
         } else {
             return res.status(200).json({
                 success: true,
-                user: req.body.userFrom,
                 list: voice,
             });
         }
@@ -54,7 +78,6 @@ router.get('/word', (req, res) => {
         } else {
             return res.status(200).json({
                 success: true,
-                user: req.body.userFrom,
                 list: word,
             });
         }

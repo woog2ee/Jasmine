@@ -7,6 +7,9 @@ const voiceSchema = mongoose.Schema(
             type: Schema.Types.ObjectID,
             ref: 'User',
         },
+        score: {
+            type: Number,
+        },
         audioUrl: {
             type: String,
         },

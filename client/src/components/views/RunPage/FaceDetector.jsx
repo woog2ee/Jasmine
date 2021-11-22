@@ -261,7 +261,7 @@ function FaceDetector(props) {
     return (
         <div id="FD">
             <div className="audioRecord" style={{ display: 'none' }}>
-                <AudioReactRecorder state={recordState} onStop={onStop} />
+                <AudioReactRecorder userFrom={userFrom} state={recordState} onStop={onStop} />
             </div>
             {btnVisible && <ShowButton
                 style={{

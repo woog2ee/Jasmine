@@ -6,6 +6,7 @@ import wordCloud from '../../../img/wordcloud.png';
 import { withRouter } from 'react-router-dom';
 
 function Report(props){
+    const userFrom = localStorage.getItem('userId');
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
@@ -13,7 +14,7 @@ function Report(props){
     useEffect(() => {
         axios.get('/api/report/vision', {
             params: {
-                userFrom: localStorage.getItem('userId'),
+                userFrom: userFrom,
                 timestamp: props.timestamp
             },
         }).then((response) => {
@@ -26,7 +27,7 @@ function Report(props){
 
         axios.get('/api/report/voice', {
             params: {
-                userFrom: localStorage.getItem('userId'),
+                userFrom: userFrom,
                 timestamp: props.timestamp
             },
         }).then((response) => {
@@ -39,7 +40,7 @@ function Report(props){
 
         axios.get('/api/report/vision', {
             params: {
-                userFrom: localStorage.getItem('userId'),
+                userFrom: userFrom,
                 timestamp: props.timestamp
             },
         }).then((response) => {
