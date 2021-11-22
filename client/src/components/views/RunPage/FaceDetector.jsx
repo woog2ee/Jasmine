@@ -223,22 +223,31 @@ function FaceDetector(props) {
         dictStart();
         run();
     };
+        
+    function blobToDataURL(blob, callback) {
+        var reader = new FileReader();
+        reader.onload = function(e) {callback(e.target.result);}
+        reader.readAsDataURL(blob);
+    }
 
     // audio recorder
     const onStop = (audioData) => {
         console.log('audioData', audioData);
         console.log(audioData.blob.text());
 
-        let body = {
-            userFrom: userFrom,
-            audioUrl: audioData.blob,
-        };
+        blobToDataURL(audioData.blob, function(dataurl) {
+            console.log(btoa(dataurl))
+            let body = {
+                userFrom: userFrom,
+                audioUrl: btoa(dataurl),
+            };
 
-        Axios.post('/api/run/voice', body).then((response) => {
-            if (response.data.success) {
-            } else {
-                alert('Voice error');
-            }
+            Axios.post('/api/run/voice', body).then((response) => {
+                if (response.data.success) {
+                } else {
+                    alert('Voice error');
+                }
+            });
         });
     };
 

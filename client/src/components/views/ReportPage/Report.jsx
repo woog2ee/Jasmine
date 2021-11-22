@@ -1,10 +1,56 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import axios from 'axios';
 import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
 import wordCloud from '../../../img/wordcloud.png';
 import { withRouter } from 'react-router-dom';
 
 function Report(props){
+    const [vision, setVision] = useState([]);
+    const [voice, setVoice] = useState([]);
+    const [word, setWord] = useState([]);
+
+    useEffect(() => {
+        axios.get('/api/report/vision', {
+            params: {
+                userFrom: localStorage.getItem('userId'),
+                timestamp: props.timestamp
+            },
+        }).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('발표 태도 분석을 불러오는 데 실패했습니다.');
+            }
+            setVision(response.data.list);
+        });
+
+        axios.get('/api/report/voice', {
+            params: {
+                userFrom: localStorage.getItem('userId'),
+                timestamp: props.timestamp
+            },
+        }).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('발표 음성 분석을 불러오는 데 실패했습니다.');
+            }
+            setVoice(response.data.list);
+        });
+
+        axios.get('/api/report/vision', {
+            params: {
+                userFrom: localStorage.getItem('userId'),
+                timestamp: props.timestamp
+            },
+        }).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('발표 대본 분석을 불러오는 데 실패했습니다.');
+            }
+            setWord(response.data.list);
+        });
+    }, []);
+
     const onSubmitHandler = (event) => {
         event.preventDefault();
         props.history.push('/list');

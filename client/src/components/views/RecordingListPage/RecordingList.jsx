@@ -53,6 +53,12 @@ function RecordingList(props) {
         props.history.push('/home');
     };
 
+    const onReportHandler = (event) => {
+        event.preventDefault();
+
+        props.history.push('/report');
+    };
+
     return (
         <div className="recordingList">
             <div className="simpleNavi">
@@ -64,14 +70,16 @@ function RecordingList(props) {
                 </div>
                 <div className="list">
                     {recordTimeList?.map((datetime) => (
-                        <Record type="submit">
-                            <span className="date" id="recording_date">
-                                {datetime.substring(0, 10)}
-                            </span>
-                            <span className="time" id="recording_time">
-                                {datetime.substring(11, 19)}
-                            </span>
-                        </Record>
+                        <form onSubmit={onReportHandler}>
+                            <Record type="submit" datetime={datetime}>
+                                <span className="date" id="recording_date">
+                                    {datetime.substring(0, 10)}
+                                </span>
+                                <span className="time" id="recording_time">
+                                    {datetime.substring(11, 19)}
+                                </span>
+                            </Record>
+                        </form>
                     ))}
                 </div>
                 <div className="stopButton">
