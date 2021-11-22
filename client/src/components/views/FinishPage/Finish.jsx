@@ -21,8 +21,9 @@ function Finish(props){
         let flower_cnt = 5;
         let flower_arr = [];
 
-        for (let i = 0; i < flower; i++) {
-            flower_arr.push(<img src={miniFlower} alt='flower-rate'/>);
+        for(let i=0;i<flower_cnt;i++){
+            flower_arr.push(<img key={i} src={miniFlower} alt='flower-rate'/>);
+
         }
 
         return flower_arr;

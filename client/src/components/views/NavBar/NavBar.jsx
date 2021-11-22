@@ -18,21 +18,21 @@ function Navbar(props) {
     };
 
     return (
-        <div class="masthead clearfix">
-            <div class="inner">
+        <div className="masthead clearfix">
+            <div className="inner">
                 {/* <h3 class="masthead-brand">Cover</h3> */}
                 <div className="logo masthead-brand">
                     <img src = {logo} className="logoImg"/>
                 </div>
                 <nav>
-                    <ul class="nav masthead-nav">
-                        <li class="active">
+                    <ul className="nav masthead-nav">
+                        <li className="active">
                             <button className="fs-3 li-a text-body" id="list-1" onClick={onHomeClickHandler}>홈</button>
                         </li>
-                        <li class="active">
+                        <li className="active">
                             <button className="fs-3 li-a text-body" id="list-2" onClick={onRegisterClickHandler}>회원가입</button>
                         </li>
-                        <li class="active">
+                        <li className="active">
                             <button className="fs-3 li-a text-body" id="list-3" onClick={onLoginClickHandler}>로그인</button>
                             
                         </li>
