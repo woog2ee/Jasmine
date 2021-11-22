@@ -287,6 +287,7 @@ def make_parent_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwor
 
     # 문장 길이 판단
     short_sent, long_sent = check_area(len_sent)
+    avg_sent = sum(len_sent) // num_sent
     sentcount_comment  = f'아이가 발표에서 사용한 문장은 총 {num_sent}개로, 문장의 평균 길이는 {avg_sent}로 측정되었습니다. '
     sentcount_comment += '그래프에서는 문장 순서에 따라 공백을 포함하거나 제외한 상태에서 전체 문장 길이를 한눈에 확인하실 수 있습니다. '
     
@@ -369,16 +370,14 @@ def mongodb_userinfo(docs):
             pass
     return userFrom_all, createdAt_all
 
-def get_stt_text():
+def get_stt_text(host):
     # DB에 stt가 올려진 발표 정보
-    stt_host = 'mongodb+srv://sangh:0000@jasmine.iqad5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-    stt_collection = mongodb_connection(stt_host, 'speechtexts')
+    stt_collection = mongodb_connection(host, 'speechtexts')
     stt_docs = list(stt_collection.find())
     stt_userFrom, stt_createdAt = mongodb_userinfo(stt_docs)
 
     # DB에 내용 분석이 올려진 발표 정보
-    text_host = 'mongodb+srv://seungukyu:0128@jasmine.iyjg6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-    text_collection = mongodb_connection(text_host, 'text_result')
+    text_collection = mongodb_connection(host, 'words')
     text_docs = list(text_collection.find())
     text_userFrom, text_createdAt = mongodb_userinfo(text_docs)
 
@@ -394,17 +393,17 @@ def get_stt_text():
         stt_text = doc['text']
     return stt_text, upload_userFrom, upload_createdAt
 
-def upload_speech_document(upload_userFrom, upload_createdAt, variety_comment, sentcount_comment, sentcount_image,
+def upload_speech_document(host, upload_userFrom, upload_createdAt, variety, variety_comment, sentcount_comment, sentcount_image,
                            keywords_comment, keywords_image, stopwords_comment, stopwords_image, countwords_comment, countwords_image,
                            keywords_comment_c, stopwords_comment_c, countwords_comment_c):
-    text_host = 'mongodb+srv://seungukyu:0128@jasmine.iyjg6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-    text_collection = mongodb_connection(text_host, 'text_result')
+    text_collection = mongodb_connection(host, 'words')
 
     # comment는 아이의 발표 결과에 따라 선정되며,
     # image는 발표 분석 통계 자료를 base64로 인코딩함
     text_analysis = {
         'userFrom'            : upload_userFrom,
         'createdAt'           : upload_createdAt, 
+        'score'               : variety,
         'variety_comment'     : variety_comment,
         'sentcount_comment'   : sentcount_comment,
         'sentcount_image'     : sentcount_image,
@@ -423,12 +422,13 @@ def upload_speech_document(upload_userFrom, upload_createdAt, variety_comment, s
 
 
 if __name__ == '__main__':
-    stttext, upload_userFrom, upload_createdAt = get_stt_text()     # 발표 내용을 분석할 유저 및 발표 정보
+    host = 'mongodb+srv://sangh:0000@jasmine.iqad5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    stttext, upload_userFrom, upload_createdAt = get_stt_text(host)     # 발표 내용을 분석할 유저 및 발표 정보
     
     TA = TextAnalyzer()     # 텍스트 분석 클래스
     WA = WordAnalyzer()     # 단어 분석 클래스
 
-    variety     = TA.text2variety(stttext)             # 어휘 다양도
+    variety = TA.text2variety(stttext)                                                                 # 어휘 다양도
     sentcount_image, num_sent, len_sent, len_sent_blank_removed = TA.visualize_text4count(stttext)     # 문장 길이 통계
 
     top3_keywords   = WA.text2keywords(stttext)[:3]       # 키워드 상위 3개
@@ -440,14 +440,14 @@ if __name__ == '__main__':
 
     # 학부모 인터페이스용 코멘트 생성
     variety_comment, sentcount_comment, keywords_comment, stopwords_comment, countwords_comment =\
-        make_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords)
+        make_parent_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords)
     
     # 아이 인터페이스용 코멘트 생성
     keywords_comment_c, stopwords_comment_c, countwords_comment_c =\
         make_child_comment(top3_keywords, top3_stopwords, top3_countwords)
     
     # DB에 학부모 인터페이스용 코멘트 및 분석 자료 등록
-    upload_speech_document(upload_userFrom, upload_createdAt,\
+    upload_speech_document(host, upload_userFrom, upload_createdAt, variety\
                            variety_comment, sentcount_comment, sentcount_image,\
                            keywords_comment, wordcloud_keyword_image,\
                            stopwords_comment, wordcloud_stopword_image,\
