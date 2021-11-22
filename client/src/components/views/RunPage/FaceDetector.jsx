@@ -41,7 +41,6 @@ function FaceDetector(props) {
     const [recordState, setRecordState] = useState(null);
     const [btnVisible, setBtn] = useState(true);
     const camera = React.useRef();
-    const camera_temp = React.useRef();
     const webcamElement = camera.current;
     const figures = React.useRef();
 
@@ -86,7 +85,7 @@ function FaceDetector(props) {
         // stop dictaphone'
         dictStop();
         camera.current = null;
-        camera_temp.current = null;
+        // camera_temp.current = null;
     };
 
     const onSubmitHandler = async (event) => {
@@ -148,7 +147,7 @@ function FaceDetector(props) {
             resizeHeight: 227,
         });
 
-        await gaze.setUpCamera(camera_temp.current);
+        await gaze.setUpCamera(camera.current);
 
         const predict = async () => {
             while (true) {
@@ -216,9 +215,9 @@ function FaceDetector(props) {
         if (camera && camera.current && !camera.current.srcObject) {
             camera.current.srcObject = stream;
         }
-        if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
-            camera_temp.current.srcObject = stream;
-        }
+        // if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
+        //     camera_temp.current.srcObject = stream;
+        // }
 
         dictStart();
         run();
@@ -236,10 +235,9 @@ function FaceDetector(props) {
         console.log(audioData.blob.text());
 
         blobToDataURL(audioData.blob, function(dataurl) {
-            console.log(btoa(dataurl))
             let body = {
                 userFrom: userFrom,
-                audioUrl: btoa(dataurl),
+                audioUrl: dataurl,
             };
 
             Axios.post('/api/run/voice', body).then((response) => {
@@ -280,7 +278,6 @@ function FaceDetector(props) {
             {!btnVisible && 
             <div className="facedetector">
                 <video id="webcam" autoPlay muted={true} ref={camera} />
-                <video id="hiddencam" autoPlay muted={true} ref={camera_temp} />
             </div>
             }
         

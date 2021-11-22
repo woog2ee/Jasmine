@@ -25,6 +25,8 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.14",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0"
   }
 }
