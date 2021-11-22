@@ -26,7 +26,6 @@ const ShowButton = styled(animated.button)`
         cursor: pointer;
         font-family: 'CookieRunOTF-Bold';
         
-
         /* 색상 */
         background: #C54AC7;
         &:hover {
@@ -140,7 +139,7 @@ function FaceDetector(props) {
     
 
     const run = async () => {
-        let timerDict = setInterval(() => {dictStop();console.log('dict 저장');},5000);
+        // let timerDict = setInterval(() => {dictStop();console.log('dict 저장');},5000);
         const model = await blazeface.load();
         await gaze.loadModel();
 
@@ -228,7 +227,7 @@ function FaceDetector(props) {
     // audio recorder
     const onStop = (audioData) => {
         console.log('audioData', audioData);
-        console.log(audioData.blob);
+        console.log(audioData.blob.text());
 
         let body = {
             userFrom: userFrom,

@@ -29,7 +29,7 @@
 }
 
 .content{
-    background: white;
+    background: #B4C6A6;
     margin: 0 auto;
     width: 70%;
     display: flex;
@@ -47,6 +47,22 @@
     width: 50%;
 }
 
+.finish-box{
+    margin: 50px auto 10px auto;
+}
+.finish-span{
+    text-align: center;
+    height: 60px;
+    font-size: 30px;
+    font-weight: 600;
+    font-family: 'CookieRunOTF-Bold';
+    align-items: center;
+    margin: 20px auto;
+    padding: 0 10px;
+}
+.flower-rate {
+    margin: 30px auto;
+}
 .mini-title {
     border: #31859C 1px solid;
     border-radius: 10px;
@@ -59,6 +75,8 @@
     margin: 20px auto 50px auto;
     padding: 0 10px;
 }
+
+
 
 .wordcloud {
     display: flex;
@@ -133,21 +151,30 @@
     padding: 0 4%;
 }
 
+.third-finish{
+    margin: 10px 0 0 0;
+}
+
 #feedback-title{
-    margin-left: 1%;
+    margin-left: -3%;
 }
 
 .feedback-content {
-    border: lightgray 3px solid ;
+    border: white 3px solid ;
     border-radius: 10px;
-    width: 100%;
+    width: 90%;
     overflow: auto;
-    font-size: 2rem;
+    font-size: 20px;
     font-family: 'HSYuji-Regular';
     text-align: left;
+    margin: 60px auto 0 auto;
     padding: 20px;
     line-height: 180%;
-    color: #999999;
+    color: black;
+}
+
+.finish-feedback-content{
+    padding-bottom: 10px;
 }
 
 .scoreboard{
@@ -175,4 +202,8 @@
 
 #back {
     width: 70%;
+}
+
+.button-text {
+    font-size: 20px;
 }

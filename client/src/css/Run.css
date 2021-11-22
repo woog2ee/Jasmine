@@ -135,10 +135,10 @@
     margin: 0 auto;
     background-color: #C54AC7;
     color: papayawhip;
-    width: 10%;
+    width: 120px;
     height: 60px;
     border: none;
-    font-size: 1.5rem;
+    font-size: 2rem;
     border-radius: 5px;
     position: static;
 }

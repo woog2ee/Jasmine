@@ -7,7 +7,6 @@ import { withRouter } from 'react-router-dom';
 function Report(props){
     const onSubmitHandler = (event) => {
         event.preventDefault();
-
         props.history.push('/list');
     };
 
