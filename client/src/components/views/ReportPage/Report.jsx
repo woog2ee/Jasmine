@@ -34,7 +34,7 @@ function Report(props){
             } else {
                 alert('발표 음성 분석을 불러오는 데 실패했습니다.');
             }
-            setVision(response.data.list);
+            setVoice(response.data.list);
         });
 
         axios.get('/api/report/vision', {
@@ -47,7 +47,7 @@ function Report(props){
             } else {
                 alert('발표 대본 분석을 불러오는 데 실패했습니다.');
             }
-            setVision(response.data.list);
+            setWord(response.data.list);
         });
     }, []);
 
