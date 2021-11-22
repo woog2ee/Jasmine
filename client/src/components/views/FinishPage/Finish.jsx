@@ -18,9 +18,9 @@ function Finish(props){
     const mk_flowers = () => {
         let flower_cnt = 5; // 점수에 따라 정해줘야 함.
         let flower_arr = [];
-        
+
         for(let i=0;i<flower_cnt;i++){
-            flower_arr.push(<img id={i} src={miniFlower} alt='flower-rate'/>);
+            flower_arr.push(<img key={i} src={miniFlower} alt='flower-rate'/>);
 
         }
 
