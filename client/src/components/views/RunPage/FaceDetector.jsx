@@ -241,10 +241,10 @@ function FaceDetector(props) {
                 audioUrl: dataurl,
             };
 
-            Axios.post('/api/run/voice', body).then((response) => {
+            Axios.post('/api/run/audio', body).then((response) => {
                 if (response.data.success) {
                 } else {
-                    alert('Voice error');
+                    alert('Audio error');
                 }
             });
         });
