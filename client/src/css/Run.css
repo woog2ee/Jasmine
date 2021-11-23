@@ -106,17 +106,10 @@
 .facedetector #webcam{
     /* float: center; */
     /* background-color:#999999; */
-    margin: 1px -22px 0 -22px;
-    width: 960px;
-    height: 600px;
-}
-.facedetector #hiddencam{
-    /* background-color:#999999; */
-    /* margin: auto; */
-    margin: 1px -22px 0 -22px;
-    width: 500px;
-    height: 500px;
-    display: none;
+    transform: scaleX(-1);
+    margin: -2px auto;
+    width: 910px;
+    height: 690px;
 }
 
 .stopButton {

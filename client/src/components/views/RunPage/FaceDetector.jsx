@@ -7,7 +7,7 @@ import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
-import gaze from 'gaze-detection';
+import gaze from './Gaze';
 import sloth from '../../../img/sloth512.png';
 import koala from '../../../img/koala512.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
@@ -47,6 +47,7 @@ function FaceDetector(props) {
     const [score, setScore] = useState(50);
     const [comment, setComment] = useState('');
     const [isToggle, setToggle] = useState(false);
+
 
 
     const appearSloth = useSpring({
