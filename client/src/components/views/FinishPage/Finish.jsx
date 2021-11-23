@@ -21,9 +21,8 @@ function Finish(props){
         let flower_cnt = 5;
         let flower_arr = [];
 
-        for(let i=0;i<flower_cnt;i++){
+        for (let i = 0; i < flower_cnt; i++) {
             flower_arr.push(<img key={i} src={miniFlower} alt='flower-rate'/>);
-
         }
 
         return flower_arr;
@@ -83,7 +82,7 @@ function Finish(props){
             setWord(response.data.list);
         });
 
-        setFlower(5); // 점수에 따라 정해줘야 함.
+        setFlower((preFlower) => preFlower + 5); // 점수에 따라 정해줘야 함.
 
         axios.get('/api/report/user', {
             params: {
@@ -94,6 +93,7 @@ function Finish(props){
             } else {
                 alert('사용자 정보를 불러오는 데 실패했습니다.');
             }
+            console.log(flower+"@");
             setFlower((preFlower) => preFlower + response.data.user["flower"]);
             console.log(flower+"!");
         })

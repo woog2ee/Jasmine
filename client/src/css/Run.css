@@ -101,8 +101,6 @@
     border-radius: 10px;
 }
 
-
-
 .facedetector #webcam{
     /* float: center; */
     /* background-color:#999999; */
@@ -114,8 +112,8 @@
     /* background-color:#999999; */
     /* margin: auto; */
     margin: 1px -22px 0 -22px;
-    width: 500px;
-    height: 500px;
+    width: 960px;
+    height: 600px;
     display: none;
 }
 

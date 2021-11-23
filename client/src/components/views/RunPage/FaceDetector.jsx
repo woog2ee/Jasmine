@@ -49,7 +49,6 @@ function FaceDetector(props) {
     const [comment, setComment] = useState('');
     const [isToggle, setToggle] = useState(false);
 
-
     const appearSloth = useSpring({
         config: config.stiff,
         x : 300,
@@ -136,8 +135,6 @@ function FaceDetector(props) {
         resetTranscript();
     };
 
-    
-
     const run = async () => {
         // let timerDict = setInterval(() => {dictStop();console.log('dict 저장');},5000);
         const model = await blazeface.load();
@@ -180,8 +177,9 @@ function FaceDetector(props) {
                     if (check) {
                         for (let i = 0; i < predictions.length; i++) {
                             if (figures.current) {
-                                const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
-                                if (predictions[i].landmarks[2][0] < face_center - 10 || predictions[i].landmarks[2][0] > face_center + 10) {
+                                console.log(predictions[i]);
+                                const face_center = (predictions[i].landmarks[0][0] + predictions[i].landmarks[2][0]) / 2;
+                                if (predictions[i].landmarks[1][0] < face_center - 10 || predictions[i].landmarks[1][0] > face_center + 10) {
                                     figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                                     setScore((preScore) => preScore - 1);
                                     //setToggle((isToggle) => true);
@@ -282,7 +280,6 @@ function FaceDetector(props) {
                 <video id="hiddencam" autoPlay muted={true} ref={camera_temp} />
             </div>
             }
-        
             
             <animated.img src={sloth} className="animal" id="sloth" style={appearSloth}/>
             
