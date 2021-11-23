@@ -7,7 +7,7 @@ import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
-import gaze from 'gaze-detection';
+import gaze from './Gaze';
 import sloth from '../../../img/sloth512.png';
 import koala from '../../../img/koala512.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
@@ -41,7 +41,6 @@ function FaceDetector(props) {
     const [recordState, setRecordState] = useState(null);
     const [btnVisible, setBtn] = useState(true);
     const camera = React.useRef();
-    const camera_temp = React.useRef();
     const webcamElement = camera.current;
     const figures = React.useRef();
 
@@ -85,7 +84,7 @@ function FaceDetector(props) {
         // stop dictaphone'
         dictStop();
         camera.current = null;
-        camera_temp.current = null;
+        // camera_temp.current = null;
     };
 
     const onSubmitHandler = async (event) => {
@@ -145,7 +144,7 @@ function FaceDetector(props) {
             resizeHeight: 227,
         });
 
-        await gaze.setUpCamera(camera_temp.current);
+        await gaze.setUpCamera(camera.current);
 
         const predict = async () => {
             while (true) {
@@ -214,9 +213,9 @@ function FaceDetector(props) {
         if (camera && camera.current && !camera.current.srcObject) {
             camera.current.srcObject = stream;
         }
-        if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
-            camera_temp.current.srcObject = stream;
-        }
+        // if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
+        //     camera_temp.current.srcObject = stream;
+        // }
 
         dictStart();
         run();
@@ -277,7 +276,6 @@ function FaceDetector(props) {
             {!btnVisible && 
             <div className="facedetector">
                 <video id="webcam" autoPlay muted={true} ref={camera} />
-                <video id="hiddencam" autoPlay muted={true} ref={camera_temp} />
             </div>
             }
             
