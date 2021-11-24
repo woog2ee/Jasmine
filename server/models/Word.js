@@ -9,6 +9,7 @@ const wordSchema = mongoose.Schema(
         },
         score: {
             type: Number,
+            default: 0,
         },
         variety_comment: {
             type: String,

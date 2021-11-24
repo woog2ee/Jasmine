@@ -12,20 +12,38 @@ function Finish(props){
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
     const [flower, setFlower] = useState(0);
-    const [flowerCnt, setFlowerCnt] = useState(0);
+    const [flowers, setFlowers] = useState([]);
 
     let total_comment = "참 잘했어요! 오늘처럼 발표해주세요.";
     
     //const total_comment = "발표하느라 수고했어요!"
     const mk_flowers = () => {
-        let flower_cnt = 5;
+        let flower_cnt = 0;
         let flower_arr = [];
+        let vision_score, voice_score, word_score, total_score;
 
-        for(let i=0;i<flower_cnt;i++){
-            flower_arr.push(<img key={i} src={miniFlower} alt='flower-rate'/>);
-
+        if (vision["score"] < 0) {
+            vision_score = 0;
+        } else if (vision["score"] > 100) {
+            vision_score = 100;
+        } else {
+            vision_score = vision["score"];
         }
 
+        total_score = vision_score * 0.4 + voice_score * 0.4 + word_score * 0.2;
+        if (total_score >= 80) {
+            flower_cnt = 5;
+        } else if (total_score >= 50) {
+            flower_cnt = 4;
+        } else {
+            flower_cnt = 3;
+        }
+        setFlower((preFlower) => preFlower + flower_cnt);
+
+        for (let i = 0; i < flower_cnt; i++) {
+            flower_arr.push(<img key={i} src={miniFlower} alt='flower-rate'/>);
+        }
+        setFlowers(flower_arr);
         return flower_arr;
     }
 
@@ -36,6 +54,7 @@ function Finish(props){
         } else {
             comments.push(<><span>발표하는 모습이 멋있어요!<br/>다음에는 앞을 많이 쳐다보면 더욱 좋을 것 같아요.</span><br/></>)
         }
+        comments.push(<><span>{vision['comment']}</span><br/></>)
         comments.push(<><span>{voice['comment']}</span><br/></>)
         comments.push(<><span>{word['comment']}</span><br/></>)
         // comments.map((commt) => {
@@ -83,8 +102,6 @@ function Finish(props){
             setWord(response.data.list);
         });
 
-        setFlower(5); // 점수에 따라 정해줘야 함.
-
         axios.get('/api/report/user', {
             params: {
                 userFrom: userFrom
@@ -95,9 +112,14 @@ function Finish(props){
                 alert('사용자 정보를 불러오는 데 실패했습니다.');
             }
             setFlower((preFlower) => preFlower + response.data.user["flower"]);
-            console.log(flower+"!");
         })
-        console.log(flower);
+
+        mk_flowers();
+        total_comment = ""
+    }, []);
+
+    const onSubmitHandler = (event) => {
+        event.preventDefault();
 
         axios.put('/api/report/flower', {
             userFrom: userFrom,
@@ -109,11 +131,6 @@ function Finish(props){
             }
         })
 
-        total_comment = ""
-    }, []);
-
-    const onSubmitHandler = (event) => {
-        event.preventDefault();
         props.history.push('/home');
     };
 
@@ -132,7 +149,7 @@ function Finish(props){
                             {total_comment}
                         </span>
                         <div className='flower-rate'>
-                            {mk_flowers()}
+                            {flowers}
                         </div>
                     </div>
                     <div className='thirdrow third-finish'>

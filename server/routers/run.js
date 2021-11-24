@@ -18,7 +18,7 @@ router.post('/vision', (req, res) => {
 router.post('/audio', (req, res) => {
     const audio = new Audio(req.body);
 
-    audio.save((err, voiceInfo) => {
+    audio.save((err, audioInfo) => {
         if (err) return res.json({ success: false, err });
         return res.status(200).json({
             success: true,
