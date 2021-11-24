@@ -109,18 +109,29 @@ function FaceDetector(props) {
 
     // dictaphone
     const { transcript, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+    // const [script, setScript] = useState([]);
     const dictStart = () => {
         SpeechRecognition.startListening({ continuous: true });
         if (!browserSupportsSpeechRecognition) {
             return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
         }
+        // let timerDict = setInterval(() => {
+        //     setScript(script.concat(transcript));
+        //     console.log(transcript);
+        //     console.log(script);
+        //     resetTranscript();
+        // }, 30000);
     };
     const dictStop = () => {
         SpeechRecognition.stopListening();
-        console.log({ transcript });
+        // setScript(script.concat(transcript));
+        // console.log(transcript);
+        // console.log(script);
+        
         // mongoDB 저장
         let body = {
             userFrom: userFrom,
+            // text: script,
             text: transcript,
         };
 
@@ -135,7 +146,6 @@ function FaceDetector(props) {
     };
 
     const run = async () => {
-        // let timerDict = setInterval(() => {dictStop();console.log('dict 저장');},5000);
         const model = await blazeface.load();
         await gaze.loadModel();
         var left_gaze = 0;
