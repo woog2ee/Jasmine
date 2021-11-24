@@ -12,7 +12,7 @@ function Finish(props){
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
     const [flower, setFlower] = useState(0);
-    const [flowerCnt, setFlowerCnt] = useState(0);
+    const [flowers, setFlowers] = useState([]);
 
     let total_comment = "참 잘했어요! 오늘처럼 발표해주세요.";
     
@@ -43,7 +43,7 @@ function Finish(props){
         for (let i = 0; i < flower_cnt; i++) {
             flower_arr.push(<img key={i} src={miniFlower} alt='flower-rate'/>);
         }
-
+        setFlowers(flower_arr);
         return flower_arr;
     }
 
@@ -114,6 +114,7 @@ function Finish(props){
             setFlower((preFlower) => preFlower + response.data.user["flower"]);
         })
 
+        mk_flowers();
         total_comment = ""
     }, []);
 
@@ -148,7 +149,7 @@ function Finish(props){
                             {total_comment}
                         </span>
                         <div className='flower-rate'>
-                            {() => mk_flowers()}
+                            {flowers}
                         </div>
                     </div>
                     <div className='thirdrow third-finish'>
