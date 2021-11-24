@@ -13,34 +13,34 @@ const voiceSchema = mongoose.Schema({
         type: Number,
         default: 0,
     },
-    slient_comment: {
+    slient_cmt: {
         type: String,
     },
-    speaktime_image: {
+    speaktime_img: {
         type: String,
     },
-    quiettime_image: {
+    quiettime_img: {
         type: String,
     },
-    tempo_comment: {
+    tempo_cmt: {
         type: String,
     },
-    tempo_image: {
+    tempo_img: {
         type: String,
     },
-    volume_comment: {
+    volume_cmt: {
         type: String,
     },
-    volume_image: {
+    volume_img: {
         type: String,
     },
-    slient_comment_c: {
+    slient_cmt_c: {
         type: String,
     },
-    tempo_comment_c: {
+    tempo_cmt_c: {
         type: String,
     },
-    volume_comment_c: {
+    volume_cmt_c: {
         type: String,
     },
 });
