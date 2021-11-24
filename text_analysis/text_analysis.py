@@ -266,7 +266,7 @@ class WordAnalyzer:
 def encode_image_tobase64(imagepath):
     with open(imagepath, 'rb') as img_file:
         base64_string = base64.b64encode(img_file.read())
-    return str(base64_string)
+    return base64_string
 
 
 
