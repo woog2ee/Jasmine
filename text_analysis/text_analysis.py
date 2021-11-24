@@ -289,5 +289,5 @@ if __name__ == '__main__':
     # 분석 자료 만들고 MongoDB에 업로드
     CM = CommentMaker(userFrom, createdAt)
     CM.create_speech_document(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords,
-                              sentcount_img, keywrods_img, stopwords_img, countwords_img)
+                              sentcount_img, keywords_img, stopwords_img, countwords_img)
     CM.upload_speech_document()
