@@ -70,7 +70,7 @@ function Finish(props){
             setVoice(response.data.list);
         });
 
-        axios.get('/api/report/vision', {
+        axios.get('/api/report/word', {
             params: {
                 userFrom: userFrom,
                 timestamp: props.timestamp

@@ -1,15 +1,36 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from 'axios';
+import atob from 'atob';
 import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
 import wordCloud from '../../../img/wordcloud.png';
 import { withRouter } from 'react-router-dom';
 
 function Report(props){
-    const userFrom = localStorage.getItem('userId');
+    let userFrom = localStorage.getItem('userId');
+    console.log('usrf',userFrom);
+    // userFrom = '유절프롬';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
+
+    const mk_comments = () => {
+        let comments = [];
+        if (vision['score'] >= 70) {
+            comments.push(<><span>{userFrom}(이)의 발표태도가 좋아요.</span><br/></>)
+        } else {
+            comments.push(<><span>{userFrom}(이)의 고개가 정면을 보고 있도록 도와주세요.</span><br/></>)
+        }
+        console.log(word);
+        const comment_arr = ['variety_comment','sentcount_comment','keywords_comment',
+        'stopwords_comment','countwords_comment']
+        comment_arr.forEach( (txt)=>{
+            const tmp = word[txt]
+            comments.push(<><span key={txt}>{tmp}</span><br/></>)
+        })
+        
+        return comments;
+    };
 
     useEffect(() => {
         axios.get('/api/report/vision', {
@@ -25,20 +46,21 @@ function Report(props){
             setVision(response.data.list);
         });
 
-        axios.get('/api/report/voice', {
-            params: {
-                userFrom: userFrom,
-                timestamp: props.timestamp
-            },
-        }).then((response) => {
-            if (response.data.success) {
-            } else {
-                alert('발표 음성 분석을 불러오는 데 실패했습니다.');
-            }
-            setVoice(response.data.list);
-        });
+        // axios.get('/api/report/voice', {
+        //     params: {
+        //         userFrom: userFrom,
+        //         timestamp: props.timestamp
+        //     },
+        // }).then((response) => {
+        //     if (response.data.success) {
+        //     } else {
+        //         alert('발표 음성 분석을 불러오는 데 실패했습니다.');
+        //     }
+        //     setVoice(response.data.list);
+        //     console.log(atob(response.data.list['keywords_image'].substr(2,)));
+        // });
 
-        axios.get('/api/report/vision', {
+        axios.get('/api/report/word', {
             params: {
                 userFrom: userFrom,
                 timestamp: props.timestamp
@@ -49,6 +71,7 @@ function Report(props){
                 alert('발표 대본 분석을 불러오는 데 실패했습니다.');
             }
             setWord(response.data.list);
+            console.log(atob(response.data.list['keywords_image'].substr(2,)));
         });
     }, []);
 
@@ -77,7 +100,7 @@ function Report(props){
                             키워드
                         </span>
                         <div className='wordcloud'>
-                            <img src={wordCloud} alt='wordcloud'/>
+                            {/* <img src={`data:image/png;base64,${}`} alt='wordcloud'/> */}
                             <div className='rank'>
                                 <ul>
                                     <li>1위 : </li>
@@ -114,19 +137,9 @@ function Report(props){
                         </div>
                     </div>
                     <div className='thirdrow'>
-                        <span className='mini-title' id='feedback-title'>자스민이 하고싶은 말</span>
+                        <span className='mini-title' id='feedback-title'>피드백</span>
                         <div className='feedback-content'>
-                            <span>
-                                dklfjsldkfjkldsjfkljsioejfoisdjdflkjds
-                            </span>
-                            <br/>
-                            <span>
-                                고개가 왼쪽으로 돌아가니 주의해주세요.
-                            </span>
-                            <br/>
-                            <span>
-                                발표할때 목소리에 좀더 힘을 실어서 발표해주세요.
-                            </span>
+                            {mk_comments()}
                         </div>
                     </div>
                     <div className='scoreboard'>

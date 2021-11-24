@@ -37,7 +37,7 @@ const ShowButton = styled(animated.button)`
     `;
 
 function FaceDetector(props) {
-    const userFrom = props.userFrom;
+    const userFrom = localStorage.getItem('userId');
     const [recordState, setRecordState] = useState(null);
     const [btnVisible, setBtn] = useState(true);
     const camera = React.useRef();
@@ -140,6 +140,7 @@ function FaceDetector(props) {
 
     const run = async () => {
         // let timerDict = setInterval(() => {dictStop();console.log('dict 저장');},5000);
+        
         const model = await blazeface.load();
         await gaze.loadModel();
 
