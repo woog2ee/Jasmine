@@ -37,8 +37,7 @@ const ShowButton = styled(animated.button)`
 `;
 
 function FaceDetector(props) {
-    // const userFrom = props.userFrom;
-    const userFrom = localStorage.getItem('userId');
+    const userFrom = props.userFrom;
     const [recordState, setRecordState] = useState(null);
     const [btnVisible, setBtn] = useState(true);
     const camera = React.useRef();
