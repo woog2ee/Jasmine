@@ -1,11 +1,11 @@
 import re
 import base64
 import numpy as np
+from PIL import Image
 from collections import Counter
+from wordcloud import WordCloud, ImageColorGenerator
 import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'NanumGothic'
-from wordcloud import WordCloud, ImageColorGenerator
-from PIL import Image
 import warnings
 warnings.filterwarnings(action='ignore')
 
