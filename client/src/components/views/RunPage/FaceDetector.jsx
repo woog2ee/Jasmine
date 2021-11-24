@@ -1,5 +1,5 @@
-import React, { useRef, useState} from 'react';
-import { useSpring,config, animated } from 'react-spring';
+import React, { useRef, useState } from 'react';
+import { useSpring, config, animated } from 'react-spring';
 import Axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
@@ -14,30 +14,31 @@ import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 
 const CONSTRAINTS = { video: true };
 const ShowButton = styled(animated.button)`
-        outline: none;
-        border: none;
-        border-radius: 10px;
-        color: white;
-        width: 300px;
-        padding: 2rem;
-        height: 30%;
-        margin: 8% auto;
-        font-size: 30px;
-        cursor: pointer;
-        font-family: 'CookieRunOTF-Bold';
-        
-        /* 색상 */
-        background: #C54AC7;
-        &:hover {
-            background: ${lighten(0.1, '#C54AC7')};
-        }
-        &:active {
-            background: ${darken(0.1, '#C54AC7')};
-        }
-    `;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    width: 300px;
+    padding: 2rem;
+    height: 30%;
+    margin: 8% auto;
+    font-size: 30px;
+    cursor: pointer;
+    font-family: 'CookieRunOTF-Bold';
+
+    /* 색상 */
+    background: #c54ac7;
+    &:hover {
+        background: ${lighten(0.1, '#C54AC7')};
+    }
+    &:active {
+        background: ${darken(0.1, '#C54AC7')};
+    }
+`;
 
 function FaceDetector(props) {
-    const userFrom = props.userFrom;
+    // const userFrom = props.userFrom;
+    const userFrom = localStorage.getItem('userId');
     const [recordState, setRecordState] = useState(null);
     const [btnVisible, setBtn] = useState(true);
     const camera = React.useRef();
@@ -50,25 +51,25 @@ function FaceDetector(props) {
 
     const appearSloth = useSpring({
         config: config.stiff,
-        x : 300,
+        x: 300,
         opacity: isToggle ? 1 : 0,
         y: -150,
     });
     const appearSlothText = useSpring({
         config: config.stiff,
-        x : 150,
+        x: 150,
         opacity: isToggle ? 1 : 0,
         y: 0,
     });
     const appearKoala = useSpring({
-        config: config.stiff ,
-        x : -740,
+        config: config.stiff,
+        x: -740,
         opacity: isToggle ? 0 : 1,
         y: 270,
     });
     const appearKoalaText = useSpring({
         config: config.stiff,
-        x : -240,
+        x: -240,
         opacity: isToggle ? 0 : 1,
         y: 170,
     });
@@ -77,7 +78,7 @@ function FaceDetector(props) {
         from: { x: 0 },
         to: { x: 1 },
         config: { duration: 2000 },
-    })
+    });
 
     const allStop = async () => {
         console.log('end~~~');
@@ -138,6 +139,8 @@ function FaceDetector(props) {
         // let timerDict = setInterval(() => {dictStop();console.log('dict 저장');},5000);
         const model = await blazeface.load();
         await gaze.loadModel();
+        var left_gaze = 0;
+        var right_gaze = 0;
 
         const webcam = await tf.data.webcam(webcamElement, {
             resizeWidth: 220,
@@ -152,7 +155,7 @@ function FaceDetector(props) {
                     let check = false;
                     const img = await webcam.capture();
                     const predictions = await model.estimateFaces(img, false);
-                    
+
                     const gazePrediction = await gaze.getGazePrediction();
                     for (let i = 0; i < predictions.length; i++) {
                         if (figures.current) {
@@ -160,29 +163,44 @@ function FaceDetector(props) {
                             console.log('Gaze direction: ', gazePrediction); //will return 'RIGHT', 'LEFT', 'STRAIGHT' or 'TOP'
                             if (gazePrediction === 'LEFT' || gazePrediction === 'RIGHT') {
                                 setScore((preScore) => preScore - 1);
+                                if (gazePrediction === 'LEFT') {
+                                    left_gaze += 1;
+                                } else {
+                                    right_gaze += 1;
+                                }
+                                if (left_gaze > right_gaze) {
+                                    setComment('발표 중에 왼쪽을 바라보는 경향이 있어요.');
+                                } else {
+                                    setComment('발표 중에 오른쪽을 바라보는 경향이 있어요.');
+                                }
                             } else if (gazePrediction === 'STRAIGHT' || gazePrediction === 'TOP' || gazePrediction === 'BOTTOM') {
                                 setScore((preScore) => preScore + 1);
                             }
                             check = true;
-                            
                         }
                     }
-    
-                    
+
                     if (figures.current && !check) {
-                        if (!isToggle){setToggle((isToggle) => true);}
+                        if (!isToggle) {
+                            setToggle((isToggle) => true);
+                        }
                         figures.current.innerText = '         얼굴을 보여주세요.';
                     }
                     if (check) {
                         for (let i = 0; i < predictions.length; i++) {
                             if (figures.current) {
-                                console.log(predictions[i]);
-                                const face_center = (predictions[i].landmarks[0][0] + predictions[i].landmarks[2][0]) / 2;
-                                if (predictions[i].landmarks[1][0] < face_center - 10 || predictions[i].landmarks[1][0] > face_center + 10) {
+                                // console.log(predictions[i]);
+                                const face_center = (predictions[i].bottomRight[0] + predictions[i].topLeft[0]) / 2;
+                                if (
+                                    predictions[i].landmarks[2][0] < face_center - 10 ||
+                                    predictions[i].landmarks[2][0] > face_center + 10
+                                ) {
                                     figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                                     setScore((preScore) => preScore - 1);
                                     //setToggle((isToggle) => true);
-                                    if (!isToggle){setToggle((isToggle) => true);}
+                                    if (!isToggle) {
+                                        setToggle((isToggle) => true);
+                                    }
                                 } else {
                                     setScore((preScore) => preScore + 1);
                                     setToggle((isToggle) => false);
@@ -200,10 +218,8 @@ function FaceDetector(props) {
                     continue;
                 }
             }
-        }
+        };
         predict();
-
-        
     };
 
     const startVideo = async () => {
@@ -220,10 +236,12 @@ function FaceDetector(props) {
         dictStart();
         run();
     };
-        
+
     function blobToDataURL(blob, callback) {
         var reader = new FileReader();
-        reader.onload = function(e) {callback(e.target.result);}
+        reader.onload = function (e) {
+            callback(e.target.result);
+        };
         reader.readAsDataURL(blob);
     }
 
@@ -232,7 +250,7 @@ function FaceDetector(props) {
         console.log('audioData', audioData);
         console.log(audioData.blob.text());
 
-        blobToDataURL(audioData.blob, function(dataurl) {
+        blobToDataURL(audioData.blob, function (dataurl) {
             let body = {
                 userFrom: userFrom,
                 audioUrl: dataurl,
@@ -259,33 +277,38 @@ function FaceDetector(props) {
             <div className="audioRecord" style={{ display: 'none' }}>
                 <AudioReactRecorder userFrom={userFrom} state={recordState} onStop={onStop} />
             </div>
-            {btnVisible && <ShowButton
-                style={{
-                    scale: x.to({
-                    range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
-                    output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1],
-                    }),
-                }}
-                onClick={() => {
-                    startAudio();
-                    startVideo();
-                }}
-            >발표 시작하기
-            </ShowButton>}
-            
-            {!btnVisible && 
-            <div className="facedetector">
-                <video id="webcam" autoPlay muted={true} ref={camera} />
-            </div>
-            }
-            
-            <animated.img src={sloth} className="animal" id="sloth" style={appearSloth}/>
-            
-            <animated.div className="text" id="sloth-text" ref={figures} style={appearSlothText}/>
-            {!btnVisible && 
-            <animated.img src={koala} className="animal" id="koala" style={appearKoala}/>}
-            {!btnVisible && 
-            <animated.div className="text" id="koala-text" style={appearKoalaText}>잘하고 있어요👍</animated.div>}
+            {btnVisible && (
+                <ShowButton
+                    style={{
+                        scale: x.to({
+                            range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
+                            output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1],
+                        }),
+                    }}
+                    onClick={() => {
+                        startAudio();
+                        startVideo();
+                    }}
+                >
+                    발표 시작하기
+                </ShowButton>
+            )}
+
+            {!btnVisible && (
+                <div className="facedetector">
+                    <video id="webcam" autoPlay muted={true} ref={camera} />
+                </div>
+            )}
+
+            <animated.img src={sloth} className="animal" id="sloth" style={appearSloth} />
+
+            <animated.div className="text" id="sloth-text" ref={figures} style={appearSlothText} />
+            {!btnVisible && <animated.img src={koala} className="animal" id="koala" style={appearKoala} />}
+            {!btnVisible && (
+                <animated.div className="text" id="koala-text" style={appearKoalaText}>
+                    잘하고 있어요👍
+                </animated.div>
+            )}
             <div className="stopButton">
                 <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
                     <button onClick={stopAudio} type="submit">
