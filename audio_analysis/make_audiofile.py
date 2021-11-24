@@ -104,9 +104,8 @@ class AudioMaker():
 
 class CommentMaker():
     def __init__(self, userFrom, createdAt):
-        self.AudioMaker = AudioMaker()
-        self.userFrom   = userFrom
-        self.createdAt  = createdAt
+        self.userFrom  = userFrom
+        self.createdAt = createdAt
         
         self.score         = 100
         self.slient_cmt    = None
