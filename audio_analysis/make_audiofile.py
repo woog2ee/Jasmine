@@ -111,10 +111,12 @@ class CommentMaker():
         self.slient_cmt    = None
         self.speaktime_img = None
         self.quiettime_img = None
+        
         self.tempo_cmt     = None
         self.tempo_img     = None
         self.volume_cmt    = None
         self.volume_img    = None
+        
         self.slient_cmt_c  = None
         self.tempo_cmt_c   = None
         self.volume_cmt_c  = None
@@ -320,14 +322,17 @@ class CommentMaker():
         audio_analysis = {
             'userFrom'     : self.userFrom,
             'createdAt'    : self.createdAt,
+            
             'score'        : self.score,
             'slient_cmt'   : self.slient_cmt,
             'speaktime_img': self.speaktime_img,
             'quiettime_img': self.quiettime_img,
+            
             'tempo_cmt'    : self.tempo_cmt,
             'tempo_img'    : self.tempo_img,
             'volume_cmt'   : self.volume_cmt,
             'volume_img'   : self.volume_img,
+            
             'slient_cmt_c' : self.slient_cmt_c,
             'tempo_cmt_c'  : self.tempo_cmt_c,
             'volume_cmt_c' : self.volume_cmt_c
