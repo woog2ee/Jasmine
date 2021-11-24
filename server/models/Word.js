@@ -20,33 +20,25 @@ const wordSchema = mongoose.Schema(
         sentcount_cmt: {
             type: String,
         },
-        sentcount_img: {
-            type: String,
-        },
+        sentcount_img: String,
         keywords_cmt: {
             type: String,
         },
-        keywords_img: {
-            type: String,
-        },
+        keywords_img: String,
         top3_keywords: {
             type: String,
         },
         stopwords_cmt: {
             type: String,
         },
-        stopwords_img: {
-            type: String,
-        },
+        stopwords_img: String,
         top3_stopwords: {
             type: String,
         },
         countwords_cmt: {
             type: String,
         },
-        countwords_img: {
-            type: String,
-        },
+        countwords_img: String,
         top3_countwords: {
             type: String,
         },
