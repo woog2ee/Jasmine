@@ -5,14 +5,14 @@ import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
 import wordCloud from '../../../img/wordcloud.png';
 import { withRouter } from 'react-router-dom';
+import fs from 'browserify-fs';
 
 function Report(props){
     let userFrom = localStorage.getItem('userId');
-    console.log('usrf',userFrom);
-    // userFrom = '유절프롬';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
+    let img_tmp;
 
     const mk_comments = () => {
         let comments = [];
@@ -21,22 +21,41 @@ function Report(props){
         } else {
             comments.push(<><span>{userFrom}(이)의 고개가 정면을 보고 있도록 도와주세요.</span><br/></>)
         }
-        console.log(word);
-        const comment_arr = ['variety_comment','sentcount_comment','keywords_comment',
+        comments.push(<br/>);
+        let comment_arr = ['variety_comment','sentcount_comment','keywords_comment',
         'stopwords_comment','countwords_comment']
         comment_arr.forEach( (txt)=>{
             const tmp = word[txt]
             comments.push(<><span key={txt}>{tmp}</span><br/></>)
         })
-        
+        comments.push(<br/>);
+        comment_arr = ['slient_cmt','tempo_cmt','volume_cmt']
+        comment_arr.forEach( (txt)=>{
+            const tmp = voice[txt]
+            comments.push(<><span key={txt}>{tmp}</span><br/></>)
+        })
         return comments;
     };
+
+    // const handlingDataForm = async img_tmp => {
+    //     const ab = new ArrayBuffer(img_tmp.length);
+    //     const ia = new Uint8Array(ab);
+    //     for (let i = 0; i < img_tmp.length; i++) {
+    //         ia[i] = img_tmp.charCodeAt(i);
+    //     }
+    //     const blob = new Blob([ia], {
+    //         type: "image/png"
+    //     });
+    //     const file = new File([blob], "image.png");
+    //     return file;
+    // };
 
     useEffect(() => {
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
-                timestamp: props.timestamp
+                timestamp: '2021-11-24T01:09:36.188+00:00'
+                // timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {
@@ -46,24 +65,25 @@ function Report(props){
             setVision(response.data.list);
         });
 
-        // axios.get('/api/report/voice', {
-        //     params: {
-        //         userFrom: userFrom,
-        //         timestamp: props.timestamp
-        //     },
-        // }).then((response) => {
-        //     if (response.data.success) {
-        //     } else {
-        //         alert('발표 음성 분석을 불러오는 데 실패했습니다.');
-        //     }
-        //     setVoice(response.data.list);
-        //     console.log(atob(response.data.list['keywords_image'].substr(2,)));
-        // });
+        axios.get('/api/report/voice', {
+            params: {
+                userFrom: userFrom,
+                timestamp: '2021-11-24T01:09:36.188+00:00'
+                // timestamp: props.timestamp
+            },
+        }).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('발표 음성 분석을 불러오는 데 실패했습니다.');
+            }
+            setVoice(response.data.list);
+        });
 
         axios.get('/api/report/word', {
             params: {
                 userFrom: userFrom,
-                timestamp: props.timestamp
+                timestamp: '2021-11-24T01:09:36.188+00:00'
+                // timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {
@@ -71,8 +91,16 @@ function Report(props){
                 alert('발표 대본 분석을 불러오는 데 실패했습니다.');
             }
             setWord(response.data.list);
-            console.log(atob(response.data.list['keywords_image'].substr(2,)));
         });
+        let tmp = String(word['keywords_image'])
+        img_tmp = atob((tmp).substr(2,));
+        // img_tmp = "data:image/png;base64,"+img_tmp;
+
+        
+        // fs.writeFile('image.png', img_tmp, {encoding: 'base64'}, function(err) {
+        //     console.log('File created');
+        // });
+        
     }, []);
 
     const onSubmitHandler = (event) => {
@@ -100,7 +128,7 @@ function Report(props){
                             키워드
                         </span>
                         <div className='wordcloud'>
-                            {/* <img src={`data:image/png;base64,${}`} alt='wordcloud'/> */}
+                            <img src={handlingDataForm()} alt='wordcloud'/>
                             <div className='rank'>
                                 <ul>
                                     <li>1위 : </li>

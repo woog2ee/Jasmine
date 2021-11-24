@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 
 function Finish(props){
     const userFrom = localStorage.getItem('userId');
+    console.log(userFrom)
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
@@ -16,7 +17,6 @@ function Finish(props){
 
     let total_comment = "참 잘했어요! 오늘처럼 발표해주세요.";
     
-    //const total_comment = "발표하느라 수고했어요!"
     const mk_flowers = () => {
         let flower_cnt = 0;
         let flower_arr = [];
@@ -50,15 +50,22 @@ function Finish(props){
     const mk_comments = () => {
         let comments = [];
         if (vision['score'] >= 70) {
-            comments.push(<><span>우와~ 오늘 정말 발표태도가 좋아요!<br/>눈과 고개를 앞으로 향해서 잘 발표했어요.</span><br/></>)
+            comments.push(<><span key='vision1'>우와~ 오늘 정말 발표태도가 좋아요!<br/>눈과 고개를 앞으로 향해서 잘 발표했어요.</span><br/></>)
         } else {
-            comments.push(<><span>발표하는 모습이 멋있어요!<br/>다음에는 앞을 많이 쳐다보면 더욱 좋을 것 같아요.</span><br/></>)
+            comments.push(<><span key='vision2'>발표하는 모습이 멋있어요!<br/>다음에는 앞을 많이 쳐다보면 더욱 좋을 것 같아요.</span><br/></>)
         }
-        comments.push(<><span>{vision['comment']}</span><br/></>)
-        comments.push(<><span>{voice['comment']}</span><br/></>)
-        comments.push(<><span>{word['comment']}</span><br/></>)
-        // comments.map((commt) => {
-        //     return (<><span>{commt}</span><br/></>);
+        comments.push(<br/>);
+        let comment_arr = ['keywords_comment_c','stopwords_comment_c','countwords_comment_c']
+        comment_arr.forEach( (txt)=>{
+            const tmp = word[txt]
+            comments.push(<><span key={txt}>{tmp}</span><br/></>)
+        })
+        comments.push(<br/>);
+        comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
+        comment_arr.forEach( (txt)=>{
+            const tmp = voice[txt]
+            comments.push(<><span key={txt}>{tmp}</span><br/></>)
+        })
         return comments;
     };
 
@@ -67,6 +74,7 @@ function Finish(props){
             params: {
                 userFrom: userFrom,
                 timestamp: props.timestamp
+                // timestamp: '2021-11-24T01:09:36.188+00:00'
             },
         }).then((response) => {
             if (response.data.success) {
@@ -80,6 +88,7 @@ function Finish(props){
             params: {
                 userFrom: userFrom,
                 timestamp: props.timestamp
+                // timestamp: '2021-11-24T01:09:36.188+00:00'
             },
         }).then((response) => {
             if (response.data.success) {
@@ -93,6 +102,7 @@ function Finish(props){
             params: {
                 userFrom: userFrom,
                 timestamp: props.timestamp
+                // timestamp: '2021-11-24T01:09:36.188+00:00'
             },
         }).then((response) => {
             if (response.data.success) {
