@@ -38,19 +38,19 @@ function Navbar(props) {
                 <nav>
                     <ul className="nav masthead-nav">
                         <li className="active">
-                            <button className="fs-3 li-a text-body" id="list-1" onClick={onHomeClickHandler}>홈</button>
+                            <button className="fs-3 li-a" id="list-1" onClick={onHomeClickHandler}>홈</button>
                         </li>
                         <span className='bar'>|</span>
                         <li className="active">
-                            <button className="fs-3 li-a text-body" id="list-2" onClick={onRegisterClickHandler}>회원가입</button>
+                            <button className="fs-3 li-a" id="list-2" onClick={onRegisterClickHandler}>회원가입</button>
                         </li>
                         <span className='bar'>|</span>
                         <li className="active">
-                            <button className="fs-3 li-a text-body" id="list-3" onClick={onLoginClickHandler}>로그인</button>
+                            <button className="fs-3 li-a" id="list-3" onClick={onLoginClickHandler}>로그인</button>
                         </li>
                         <span className='bar'>|</span>
                         <li className="active">
-                        <button className="fs-3 li-a text-body" id="list-3" onClick={onLogoutClickHandler}>로그아웃</button>
+                        <button className="fs-3 li-a" id="list-3" onClick={onLogoutClickHandler}>로그아웃</button>
                         </li>
                     </ul>
                 </nav>
