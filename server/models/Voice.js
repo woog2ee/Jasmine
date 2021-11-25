@@ -16,22 +16,10 @@ const voiceSchema = mongoose.Schema({
     slient_cmt: {
         type: String,
     },
-    speaktime_img: {
-        type: String,
-    },
-    quiettime_img: {
-        type: String,
-    },
     tempo_cmt: {
         type: String,
     },
-    tempo_img: {
-        type: String,
-    },
     volume_cmt: {
-        type: String,
-    },
-    volume_img: {
         type: String,
     },
     slient_cmt_c: {

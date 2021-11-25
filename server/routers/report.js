@@ -4,7 +4,6 @@ const { User } = require('../models/User');
 const { Vision } = require('../models/Vision');
 const { Voice } = require('../models/Voice');
 const { Word } = require('../models/Word');
-const { Speechtext } = require('../models/Speechtext');
 
 router.get('/list', (req, res) => {
     Vision.find({ userFrom: req.query.userFrom }, (err, list) => {
