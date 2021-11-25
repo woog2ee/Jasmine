@@ -8,7 +8,6 @@ import { withRouter } from 'react-router-dom';
 
 function Finish(props){
     const userFrom = localStorage.getItem('userId');
-    console.log(userFrom)
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);

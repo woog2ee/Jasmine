@@ -8,7 +8,7 @@ const speechtextSchema = mongoose.Schema(
             ref: 'User',
         },
         text: {
-            type: String,
+            type: Array,
         },
     },
     { timestamps: true }
