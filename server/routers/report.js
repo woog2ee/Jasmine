@@ -68,7 +68,7 @@ router.get('/voice', (req, res) => {
         args: null
     };
     
-    PythonShell.run(__dirname+'/audio_analysis/audio_analysis.py', options, (err, result) => {
+    PythonShell.run(__dirname+'../../audio_analysis/audio_analysis.py', options, (err, result) => {
         if(err) throw err;
         console.log('result: ${result}');
         console.log('audio analysis finished');
