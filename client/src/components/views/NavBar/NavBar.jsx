@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import logo from '../../../img/logo.png'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../css/Navi.css'
@@ -15,6 +16,16 @@ function Navbar(props) {
 
     const onLoginClickHandler = () => {
         props.history.push('/login');
+    };
+
+    const onLogoutClickHandler = () => {
+        axios.get('/api/users/logout').then((response) => {
+            if (response.data.success) {
+                props.history.push('/login');
+            } else {
+                alert('로그아웃에 실패했습니다.');
+            }
+        });
     };
 
     return (
@@ -36,7 +47,10 @@ function Navbar(props) {
                         <span className='bar'>|</span>
                         <li className="active">
                             <button className="fs-3 li-a text-body" id="list-3" onClick={onLoginClickHandler}>로그인</button>
-                            
+                        </li>
+                        <span className='bar'>|</span>
+                        <li className="active">
+                        <button className="fs-3 li-a text-body" id="list-3" onClick={onLogoutClickHandler}>로그아웃</button>
                         </li>
                     </ul>
                 </nav>

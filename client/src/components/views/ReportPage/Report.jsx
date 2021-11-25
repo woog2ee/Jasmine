@@ -28,11 +28,11 @@ function Report(props){
             comments.push(<><span key={txt}>{tmp}</span><br/></>)
         })
         comments.push(<br/>);
-        // comment_arr = ['slient_cmt','tempo_cmt','volume_cmt']
-        // comment_arr.forEach((txt) => {
-        //     const tmp = voice[txt]
-        //     comments.push(<><span key={txt}>{tmp}</span><br/></>)
-        // })
+        comment_arr = ['slient_cmt','tempo_cmt','volume_cmt']
+        comment_arr.forEach((txt) => {
+            const tmp = voice[txt]
+            comments.push(<><span key={txt}>{tmp}</span><br/></>)
+        })
         return comments;
     };
 
@@ -137,7 +137,7 @@ function Report(props){
                             키워드
                         </span>
                         <div className='wordcloud'>
-                            <img src={img} alt='wordcloud'/>
+                            <img src='../../../../Jasmine_sentence_count.png' alt='wordcloud'/>
                             <div className='rank'>
                                 <ul>
                                     <li>1위 : </li>
