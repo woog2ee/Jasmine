@@ -5,14 +5,13 @@ import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
 import wordCloud from '../../../img/wordcloud.png';
 import { withRouter } from 'react-router-dom';
-import fs from 'browserify-fs';
 
 function Report(props){
     let userFrom = localStorage.getItem('userId');
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
-    let img_tmp;
+    const [img, setImg] = useState();
 
     const mk_comments = () => {
         let comments = [];
@@ -24,16 +23,16 @@ function Report(props){
         comments.push(<br/>);
         let comment_arr = ['variety_comment','sentcount_comment','keywords_comment',
         'stopwords_comment','countwords_comment']
-        comment_arr.forEach( (txt)=>{
+        comment_arr.forEach((txt) => {
             const tmp = word[txt]
             comments.push(<><span key={txt}>{tmp}</span><br/></>)
         })
         comments.push(<br/>);
-        comment_arr = ['slient_cmt','tempo_cmt','volume_cmt']
-        comment_arr.forEach( (txt)=>{
-            const tmp = voice[txt]
-            comments.push(<><span key={txt}>{tmp}</span><br/></>)
-        })
+        // comment_arr = ['slient_cmt','tempo_cmt','volume_cmt']
+        // comment_arr.forEach((txt) => {
+        //     const tmp = voice[txt]
+        //     comments.push(<><span key={txt}>{tmp}</span><br/></>)
+        // })
         return comments;
     };
 
@@ -49,6 +48,13 @@ function Report(props){
     //     const file = new File([blob], "image.png");
     //     return file;
     // };
+
+    // function toBase64(arr) {
+    //     //arr = new Uint8Array(arr) if it's an ArrayBuffer
+    //     return btoa(
+    //        arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
+    //     );
+    // }
 
     useEffect(() => {
         axios.get('/api/report/vision', {
@@ -91,9 +97,12 @@ function Report(props){
                 alert('발표 대본 분석을 불러오는 데 실패했습니다.');
             }
             setWord(response.data.list);
+            // setImg("data:image/png;base64,"+toBase64(response.data.list["keywords_img"].data));
+            // console.log(response.data.list["keywords_img"]);
         });
-        let tmp = String(word['keywords_image'])
-        img_tmp = atob((tmp).substr(2,));
+
+        // let tmp = String(word['keywords_image'])
+        // img_tmp = atob((tmp).substr(2,));
         // img_tmp = "data:image/png;base64,"+img_tmp;
 
         
@@ -128,7 +137,7 @@ function Report(props){
                             키워드
                         </span>
                         <div className='wordcloud'>
-                            <img src={handlingDataForm()} alt='wordcloud'/>
+                            <img src={img} alt='wordcloud'/>
                             <div className='rank'>
                                 <ul>
                                     <li>1위 : </li>

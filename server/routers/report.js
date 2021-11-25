@@ -72,7 +72,7 @@ router.get('/voice', (req, res) => {
 });
 
 router.get('/word', (req, res) => {
-    Word.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, word) => {
+    Word.findOne({ userFrom: req.query.userFrom }, (err, word) => {
         if (err) {
             return res.status(400).send(err);
         } else {
