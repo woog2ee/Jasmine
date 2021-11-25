@@ -128,7 +128,7 @@ function Report(props){
                             키워드
                         </span>
                         <div className='wordcloud'>
-                            <img src={handlingDataForm()} alt='wordcloud'/>
+                            <img src={wordCloud} alt='wordcloud'/>
                             <div className='rank'>
                                 <ul>
                                     <li>1위 : </li>

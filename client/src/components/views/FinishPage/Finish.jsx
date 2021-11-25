@@ -54,14 +54,14 @@ function Finish(props){
         } else {
             comments.push(<><span key='vision2'>발표하는 모습이 멋있어요!<br/>다음에는 앞을 많이 쳐다보면 더욱 좋을 것 같아요.</span><br/></>)
         }
-        comments.push(<br/>);
-        let comment_arr = ['keywords_comment_c','stopwords_comment_c','countwords_comment_c']
+        /*comments.push(<br/>);
+        let comment_arr = ['keywords_cmt_c','stopwords_cmt_c','countwords_cmt_c']
         comment_arr.forEach( (txt)=>{
             const tmp = word[txt]
             comments.push(<><span key={txt}>{tmp}</span><br/></>)
-        })
+        })*/
         comments.push(<br/>);
-        comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
+        let comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
         comment_arr.forEach( (txt)=>{
             const tmp = voice[txt]
             comments.push(<><span key={txt}>{tmp}</span><br/></>)
