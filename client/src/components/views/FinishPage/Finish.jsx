@@ -19,7 +19,10 @@ function Finish(props){
     const mk_flowers = () => {
         let flower_cnt = 0;
         let flower_arr = [];
-        let vision_score, voice_score, word_score, total_score;
+        let vision_score=0;
+        let voice_score = parseInt(voice['score']);
+        let word_score = parseInt(word['score']);
+        let total_score = 0;
 
         if (vision["score"] < 0) {
             vision_score = 0;

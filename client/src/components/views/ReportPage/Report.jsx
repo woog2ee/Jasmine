@@ -9,23 +9,44 @@ function Report(props){
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
+    
 
-    const mk_comments = () => {
-        let comments = [];
-        if (vision['score'] >= 70) {
-            comments.push(<><span>{userFrom}(이)의 발표태도가 좋아요.</span><br/></>)
+    // const mk_comments = () => {
+    //     let comments = [];
+    //     if (vision['score'] >= 70) {
+    //         comments.push(<><span>{userFrom}(이)의 발표태도가 좋아요.</span><br/></>)
+    //     } else {
+    //         comments.push(<><span>{userFrom}(이)의 고개가 정면을 보고 있도록 도와주세요.</span><br/></>)
+    //     }
+    //     comments.push(<br/>);
+    //     let comment_arr = ['variety_comment','sentcount_comment','keywords_comment',
+    //     'stopwords_comment','countwords_comment']
+    //     comment_arr.forEach( (txt)=>{
+    //         comments.push(<><span key={txt}>{txt}</span><br/></>)
+    //     })
+        
+        
+    //     return comments;
+    // };
+
+    const gv_score = () => {
+        let vision_score, total_score;
+        let voice_score = parseInt(voice['score']);
+        let word_score = parseInt(word['score']);
+        if (vision["score"] < 0) {
+            vision_score = 0;
+        } else if (vision["score"] > 100) {
+            vision_score = 100;
         } else {
-            comments.push(<><span>{userFrom}(이)의 고개가 정면을 보고 있도록 도와주세요.</span><br/></>)
+            vision_score = vision["score"];
         }
-        comments.push(<br/>);
-        let comment_arr = ['variety_comment','sentcount_comment','keywords_comment',
-        'stopwords_comment','countwords_comment']
-        comment_arr.forEach( (txt)=>{
-            comments.push(<><span key={txt}>{txt}</span><br/></>)
-        })
-        
-        
-        return comments;
+        total_score = vision_score * 0.4 + voice_score * 0.4 + word_score * 0.2;
+        return (<>
+                    <div className='totalscore'>총점 : {total_score}점</div>
+                        <div className='subscore'>
+                            <span id='vision'>시선 : {vision_score}점</span>
+                            <span id='voice'>목소리 : {voice_score}점</span>
+                            <span id='contents'>내용 : {word_score}점</span></div></>);
     };
 
     useEffect(() => {
@@ -216,14 +237,14 @@ function Report(props){
                             <span>{voice['volume_cmt']}</span>
                         </div>
                     </div>
-                    <div className='box' id='box9'>
+                    {/* <div className='box' id='box9'>
                         <span className='mini-title'>
                             어휘 다양도
                         </span>
                         <div className='feedback-content subCmt'>
                             <span>{word['variety_cmt']}</span>
                         </div>
-                    </div>
+                    </div> */}
                     {/* <div className='secondrow'>
                         <div className='graph'>
                             그래프
@@ -232,19 +253,14 @@ function Report(props){
                             발표 내용 요약
                         </div>
                     </div> */}
-                    <div className='thirdrow'>
+                    {/* <div className='thirdrow'>
                         <span className='mini-title' id='feedback-title'>피드백</span>
                         <div className='feedback-content' style={{marginLeft:"20px"}}>
                             {mk_comments()}
                         </div>
-                    </div>
+                    </div> */}
                     <div className='scoreboard'>
-                        <div className='totalscore'>총점 : 100점</div>
-                        <div className='subscore'>
-                            <span id='vision'>시선 : {word['vision']}점</span>
-                            <span id='voice'>목소리 : {word['voice']}점</span>
-                            <span id='contents'>내용 : {word['score']}점</span>
-                        </div>
+                    {gv_score()}
                     </div>
                     <div className="stopButton" id="back">
                         <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
@@ -253,7 +269,6 @@ function Report(props){
                     </div>
                 </div>
             </div>
-            
         </div>
     )
 }
