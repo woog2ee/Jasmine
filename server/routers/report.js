@@ -57,22 +57,18 @@ router.get('/vision', (req, res) => {
     });
 });
 
-router.get('/voice', (req, res) => {
-    let {PythonShell} = require('python-shell');
-    let options = {
-        mode: 'text',
-        pythonPath: '',
-        pythonOptions: ['-u'],
-        scriptPath: '',
-        args: null
-    };
-    
-    PythonShell.run(__dirname+'../../audio_analysis/audio_analysis.py', options, (err, result) => {
-        if(err) throw err;
-        console.log('result: ${result}');
-        console.log('audio analysis finished');
+router.post('/voiceandword', (req, res) => {
+    const spawn = require('child_process').spawn;
+    var process_voice = spawn('python', [__dirname+'/text_analysis/text_analysis.py']);
+    process_voice.stdout.on('data', function(data) {
+        console.log(data.toString());
     });
+    process_voice.stderr.on('data', function(data){
+        console.error(data.toString());
+    });
+})
 
+router.get('/voice', (req, res) => {
     Voice.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, voice) => {
         if (err) {
             return res.status(400).send(err);
