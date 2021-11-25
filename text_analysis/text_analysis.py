@@ -91,7 +91,7 @@ class TextAnalyzer:
         plt.xticks([])
         plt.yticks([])
         plt.legend(loc='upper left', frameon=False, fontsize=10)
-        plt.savefig('./../client/public/Jasmine_내용_sentcount.png')
+        plt.savefig('./../client/public/Jasmine_내용_.png')
         return num_sent, len_sent, len_sent_blank_removed
         
         #print(f' (공백포함) 문장 길이 평균값: {sum(len_sent)/len(len_sent)}')
@@ -235,16 +235,19 @@ class WordAnalyzer:
             mask = np.array(Image.open('./wordcloud_keywords_rectangle.png'))
             words = self.text2keywords(text)
             words = self.words2wordscount(words, 'individual')
+            expr = '키워드'
         
         elif wordtype == 'stopwords':
             mask = np.array(Image.open('./wordcloud_stopwords_rectangle.png'))
             words = self.text2stopwords(text)
             words = self.words2wordscount(words, 'none')
+            expr = '불용어'
         
         elif wordtype == 'countwords':
             mask = np.array(Image.open('./wordcloud_countwords_circle.png'))
             words = self.text2countwords(text)
             words = self.words2wordscount(words, 'count')
+            expr = '자주쓴단어'
         
         image_colors = ImageColorGenerator(mask)
         wordcloud = WordCloud(font_path='./NanumBarunGothic.ttf', background_color='white',
@@ -254,7 +257,7 @@ class WordAnalyzer:
         plt.figure(figsize=(8,8))
         plt.imshow(cloud.recolor(color_func=image_colors), interpolation='bilinear')
         plt.axis('off')
-        plt.savefig(f'./../client/public/Jasmine_내용_{wordtype}.png')
+        plt.savefig(f'./../client/public/Jasmine_내용_{expr}.png')
 
 
 
