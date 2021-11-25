@@ -37,7 +37,7 @@ function LoginPage(props) {
     };
 
     return (
-        <body>
+        <div>
             <div
                 className="bg-primary bg-opacity-25"
                 style={{
@@ -62,7 +62,7 @@ function LoginPage(props) {
                     <button type="submit" className="btn btn-primary">로그인</button>
                 </form>
             </div>
-        </body>
+        </div>
     );
 }
 

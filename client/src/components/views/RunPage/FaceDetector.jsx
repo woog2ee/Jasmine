@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState} from 'react';
 import { useSpring, config, animated } from 'react-spring';
 import Axios from 'axios';
 import { withRouter } from 'react-router-dom';
@@ -11,6 +11,7 @@ import gaze from './Gaze';
 import sloth from '../../../img/sloth512.png';
 import koala from '../../../img/koala512.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
+import useInterval from 'use-interval';
 
 const CONSTRAINTS = { video: true };
 const ShowButton = styled(animated.button)`
@@ -109,33 +110,47 @@ function FaceDetector(props) {
 
     // dictaphone
     const { transcript, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
-    // const [script, setScript] = useState([]);
+
+    const [script, setScript] = useState([]);
+
     const dictStart = () => {
         SpeechRecognition.startListening({ continuous: true });
         if (!browserSupportsSpeechRecognition) {
             return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
         }
-        // let timerDict = setInterval(() => {
-        //     setScript(script.concat(transcript));
-        //     console.log(transcript);
-        //     console.log(script);
-        //     resetTranscript();
-        // }, 30000);
+        
     };
-    const dictStop = () => {
+    useInterval(() => {
+        setScript(script.concat(transcript));
+        console.log(transcript);
+        console.log(script);
+        resetTranscript();
+    }, 30000);
+    // useEffect(()=>{
+    //     let timerDict = useInterval(() => {
+    //         setScript(script.concat(transcript));
+    //         console.log(transcript);
+    //         console.log(script);
+    //         resetTranscript();
+    //     }, 30000);
+    // },[transcript])
+    
+    
+    
+    const dictStop = async() => {
         SpeechRecognition.stopListening();
-        // setScript(script.concat(transcript));
-        // console.log(transcript);
-        // console.log(script);
+        setScript(script.concat(transcript));
+        console.log(transcript);
+        console.log(script);
         
         // mongoDB 저장
         let body = {
             userFrom: userFrom,
-            // text: script,
-            text: transcript,
+            text: script,
+            //text: transcript,
         };
 
-        Axios.post('/api/run/speechtext', body).then((response) => {
+        await Axios.post('/api/run/speechtext', body).then((response) => {
             if (response.data.success) {
             } else {
                 alert('Speechtext error');
@@ -144,10 +159,9 @@ function FaceDetector(props) {
 
         resetTranscript();
     };
+    
 
     const run = async () => {
-        // let timerDict = setInterval(() => {dictStop();console.log('dict 저장');},5000);
-
         const model = await blazeface.load();
         await gaze.loadModel();
         var left_gaze = 0;
@@ -208,14 +222,12 @@ function FaceDetector(props) {
                                 ) {
                                     figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                                     setScore((preScore) => preScore - 1);
-                                    //setToggle((isToggle) => true);
                                     if (!isToggle) {
                                         setToggle((isToggle) => true);
                                     }
                                 } else {
                                     setScore((preScore) => preScore + 1);
                                     setToggle((isToggle) => false);
-                                    //if (isToggle){setToggle((isToggle) => false);}
                                 }
                             }
                         }
@@ -240,9 +252,6 @@ function FaceDetector(props) {
         if (camera && camera.current && !camera.current.srcObject) {
             camera.current.srcObject = stream;
         }
-        // if (camera_temp && camera_temp.current && !camera_temp.current.srcObject) {
-        //     camera_temp.current.srcObject = stream;
-        // }
 
         dictStart();
         run();
@@ -259,7 +268,6 @@ function FaceDetector(props) {
     // audio recorder
     const onStop = (audioData) => {
         console.log('audioData', audioData);
-        console.log(audioData.blob.text());
 
         blobToDataURL(audioData.blob, function (dataurl) {
             let body = {

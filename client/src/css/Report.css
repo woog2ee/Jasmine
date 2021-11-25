@@ -29,14 +29,16 @@
 }
 
 .content{
-    background: #B4C6A6;
+    /* background: #B4C6A6; */
+    background: white;
     margin: 0 auto;
-    width: 70%;
+    width: 75%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     height: 100%;
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     border-radius: 30px;
 }
 
@@ -46,7 +48,29 @@
     flex-direction: column;
     width: 50%;
 }
+.wordcloud {
+    display: flex;
+    justify-content: space-between;
+    /* background-color: blue; */
+}
 
+.wcImg{
+    margin: -120px auto -100px auto;
+    width: 450px;
+    height: 450px;
+}
+.scImg{
+    margin: -50px auto 0 auto;
+    width: 450px;
+    height: 450px;
+}
+#box3img{
+    margin-top: -50px;
+    margin-bottom: 0;
+}
+#rank-box3{
+    margin-top: 100px;
+}
 .finish-box{
     margin: 50px auto 10px auto;
 }
@@ -72,36 +96,30 @@
     font-weight: 600;
     font-family: 'CookieRunOTF-Bold';
     align-items: center;
-    margin: 20px auto 50px auto;
+    margin: 50px auto 50px auto;
     padding: 0 10px;
 }
-
-
-
-.wordcloud {
-    display: flex;
-    justify-content: space-between;
-    /* background-color: blue; */
-}
-
-.wordcloud img{
-    margin: auto;
+.subCmt{
+    margin: 0px auto 0 auto;
+    background: #B4C6A6;
+    height: 270px;
 }
 
 .rank{
     /* background-color: blanchedalmond; */
-    width: 50%;
+    width: 30%;
+    margin-left: -30px;
 }
 .rank ul{
-    padding: 0 0 0 10px;
+    padding: 0 0 0 0px;
 }
 .rank li{
     display: flex;
     flex-direction: row;
-    font-size: 35px;
+    font-size: 25px;
     font-weight: 250;
     font-family: 'HSYuji-Regular';
-    margin: 25px 0;
+    margin: 25px -20px;
     overflow: auto;
 }
 #box1 {
@@ -147,7 +165,7 @@
     flex-direction: column;
     justify-content:left;
     /* background-color: cornsilk; */
-    margin: 70px 0 0 0;
+    margin: 70px 0 0 20px;
     padding: 0 4%;
 }
 
@@ -167,7 +185,6 @@
     font-size: 20px;
     font-family: 'HSYuji-Regular';
     text-align: left;
-    margin: 60px auto 0 auto;
     padding: 20px;
     line-height: 180%;
     color: black;
