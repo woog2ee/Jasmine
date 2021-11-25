@@ -29,9 +29,11 @@ function Navbar(props) {
                         <li className="active">
                             <button className="fs-3 li-a text-body" id="list-1" onClick={onHomeClickHandler}>홈</button>
                         </li>
+                        <span className='bar'>|</span>
                         <li className="active">
                             <button className="fs-3 li-a text-body" id="list-2" onClick={onRegisterClickHandler}>회원가입</button>
                         </li>
+                        <span className='bar'>|</span>
                         <li className="active">
                             <button className="fs-3 li-a text-body" id="list-3" onClick={onLoginClickHandler}>로그인</button>
                             
