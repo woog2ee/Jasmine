@@ -10,25 +10,6 @@ function Report(props){
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
     
-
-    // const mk_comments = () => {
-    //     let comments = [];
-    //     if (vision['score'] >= 70) {
-    //         comments.push(<><span>{userFrom}(이)의 발표태도가 좋아요.</span><br/></>)
-    //     } else {
-    //         comments.push(<><span>{userFrom}(이)의 고개가 정면을 보고 있도록 도와주세요.</span><br/></>)
-    //     }
-    //     comments.push(<br/>);
-    //     let comment_arr = ['variety_comment','sentcount_comment','keywords_comment',
-    //     'stopwords_comment','countwords_comment']
-    //     comment_arr.forEach( (txt)=>{
-    //         comments.push(<><span key={txt}>{txt}</span><br/></>)
-    //     })
-        
-        
-    //     return comments;
-    // };
-
     const gv_score = () => {
         let vision_score, total_score;
         let voice_score = parseInt(voice['score']);
@@ -256,7 +237,6 @@ function Report(props){
                     {/* <div className='thirdrow'>
                         <span className='mini-title' id='feedback-title'>피드백</span>
                         <div className='feedback-content' style={{marginLeft:"20px"}}>
-                            {mk_comments()}
                         </div>
                     </div> */}
                     <div className='scoreboard'>

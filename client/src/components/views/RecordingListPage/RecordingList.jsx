@@ -71,7 +71,7 @@ function RecordingList(props) {
                 </div>
                 <div className="list">
                     {recordTimeList?.map((datetime) => (
-                        <form onSubmit={onReportHandler}>
+                        <form key={datetime} onSubmit={onReportHandler}>
                             <Record type="submit" datetime={datetime}>
                                 <span className="date" id="recording_date">
                                     {datetime.substring(0, 10)}
@@ -83,7 +83,7 @@ function RecordingList(props) {
                         </form>
                     ))}
                 </div>
-                <div className="stopButton">
+                <div className="stopButton" id="end">
                     <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
                         <button type="submit">끝내기</button>
                     </form>

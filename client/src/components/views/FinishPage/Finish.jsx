@@ -56,14 +56,14 @@ function Finish(props){
         } else {
             comments.push(<><span key='vision2'>발표하는 모습이 멋있어요!<br/>다음에는 앞을 많이 쳐다보면 더욱 좋을 것 같아요.</span><br/></>)
         }
-        /*comments.push(<br/>);
+        comments.push(<br/>);
         let comment_arr = ['keywords_cmt_c','stopwords_cmt_c','countwords_cmt_c']
         comment_arr.forEach( (txt)=>{
             const tmp = word[txt]
             comments.push(<><span key={txt}>{tmp}</span><br/></>)
-        })*/
+        });
         comments.push(<br/>);
-        let comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
+        comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
         comment_arr.forEach( (txt)=>{
             const tmp = voice[txt]
             comments.push(<><span key={txt}>{tmp}</span><br/></>)
@@ -152,7 +152,7 @@ function Finish(props){
                 <img src={logo} alt='logo'/>
             </div>
             <div className='body'>
-                <div className='content'>
+                <div className='content' id="finish_ctn">
                     <div className="question" id="report_question">
                         <h1 className='title'>오늘도 수고했어요~</h1>
                     </div>
@@ -166,7 +166,7 @@ function Finish(props){
                     </div>
                     <div className='thirdrow third-finish'>
                         <span className='finish-span' id='feedback-title'><img src={txtBsImg} />자스민이 하고싶은 말</span>
-                        <div className='feedback-content finish-feedback-content'>
+                        <div className='feedback-content finish-feedback-content' id="finish-fb">
                             {mk_comments()}
                         </div>
                     </div>
