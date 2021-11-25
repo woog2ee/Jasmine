@@ -2,7 +2,6 @@ import re
 import os
 import math
 import time
-import base64
 import urllib
 import subprocess
 import numpy as np
@@ -70,7 +69,11 @@ class TextMaker():
         upload_docs = stt_collection.find({'userFrom' : upload_userFrom,
                                            'createdAt': upload_createdAt})
         for doc in upload_docs:
-            stt_text = doc['text']
+            texts = doc['text']
+        stt_text = ''
+        for text in texts:
+            stt_text += text
+            stt_text += ' '
         return stt_text, upload_userFrom, upload_createdAt
 
 
@@ -83,18 +86,12 @@ class CommentMaker():
         self.score            = None
         self.variety_cmt      = None
         self.sentcount_cmt    = None
-        self.sentcount_img    = None
         
         self.keywords_cmt     = None
-        self.keywords_img     = None
         self.top3_keywords    = None
-        
         self.stopwords_cmt    = None
-        self.stopwords_img    = None
         self.top3_stopwords   = None
-        
         self.countwords_cmt   = None
-        self.countwords_img   = None
         self.top3_countwords  = None
         
         self.keywords_cmt_c   = None
@@ -203,16 +200,10 @@ class CommentMaker():
     
     
     # 스피치 분석 자료 생성
-    def create_speech_document(self, variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords,
-                               sentcount_img, keywords_img, stopwords_img, countwords_img):
+    def create_speech_document(self, variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords):
         self.make_parent_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords)
         self.make_child_comment()
         self.make_score(variety, num_sent)
-        
-        self.sentcount_img  = sentcount_img
-        self.keywords_img   = keywords_img
-        self.stopwords_img  = stopwords_img
-        self.countwords_img = countwords_img
     
     
     
@@ -229,18 +220,12 @@ class CommentMaker():
             'score'           : self.score,
             'variety_cmt'     : self.variety_cmt,
             'sentcount_cmt'   : self.sentcount_cmt,
-            'sentcount_img'   : self.sentcount_img,
             
             'keywords_cmt'    : self.keywords_cmt,
-            'keywords_img'    : self.keywords_img,
             'top3_keywords'   : self.top3_keywords,
-            
             'stopwords_cmt'   : self.stopwords_cmt,
-            'stopwords_img'   : self.stopwords_img,
             'top3_stopwords'  : self.top3_stopwords,
-            
             'countwords_cmt'  : self.countwords_cmt,
-            'countwords_img'  : self.countwords_img,
             'top3_countwords' : self.top3_countwords,
             
             'keywords_cmt_c'  : self.keywords_cmt_c,
