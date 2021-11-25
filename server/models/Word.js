@@ -19,25 +19,21 @@ const wordSchema = mongoose.Schema({
     sentcount_cmt: {
         type: String,
     },
-    sentcount_img: Buffer,
     keywords_cmt: {
         type: String,
     },
-    keywords_img: Buffer,
     top3_keywords: {
         type: String,
     },
     stopwords_cmt: {
         type: String,
     },
-    stopwords_img: Buffer,
     top3_stopwords: {
         type: String,
     },
     countwords_cmt: {
         type: String,
     },
-    countwords_img: Buffer,
     top3_countwords: {
         type: String,
     },

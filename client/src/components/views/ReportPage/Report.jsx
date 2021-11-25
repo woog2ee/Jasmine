@@ -36,32 +36,12 @@ function Report(props){
         return comments;
     };
 
-    // const handlingDataForm = async img_tmp => {
-    //     const ab = new ArrayBuffer(img_tmp.length);
-    //     const ia = new Uint8Array(ab);
-    //     for (let i = 0; i < img_tmp.length; i++) {
-    //         ia[i] = img_tmp.charCodeAt(i);
-    //     }
-    //     const blob = new Blob([ia], {
-    //         type: "image/png"
-    //     });
-    //     const file = new File([blob], "image.png");
-    //     return file;
-    // };
-
-    // function toBase64(arr) {
-    //     //arr = new Uint8Array(arr) if it's an ArrayBuffer
-    //     return btoa(
-    //        arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
-    //     );
-    // }
-
     useEffect(() => {
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
-                timestamp: '2021-11-24T01:09:36.188+00:00'
-                // timestamp: props.timestamp
+                // timestamp: '2021-11-24T01:09:36.188+00:00'
+                timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {
@@ -74,8 +54,8 @@ function Report(props){
         axios.get('/api/report/voice', {
             params: {
                 userFrom: userFrom,
-                timestamp: '2021-11-24T01:09:36.188+00:00'
-                // timestamp: props.timestamp
+                // timestamp: '2021-11-24T01:09:36.188+00:00'
+                timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {
@@ -88,8 +68,8 @@ function Report(props){
         axios.get('/api/report/word', {
             params: {
                 userFrom: userFrom,
-                timestamp: '2021-11-24T01:09:36.188+00:00'
-                // timestamp: props.timestamp
+                // timestamp: '2021-11-24T01:09:36.188+00:00'
+                timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {
@@ -97,19 +77,7 @@ function Report(props){
                 alert('발표 대본 분석을 불러오는 데 실패했습니다.');
             }
             setWord(response.data.list);
-            // setImg("data:image/png;base64,"+toBase64(response.data.list["keywords_img"].data));
-            // console.log(response.data.list["keywords_img"]);
         });
-
-        // let tmp = String(word['keywords_image'])
-        // img_tmp = atob((tmp).substr(2,));
-        // img_tmp = "data:image/png;base64,"+img_tmp;
-
-        
-        // fs.writeFile('image.png', img_tmp, {encoding: 'base64'}, function(err) {
-        //     console.log('File created');
-        // });
-        
     }, []);
 
     const onSubmitHandler = (event) => {

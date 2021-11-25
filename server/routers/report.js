@@ -4,7 +4,6 @@ const { User } = require('../models/User');
 const { Vision } = require('../models/Vision');
 const { Voice } = require('../models/Voice');
 const { Word } = require('../models/Word');
-const { Speechtext } = require('../models/Speechtext');
 
 router.get('/list', (req, res) => {
     Vision.find({ userFrom: req.query.userFrom }, (err, list) => {
@@ -72,7 +71,7 @@ router.get('/voice', (req, res) => {
 });
 
 router.get('/word', (req, res) => {
-    Word.findOne({ userFrom: req.query.userFrom }, (err, word) => {
+    Word.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, word) => {
         if (err) {
             return res.status(400).send(err);
         } else {
