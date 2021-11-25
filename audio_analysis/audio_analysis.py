@@ -1,7 +1,11 @@
+import sys
+sys.path.append('/Users/USER/anaconda3/Lib/site-packages')
+
 import re
 import wave
 import math
-import json 
+import json
+import base64 
 import urllib3
 import subprocess
 import pandas as pd
@@ -184,7 +188,8 @@ class AudioAnalyzer:
 
 
 if __name__ == '__main__':
-    auidofile, userFrom, createdAt = AudioMaker().get_wav_audio()     # 오디오 파일 및 유저 정보 로드
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    audiofile, userFrom, createdAt = AudioMaker().get_wav_audio()     # 오디오 파일 및 유저 정보 로드
     
     SA = SlientAnalyzer(audiofile)       # 묵음 분석 클래스
     AA = AudioAnalyzer(audiofile)        # 오디오 분석 클래스
