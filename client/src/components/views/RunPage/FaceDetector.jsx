@@ -125,7 +125,7 @@ function FaceDetector(props) {
         console.log(transcript);
         console.log(script);
         resetTranscript();
-    }, 10000);
+    }, 30000);
     // useEffect(()=>{
     //     let timerDict = useInterval(() => {
     //         setScript(script.concat(transcript));

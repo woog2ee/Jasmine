@@ -5,7 +5,7 @@ import FaceDetector from './FaceDetector';
 import '../../../css/Run.css';
 
 function Run(props) {
-    const question = '랜덤 질문';
+    const question = '구름은 무슨 맛일까?';
 
     return (
         <div className="run">
