@@ -7,35 +7,48 @@ const wordSchema = mongoose.Schema(
             type: Schema.Types.ObjectID,
             ref: 'User',
         },
+        createdAt: {
+            type: String,
+        },
         score: {
             type: Number,
             default: 0,
         },
-        variety_comment: {
+        variety_cmt: {
             type: String,
         },
-        sentcount_comment: {
+        sentcount_cmt: {
             type: String,
         },
-        sentcount_image: {
+        sentcount_img: String,
+        keywords_cmt: {
             type: String,
         },
-        keywords_comment: {
+        keywords_img: String,
+        top3_keywords: {
             type: String,
         },
-        keywords_image: {
+        stopwords_cmt: {
             type: String,
         },
-        stopwords_comment: {
+        stopwords_img: String,
+        top3_stopwords: {
             type: String,
         },
-        stopwords_image: {
+        countwords_cmt: {
             type: String,
         },
-        countwords_comment: {
+        countwords_img: String,
+        top3_countwords: {
             type: String,
         },
-        countwords_image: {
+        keywords_cmt_c: {
+            type: String,
+        },
+        stopwords_cmt_c: {
+            type: String,
+        },
+        countwords_cmt_c: {
             type: String,
         },
     },

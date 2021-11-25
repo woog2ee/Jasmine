@@ -1,6 +1,9 @@
 import re
+import base64
 import numpy as np
-import statistics
+from PIL import Image
+from collections import Counter
+from wordcloud import WordCloud, ImageColorGenerator
 import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'NanumGothic'
 import warnings
@@ -8,17 +11,10 @@ warnings.filterwarnings(action='ignore')
 
 from konlpy.tag import Okt, Kkma
 from nltk.tokenize import sent_tokenize
-from kss import split_sentences
-
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import normalize
-from collections import Counter
-from wordcloud import WordCloud, ImageColorGenerator
-from PIL import Image
-from pymongo import MongoClient
-import getpass
-import certifi
-import base64
+from make_textfile import TextMaker
+from make_textfile import CommentMaker
 
 
 
@@ -266,190 +262,32 @@ class WordAnalyzer:
 
 
 
+# MongoDB에 올리기 위한 base64 인코딩
 def encode_image_tobase64(imagepath):
     with open(imagepath, 'rb') as img_file:
         base64_string = base64.b64encode(img_file.read())
-    return str(base64_string)
-
-def make_parent_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords):
-    top3_keywords   = set_top3_words(top3_keywords)
-    top3_stopwords  = set_top3_words(top3_stopwords)
-    top3_countwords = set_top3_words(top3_countwords)
-
-    # 어휘 다양도 판단
-    variety_comment = f'어휘 다양도는 아이가 사용한 전체 낱말 중에서 다르게 사용한 낱말의 비율이 얼마인지 측정합니다. '
-    variety_comment += '쉽게 말해 아이가 얼마나 다양한 어휘를 구사했는지에 대한 지표로 유아의 경우 20 ~ 40으로 나타난다고 합니다. '
-    variety_comment += '이번 발표에서 아이의 어휘 다양도는 {variety}%로 확인됩니다. '
-    if variety < 30:
-        variety_comment += '아이의 어휘 다양도는 평균 혹은 조금 낮은 편으로 확인되며, 독서활동을 통해 아이가 더욱 다양한 단어를 구사할 수 있도록 지도해주세요.'
-    else:
-        variety_comment += '아이의 어휘 다양도가 평균 혹은 조금 높은 편으로 확인되며, 앞으로도 현재와 같이 다양한 단어를 구사할 수 있도록 격려해주세요.'
-
-    # 문장 길이 판단
-    short_sent, long_sent = check_area(len_sent)
-    avg_sent = sum(len_sent) // num_sent
-    sentcount_comment  = f'아이가 발표에서 사용한 문장은 총 {num_sent}개로, 문장의 평균 길이는 {avg_sent}로 측정되었습니다. '
-    sentcount_comment += '그래프에서는 문장 순서에 따라 공백을 포함하거나 제외한 상태에서 전체 문장 길이를 한눈에 확인하실 수 있습니다. '
-    
-    if (short_sent == True) and (long_sent == True):
-        sentcount_comment += '특히 아이가 발표에서 평균 길이보다 짧거나 긴 문장을 자주 사용하는 것으로 보여집니다. '
-        sentcount_comment += '표현하는 문장에 너무 짧거나 긴 문장이 속하지는 않았는지 점검해주세요.'
-    elif short_sent == True:
-        sentcount_comment += '특히 아이가 발표에서 평균 길이보다 짧은 문장을 사용하는 것으로 보여집니다. '
-        sentcount_comment += '발표 중 너무 적은 내용의 불필요한 문장을 사용하지는 않았는지 점검해주세요.'
-    elif long_sent == True:
-        sentcount_comment += '특히 아이가 발표에서 평균 길이보다 긴 문장을 사용하는 것으로 보여집니다. '
-        sentcount_comment += '발표 중 너무 많은 내용을 담은 문장을 사용하지는 않았는지 점검해주세요.'
-    else:
-        sentcount_comment += '아이가 표현하는 문장에 있어 너무 짧거나 긴 문장을 사용하지 않고 일관된 문장 길이로 잘 표현해 주었습니다.'
-
-    # 키워드 판단
-    keywords_comment   = f'아이의 발표에서 키워드로 인식된 단어는 {top3_keywords} 순이었습니다. '
-    keywords_comment   += '그림은 키워드를 시각화한 것으로, 단어 크기가 크거나 색깔이 눈에 띌 경우 아이가 자주 사용했음을 의미합니다. '
-    keywords_comment   += '아이가 발표에서 이 키워드들을 염두해서 발표하였는지 확인해주세요.'
-
-    # 불용어 판단
-    stopwords_comment  = f'아이의 발표에서 중요도가 낮으나 자주 사용된 단어는 {top3_stopwords} 순이었습니다. '
-    stopwords_comment  += '그림은 중요도가 낮으나 자주 사용된 단어를 시각화한 것으로, 단어 크기가 크거나 색깔이 눈에 띌 경우 아이가 자주 사용했음을 의미합니다. '
-    stopwords_comment  += '아이가 발표에서 이 단어들을 은연 중에 자주 말하지는 않는지 확인해주세요.'
-    
-    # 자주 사용된 단어 판단
-    countwords_comment = f'아이의 발표에서 자주 사용된 단어는 {top3_countwords} 순이었습니다. '
-    countwords_comment += '그림은 자주 사용된 단어를 시각화한 것으로, 단어 크기가 크거나 색깔이 눈에 띌 경우 아이가 자주 사용했음을 의미합니다. '
-    countwords_comment += '자주 사용된 단어가 키워드에 속하는 편인지, 중요도가 낮은 단어인지 확인해주세요.'
-    return variety_comment, sentcount_comment, keywords_comment, stopwords_comment, countwords_comment
-
-def make_child_comment(top3_keywords, top3_stopwords, top3_countwords):
-    top3_keywords   = set_top3_words(top3_keywords)
-    top3_stopwords  = set_top3_words(top3_stopwords)
-    top3_countwords = set_top3_words(top3_countwords)
-
-    keywords_comment_c   = f'이번 발표에는 {top3_keywords}를 주제로 발표했군요! 발표 잘 들었어요.'
-    stopwords_comment_c  = f'다음 발표에는 {top3_stopwords}를 조금 덜 써서 말해볼까요? 오늘 수고했어요.'
-    countwords_comment_c = f'이번 발표에는 {top3_countwords}라는 단어를 많이 사용했군요! 좋은 발표였어요.'
-    return keywords_comment_c, stopwords_comment_c, countwords_comment_c
-
-def set_top3_words(words):
-    words = str(words)
-    words = re.sub(r'\[', '', words)
-    words = re.sub(r'\]', '', words)
-    words = re.sub(r'"', '', words)
-    return words
-
-def check_area(scope):
-    avg   = sum(scope) // len(scope)
-    flag1 = False
-    flag2 = False
-    ratio = 0.4
-
-    for i in range(len(scope)):
-        if scope[i] <= avg*(1-ratio):
-            flag1 = True
-        elif avg*(1+ratio) <= scope[i]:
-            flag2 = True
-    return flag1, flag2
-
-
-
-def mongodb_connection(host, collection_name):
-    client     = MongoClient(host, tlsCAFile=certifi.where())
-    database   = client['myFirstDatabase']
-    collection = database[collection_name]
-    return collection
-
-def mongodb_userinfo(docs):
-    userFrom_all  = []
-    createdAt_all = []
-    for doc in docs:
-        try:
-            userFrom  = doc['userFrom']
-            createdAt = doc['createdAt']
-            userFrom_all.append(userFrom)
-            createdAt_all.append(createdAt)
-        except:
-            pass
-    return userFrom_all, createdAt_all
-
-def get_stt_text(host):
-    # DB에 stt가 올려진 발표 정보
-    stt_collection = mongodb_connection(host, 'speechtexts')
-    stt_docs = list(stt_collection.find())
-    stt_userFrom, stt_createdAt = mongodb_userinfo(stt_docs)
-
-    # DB에 내용 분석이 올려진 발표 정보
-    text_collection = mongodb_connection(host, 'words')
-    text_docs = list(text_collection.find())
-    text_userFrom, text_createdAt = mongodb_userinfo(text_docs)
-
-    # 'stt는 있으나 내용 분석이 안올려진 발표'라면 해당 정보를 리턴
-    complement_userFrom  = list(set(stt_userFrom) - set(text_userFrom))
-    complement_createdAt = list(set(stt_createdAt) - set(text_createdAt))
-    upload_userFrom  = complement_userFrom[0]
-    upload_createdAt = complement_createdAt[0]
-
-    upload_docs = stt_collection.find({'userFrom' : upload_userFrom,
-                                       'createdAt': upload_createdAt})
-    for doc in upload_docs:
-        stt_text = doc['text']
-    return stt_text, upload_userFrom, upload_createdAt
-
-def upload_speech_document(host, upload_userFrom, upload_createdAt, variety, variety_comment, sentcount_comment, sentcount_image,
-                           keywords_comment, keywords_image, stopwords_comment, stopwords_image, countwords_comment, countwords_image,
-                           keywords_comment_c, stopwords_comment_c, countwords_comment_c):
-    text_collection = mongodb_connection(host, 'words')
-
-    # comment는 아이의 발표 결과에 따라 선정되며,
-    # image는 발표 분석 통계 자료를 base64로 인코딩함
-    text_analysis = {
-        'userFrom'            : upload_userFrom,
-        'createdAt'           : upload_createdAt, 
-        'score'               : variety,
-        'variety_comment'     : variety_comment,
-        'sentcount_comment'   : sentcount_comment,
-        'sentcount_image'     : sentcount_image,
-        'keywords_comment'    : keywords_comment,
-        'keywords_image'      : keywords_image,
-        'stopwords_comment'   : stopwords_comment,
-        'stopwords_image'     : stopwords_image,
-        'countwords_comment'  : countwords_comment,
-        'countwords_image'    : countwords_image,
-        'keywords_comment_c'  : keywords_comment_c,
-        'stopwords_comment_c' : stopwords_comment_c,
-        'countwords_comment_c': countwords_comment_c
-    }
-    text_collection.insert(text_analysis)
+    return base64_string
 
 
 
 if __name__ == '__main__':
-    host = 'mongodb+srv://sangh:0000@jasmine.iqad5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-    stttext, upload_userFrom, upload_createdAt = get_stt_text(host)     # 발표 내용을 분석할 유저 및 발표 정보
+    stttext, userFrom, createdAt = TextMaker().get_stt_text()     # 발표 텍스트 및 유저 정보 로드
     
     TA = TextAnalyzer()     # 텍스트 분석 클래스
     WA = WordAnalyzer()     # 단어 분석 클래스
 
-    variety = TA.text2variety(stttext)                                                                 # 어휘 다양도
-    sentcount_image, num_sent, len_sent, len_sent_blank_removed = TA.visualize_text4count(stttext)     # 문장 길이 통계
+    variety = TA.text2variety(stttext)                                                               # 어휘 다양도
+    sentcount_img, num_sent, len_sent, len_sent_blank_removed = TA.visualize_text4count(stttext)     # 문장 길이 통계
 
-    top3_keywords   = WA.text2keywords(stttext)[:3]       # 키워드 상위 3개
-    top3_stopwords  = WA.text2keywords(stttext)[:3]       # 불용어 상위 3개
-    top3_countwords = WA.text2countwords(stttext)[:3]     # 빈도수 높은 단어 상위 3개
-    wordcloud_keyword_image   = WA.visualize_wordcloud(stttext, 'keywords')       # 키워드 워드클라우드
-    wordcloud_stopword_image  = WA.visualize_wordcloud(stttext, 'stopwords')      # 불용어 워드클라우드
-    wordcloud_countword_image = WA.visualize_wordcloud(stttext, 'countwords')     # 빈도수 높은 단어 워드클라우드
+    top3_keywords   = WA.text2keywords(stttext)[:3]                    # 키워드 상위 3개
+    top3_stopwords  = WA.text2keywords(stttext)[:3]                    # 불용어 상위 3개
+    top3_countwords = WA.text2countwords(stttext)[:3]                  # 빈도수 높은 단어 상위 3개
+    keywords_img   = WA.visualize_wordcloud(stttext, 'keywords')       # 키워드 워드클라우드
+    stopwords_img  = WA.visualize_wordcloud(stttext, 'stopwords')      # 불용어 워드클라우드
+    countwords_img = WA.visualize_wordcloud(stttext, 'countwords')     # 빈도수 높은 단어 워드클라우드
 
-    # 학부모 인터페이스용 코멘트 생성
-    variety_comment, sentcount_comment, keywords_comment, stopwords_comment, countwords_comment =\
-        make_parent_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords)
-    
-    # 아이 인터페이스용 코멘트 생성
-    keywords_comment_c, stopwords_comment_c, countwords_comment_c =\
-        make_child_comment(top3_keywords, top3_stopwords, top3_countwords)
-    
-    # DB에 학부모 인터페이스용 코멘트 및 분석 자료 등록
-    upload_speech_document(host, upload_userFrom, upload_createdAt, variety\
-                           variety_comment, sentcount_comment, sentcount_image,\
-                           keywords_comment, wordcloud_keyword_image,\
-                           stopwords_comment, wordcloud_stopword_image,\
-                           countwords_comment, wordcloud_countword_image,\
-                           keywords_comment_c, stopwords_comment_c, countwords_comment_c)
+    # 분석 자료 만들고 MongoDB에 업로드
+    CM = CommentMaker(userFrom, createdAt)
+    CM.create_speech_document(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords,
+                              sentcount_img, keywords_img, stopwords_img, countwords_img)
+    CM.upload_speech_document()
