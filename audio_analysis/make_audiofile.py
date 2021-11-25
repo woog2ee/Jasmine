@@ -1,6 +1,5 @@
 import os
 import time
-import base64
 import urllib
 import subprocess
 import numpy as np
@@ -72,7 +71,7 @@ class AudioMaker():
 
         self.crawl_audio_url(audio_url)
         self.convert_mp4_to_wav()
-        return 'Jasmine_speech_audio.wav', upload_userFrom, upload_createdAt
+        return 'Jasmine_.wav', upload_userFrom, upload_createdAt
 
 
 
@@ -87,7 +86,7 @@ class AudioMaker():
         html = driver.page_source
         soup = BeautifulSoup(html,'html.parser')
         audio_url = soup.find(type='audio/wav').get('src') 
-        urllib.request.urlretrieve(audio_url, 'Jasmine_speech_audio.mp4')
+        urllib.request.urlretrieve(audio_url, 'Jasmine_음성파일.mp4')
         driver.close()
 
 
@@ -98,7 +97,7 @@ class AudioMaker():
             os.remove('Jasmine_speech_audio.wav')
         except:
             pass
-        os.system('ffmpeg -i Jasmine_speech_audio.mp4 -acodec pcm_s16le -ar 16000 Jasmine_speech_audio.wav')
+        os.system('ffmpeg -i Jasmine_음성파일.mp4 -acodec pcm_s16le -ar 16000 Jasmine_음성파일.wav')
 
 
 
@@ -109,14 +108,9 @@ class CommentMaker():
         
         self.score         = 100
         self.slient_cmt    = None
-        self.speaktime_img = None
-        self.quiettime_img = None
-        
         self.tempo_cmt     = None
-        self.tempo_img     = None
         self.volume_cmt    = None
-        self.volume_img    = None
-        
+  
         self.slient_cmt_c  = None
         self.tempo_cmt_c   = None
         self.volume_cmt_c  = None
@@ -173,8 +167,8 @@ class CommentMaker():
             self.slient_cmt += '발표 중 불필요한 공백을 가지지 않고 말하도록 격려해주세요.'
         else:
             self.slient_cmt += '아이가 발표할 때 말을 오래 끌거나, 말을 오랫동안 하지 않는 경우 없이 적절하게 발표해 주었습니다.'
-        self.speaktime_img = visualize_result(speak_time, '발화 구간', '시간', 25)
-        self.quiettime_img = visualize_result(quiet_time, '묵음 구간', '시간', 10)
+        self.speaktime_img = visualize_result(speak_time, '시간', '발화 구간', 25)
+        self.quiettime_img = visualize_result(quiet_time, '시간', '묵음 구간', 10)
 
         
         # 목소리 속도 판단
@@ -324,14 +318,9 @@ class CommentMaker():
             'createdAt'    : self.createdAt,
             
             'score'        : self.score,
-            'slient_cmt'   : self.slient_cmt,
-            'speaktime_img': self.speaktime_img,
-            'quiettime_img': self.quiettime_img,
-            
+            'slient_cmt'   : self.slient_cmt, 
             'tempo_cmt'    : self.tempo_cmt,
-            'tempo_img'    : self.tempo_img,
             'volume_cmt'   : self.volume_cmt,
-            'volume_img'   : self.volume_img,
             
             'slient_cmt_c' : self.slient_cmt_c,
             'tempo_cmt_c'  : self.tempo_cmt_c,
@@ -353,14 +342,4 @@ def visualize_result(value, xtitle, ytitle, yrange):
     plt.ylim([min(value)-yrange, max(value)+yrange])
     plt.xticks([])
     plt.yticks([])
-    plt.savefig(f'./Jasmine_audio_{xtitle}_{ytitle}.png')
-    audio_img = encode_image_tobase64(f'./Jasmine_audio_{xtitle}_{ytitle}.png')
-    return audio_img
-
-
-
-# MongoDB에 올리기 위한 base64 인코딩
-def encode_image_tobase64(imagepath):
-    with open(imagepath, 'rb') as img_file:
-        base64_string = base64.b64encode(img_file.read())
-    return base64_string
+    plt.savefig(f'./../client/public/Jasmine_목소리_{ytitle}.png')
