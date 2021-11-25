@@ -32,6 +32,19 @@ a:hover {
   text-align: center !important;
   /* text-shadow: 0 1px 3px rgba(0,0,0,.5) !important; */
 }
+.home {
+  width: 100%;
+  height: 944px;
+  background-color: #F8DEFF;
+}
+
+.testImg {
+  width: 50%;
+  height: 600px;
+  float:right;
+  margin: 10% 5%;
+  border: palevioletred 2px solid;
+}
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
