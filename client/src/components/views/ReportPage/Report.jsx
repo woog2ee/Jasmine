@@ -33,9 +33,9 @@ function Report(props){
     useEffect(() => {
         axios.get('/api/report/vision', {
             params: {
-                userFrom: userFrom,
-                // timestamp: '2021-11-24T01:09:36.188+00:00'
-                timestamp: props.timestamp
+                userFrom: '6183c0dcffdd430bc33a46ac',
+                timestamp: '2021-11-24T01:09:36.188+00:00'
+                // timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {
@@ -47,9 +47,9 @@ function Report(props){
 
         axios.get('/api/report/voice', {
             params: {
-                userFrom: userFrom,
-                // timestamp: '2021-11-24T01:09:36.188+00:00'
-                timestamp: props.timestamp
+                userFrom: '6183c0dcffdd430bc33a46ac',
+                timestamp: '2021-11-24T01:09:36.188+00:00'
+                // timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {
@@ -61,9 +61,9 @@ function Report(props){
 
         axios.get('/api/report/word', {
             params: {
-                userFrom: userFrom,
-                // timestamp: '2021-11-24T01:09:36.188+00:00'
-                timestamp: props.timestamp
+                userFrom: '6183c0dcffdd430bc33a46ac',
+                timestamp: '2021-11-24T01:09:36.188+00:00'
+                // timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {

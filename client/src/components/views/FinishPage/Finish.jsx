@@ -63,18 +63,18 @@ function Finish(props){
             comments.push(<><span key={tmp}>{tmp}</span><br/></>)
         });
         comments.push(<br/>);
-        // comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
-        // comment_arr.forEach( (txt)=>{
-        //     const tmp = voice[txt]
-        //     comments.push(<><span key={txt}>{tmp}</span><br/></>)
-        // })
+        comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
+        comment_arr.forEach( (txt)=>{
+            const tmp = voice[txt]
+            comments.push(<><span key={txt}>{tmp}</span><br/></>)
+        })
         return comments;
     };
 
     useEffect(() => {
         axios.get('/api/report/vision', {
             params: {
-                userFrom: userFrom,
+                userFrom: '6183c0dcffdd430bc33a46ac',
                 // timestamp: props.timestamp
                 timestamp: '2021-11-24T01:09:36.188+00:00'
             },
@@ -88,7 +88,7 @@ function Finish(props){
 
         axios.get('/api/report/voice', {
             params: {
-                userFrom: userFrom,
+                userFrom: '6183c0dcffdd430bc33a46ac',
                 // timestamp: props.timestamp
                 timestamp: '2021-11-24T01:09:36.188+00:00'
             },
@@ -102,7 +102,7 @@ function Finish(props){
 
         axios.get('/api/report/word', {
             params: {
-                userFrom: userFrom,
+                userFrom: '6183c0dcffdd430bc33a46ac',
                 // timestamp: props.timestamp
                 timestamp: '2021-11-24T01:09:36.188+00:00'
             },
