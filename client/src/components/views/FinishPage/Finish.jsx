@@ -60,14 +60,14 @@ function Finish(props){
         let comment_arr = ['keywords_cmt_c','stopwords_cmt_c','countwords_cmt_c']
         comment_arr.forEach( (txt)=>{
             const tmp = word[txt]
-            comments.push(<><span key={txt}>{tmp}</span><br/></>)
+            comments.push(<><span key={tmp}>{tmp}</span><br/></>)
         });
         comments.push(<br/>);
-        comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
-        comment_arr.forEach( (txt)=>{
-            const tmp = voice[txt]
-            comments.push(<><span key={txt}>{tmp}</span><br/></>)
-        })
+        // comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
+        // comment_arr.forEach( (txt)=>{
+        //     const tmp = voice[txt]
+        //     comments.push(<><span key={txt}>{tmp}</span><br/></>)
+        // })
         return comments;
     };
 

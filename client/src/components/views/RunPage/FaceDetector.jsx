@@ -82,7 +82,6 @@ function FaceDetector(props) {
 
     const allStop = async () => {
         console.log('end~~~');
-        // stop dictaphone'
         dictStop();
         camera.current = null;
         // camera_temp.current = null;
@@ -134,30 +133,44 @@ function FaceDetector(props) {
     //         resetTranscript();
     //     }, 30000);
     // },[transcript])
-    
+    // useEffect(()=>{
+    //     return () =>{
+    //         allStop();
+    //         setScript([]);
+    //         setScore(0);
+    //         setToggle(null);
+    //     }
+    // })
     
     
     const dictStop = async() => {
-        SpeechRecognition.stopListening();
-        setScript(script.concat(transcript));
-        console.log(transcript);
-        console.log(script);
+        setTimeout(async function(){
+            const tmp = script.concat(transcript);
+            SpeechRecognition.stopListening();
+            // setScript(script.concat(transcript));
+            // setScript(() => [...script,transcript]);
+            
+            console.log(transcript);
+            // console.log(script);
+            console.log(tmp);
+
+            let body = {
+                userFrom: userFrom,
+                text: tmp,
+                //text: transcript,
+            };
+    
+            await Axios.post('/api/run/speechtext', body).then((response) => {
+                if (response.data.success) {
+                } else {
+                    alert('Speechtext error');
+                }
+            });
+        },1000)
+        
         
         // mongoDB 저장
-        let body = {
-            userFrom: userFrom,
-            text: script,
-            //text: transcript,
-        };
-
-        await Axios.post('/api/run/speechtext', body).then((response) => {
-            if (response.data.success) {
-            } else {
-                alert('Speechtext error');
-            }
-        });
-
-        resetTranscript();
+        
     };
     
 
