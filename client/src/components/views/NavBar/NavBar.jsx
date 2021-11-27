@@ -44,16 +44,6 @@ function Navbar(props) {
         }
     };
 
-    const onLogoutClickHandler = () => {
-        axios.get('/api/users/logout').then((response) => {
-            if (response.data.success) {
-                alert('로그아웃 되었습니다.');
-            } else {
-                alert('로그아웃에 실패했습니다.');
-            }
-        });
-    };
-
     return (
         <div className="masthead clearfix">
             <div className="inner">
@@ -80,10 +70,6 @@ function Navbar(props) {
                                 {isLogin ? '로그아웃' : '로그인'}
                             </button>
                         </li>
-                        {/* <span className='bar'>|</span>
-                        <li className="active">
-                        <button className="fs-3 li-a" id="list-3" onClick={onLogoutClickHandler}>로그아웃</button>
-                        </li> */}
                     </ul>
                 </nav>
             </div>
