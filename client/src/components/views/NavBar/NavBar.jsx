@@ -67,7 +67,7 @@ function Navbar(props) {
                         <span className="bar">|</span>
                         <li className="active">
                             <button className="fs-3 li-a" id="list-3" onClick={onLoginClickHandler}>
-                                {isLogin ? '로그아웃' : '로그인'}
+                                {isLogin ? '로그아웃' : '로그인   '}
                             </button>
                         </li>
                     </ul>

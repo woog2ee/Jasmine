@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import './cover.css';
+import '../../../css/landingPage.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Foot from '../Footer/Footer';
 import Navbar from '../NavBar/NavBar';
