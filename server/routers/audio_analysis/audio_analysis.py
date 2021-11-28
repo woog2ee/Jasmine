@@ -51,7 +51,7 @@ class AudioAnalyzer:
         # n초 단위로 잘라서 저장
         for i in range(self.cnt):
             ny = y[sr*sec*i:sr*sec*(i+1)]
-            sf.write(f'./trimdata/{filename}_{i}.wav', ny, sr, 'PCM_24')
+            sf.write(f'./audiofiles/{filename}_{i}.wav', ny, sr, 'PCM_24')
     
     
         
@@ -202,7 +202,7 @@ if __name__ == '__main__':
 
     # 30초 단위로 분리한 오디오로 분석
     for i in range(AA.cnt):
-        cur_audiofile = f'./trimdata/{AA.filename}_{i}.wav'
+        cur_audiofile = f'./audiofiles/{AA.filename}_{i}.wav'
         cur_duration = AA.get_duration(cur_audiofile)
         if cur_duration <= 10:
             continue

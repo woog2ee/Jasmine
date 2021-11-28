@@ -59,7 +59,7 @@ router.get('/vision', (req, res) => {
 });
 
 router.get('/voice', (req, res) => {
-    let {PythonShell} = require('python-shell');
+    /*let {PythonShell} = require('python-shell');
     let options = {
         mode: 'text',
         pythonPath: '',
@@ -70,8 +70,15 @@ router.get('/voice', (req, res) => {
     
     PythonShell.run(__dirname+'../../audio_analysis/audio_analysis.py', options, (err, result) => {
         if(err) throw err;
-        console.log('result: ${result}');
         console.log('audio analysis finished');
+    });*/
+    const spawn = require('child_process').spawn;
+    var process = spawn('python', [__dirname+'/audio_analysis/audio_analysis.py']);
+    process.stdout.on('data', function(data) {
+        console.log(data.toString());
+    });
+    process.stderr.on('data', function(data){
+        console.error(data.toString());
     });
 
     Voice.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, voice) => {

@@ -80,7 +80,7 @@ class AudioMaker():
     def crawl_audio_url(self, url):
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
-        driver = webdriver.Chrome('chromedriver.exe', options=options)
+        driver = webdriver.Chrome('C:/Users/USER/chromedriver.exe', options=options)
         driver.get(url)
         time.sleep(1)    
 
