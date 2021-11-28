@@ -22,7 +22,7 @@ function Navbar(props) {
     }, [])
 
     const onHomeClickHandler = () => {
-        props.history.push('/home');
+        props.history.push('/');
     };
 
     const onRegisterClickHandler = () => {
