@@ -4,7 +4,6 @@ const { User } = require('../models/User');
 const { Vision } = require('../models/Vision');
 const { Voice } = require('../models/Voice');
 const { Word } = require('../models/Word');
-const { Speechtext } = require('../models/Speechtext');
 
 router.get('/list', (req, res) => {
     Vision.find({ userFrom: req.query.userFrom }, (err, list) => {
@@ -58,29 +57,27 @@ router.get('/vision', (req, res) => {
     });
 });
 
-router.get('/voice', (req, res) => {
-    /*let {PythonShell} = require('python-shell');
-    let options = {
-        mode: 'text',
-        pythonPath: '',
-        pythonOptions: ['-u'],
-        scriptPath: '',
-        args: null
-    };
-    
-    PythonShell.run(__dirname+'../../audio_analysis/audio_analysis.py', options, (err, result) => {
-        if(err) throw err;
-        console.log('audio analysis finished');
-    });*/
+router.post('/voiceandword', (req, res) => {
     const spawn = require('child_process').spawn;
-    var process = spawn('python', [__dirname+'/audio_analysis/audio_analysis.py']);
-    process.stdout.on('data', function(data) {
+    var process_voice = spawn('python', [__dirname+'/audio_analysis/audio_analysis.py']);
+    process_voice.stdout.on('data', function(data) {
         console.log(data.toString());
     });
-    process.stderr.on('data', function(data){
+    process_voice.stderr.on('data', function(data){
         console.error(data.toString());
     });
 
+    const spawn = require('child_process').spawn;
+    var process_voice = spawn('python', [__dirname+'/text_analysis/text_analysis.py']);
+    process_voice.stdout.on('data', function(data) {
+        console.log(data.toString());
+    });
+    process_voice.stderr.on('data', function(data){
+        console.error(data.toString());
+    });
+})
+
+router.get('/voice', (req, res) => {
     Voice.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, voice) => {
         if (err) {
             return res.status(400).send(err);

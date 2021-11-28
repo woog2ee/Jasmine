@@ -70,18 +70,27 @@ class AudioMaker():
         for doc in upload_docs:
             audio_url = doc['audioUrl']
 
-        self.crawl_audio_url(audio_url)
+        audio_url_byte = audio_url.encode('ascii')
+        audio_url_base = base64.b64encode(audio_url_byte)
+        self.crawl_audio_url(audio_url_base)
         self.convert_mp4_to_wav()
         return 'Jasmine_speech_audio.wav', upload_userFrom, upload_createdAt
 
 
 
-    # Data url로 오디오 파일 크롤링
+        # Data url로 오디오 파일 크롤링
     def crawl_audio_url(self, url):
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
+<<<<<<< HEAD:server/routers/audio_analysis/make_audiofile.py
         driver = webdriver.Chrome('C:/Users/USER/chromedriver.exe', options=options)
         driver.get(url)
+=======
+        driver = webdriver.Chrome('C:/Users/sangh/chromedriver.exe', options=options)
+        url_byte = base64.b64decode(url)
+        url_origin = url_byte.decode('ascii')
+        driver.get(url_origin)
+>>>>>>> 50a1adbf3aa3956588b214db08933e933a85adb4:audio_analysis/make_audiofile.py
         time.sleep(1)    
 
         html = driver.page_source

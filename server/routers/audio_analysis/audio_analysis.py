@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/Users/USER/anaconda3/Lib/site-packages')
+sys.path.append('/Users/sangh/anaconda3/Lib/site-packages')
 
 import re
 import wave

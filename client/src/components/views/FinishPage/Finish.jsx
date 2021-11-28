@@ -8,7 +8,6 @@ import { withRouter } from 'react-router-dom';
 
 function Finish(props){
     const userFrom = localStorage.getItem('userId');
-    console.log(userFrom)
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
@@ -73,8 +72,8 @@ function Finish(props){
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
-                timestamp: props.timestamp
-                // timestamp: '2021-11-24T01:09:36.188+00:00'
+                // timestamp: props.timestamp
+                timestamp: '2021-11-24T01:09:36.188+00:00'
             },
         }).then((response) => {
             if (response.data.success) {
@@ -87,8 +86,8 @@ function Finish(props){
         axios.get('/api/report/voice', {
             params: {
                 userFrom: userFrom,
-                timestamp: props.timestamp
-                // timestamp: '2021-11-24T01:09:36.188+00:00'
+                // timestamp: props.timestamp
+                timestamp: '2021-11-24T01:09:36.188+00:00'
             },
         }).then((response) => {
             if (response.data.success) {
@@ -101,8 +100,8 @@ function Finish(props){
         axios.get('/api/report/word', {
             params: {
                 userFrom: userFrom,
-                timestamp: props.timestamp
-                // timestamp: '2021-11-24T01:09:36.188+00:00'
+                // timestamp: props.timestamp
+                timestamp: '2021-11-24T01:09:36.188+00:00'
             },
         }).then((response) => {
             if (response.data.success) {

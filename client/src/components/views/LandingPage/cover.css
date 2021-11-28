@@ -1,7 +1,12 @@
 /*
  * Globals
  */
-
+@font-face {
+  font-family: 'ImcreSoojin';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.3/ImcreSoojin.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 /* Links */
 a,
 a:focus,
@@ -32,6 +37,12 @@ a:hover {
   text-align: center !important;
   /* text-shadow: 0 1px 3px rgba(0,0,0,.5) !important; */
 }
+.home {
+  width: 100%;
+  height: 944px;
+}
+
+
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
@@ -54,10 +65,44 @@ a:hover {
 
 /* Padding for spacing */
 .inner {
-  padding: 30px;
+  padding: 30px 0px;
 }
 
-
+.title-land{
+  /* height: 500px; */
+  font-family: 'ImcreSoojin';
+  font-size: 40px;
+  /* width: 450px; */
+  margin-top: 280px;
+  margin-left: -170px;
+  margin-bottom: 50px;
+  padding: 100px auto 0 auto;
+  float: left;
+}
+.title-land-mini{
+  /* height: 500px; */
+  font-family: 'ImcreSoojin';
+  font-size: 20px;
+  width: 280px;
+  margin-top: 450px;
+  margin-left: -350px;
+  margin-bottom: 7%;
+  padding: 100px auto;
+  float: left;
+}
+.testImg {
+  width: 900px;
+  height: 700px;
+  margin-top: 20px;
+  margin-right: -170px;
+  float:right;
+}
+.startBtn{
+  margin-top: 550px;
+  width: 150px;
+  float:left;
+  margin-left: -300px;
+}
 /*
  * Header
  */

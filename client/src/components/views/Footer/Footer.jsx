@@ -7,8 +7,7 @@ function Footer(){
         <div className="mastfoot">
             <div className="inner">
                 <p>
-                    Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by{' '}
-                    <a href="https://twitter.com/mdo">@mdo</a>.
+                    by{' '}<a href="https://github.com/idealization/Jasmine">Jasmine Team</a>.
                 </p>
             </div>
         </div>
