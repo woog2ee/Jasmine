@@ -5,6 +5,9 @@
     overflow: hidden;
     position: relative;
 }
+.start{
+    margin-top: 9vh;
+}
 #homeLogo{
     margin-left: 2vw;
 }
@@ -12,26 +15,26 @@
     position: absolute;
 }
 .rabbit{
-    z-index: 1;
-    width: 250px;
-    height: 250px;
-    margin-top: 21vw;
-    margin-left: 22vw;
+    z-index: 2;
+    width: 270px;
+    height: 270px;
+    margin-top: 300px;
+    margin-left: 17vw;
 }
 #homeImg{
-    z-index: 0;
+    z-index: 1;
     position: absolute;
     background: url(../img/cave.png) no-repeat;
     background-size: cover;
-    margin: 3vw 30vw;
-    width: 38vw;
-    height: 38vw;
+    margin: 0 25vw;
+    width: 620px;
+    height: 600px;
     display: flexbox;
     cursor: pointer;
 }
 
 #homeImg span{
-    margin: 19vw auto 0 auto;
+    margin: 350px auto 0 auto;
     font-family: 'HSYuji-Regular';
     color: rgb(196, 183, 196);
     line-height: 90px;
@@ -72,18 +75,19 @@
     margin-left: 0;
 }
 .rock{
-    z-index: 2;
-    margin: 33vw 0 0 115vh;
+    background: url(../img/bush.png) no-repeat;
+    z-index: 3;
+    margin: 55vh 0 0 70vw;
     height: 300px;
     width: 300px;
     display: flexbox;
-    background: url(../img/bush.png) no-repeat;
     background-size: contain;
     cursor: pointer;
 }
 
 .rock span{
-    margin: 6vw auto;
+    z-index: 3;
+    margin: 27% auto;
     font-family: 'HSYuji-Regular';
     font-size: 40px;
     border: none;
