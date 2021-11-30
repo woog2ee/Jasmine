@@ -8,7 +8,7 @@ import LandingImg from '../../../img/land2.png'
 
 function LandingPage(props) {
 
-    const onHomeClickHandler = () => {
+    const onStartClickHandler = () => {
         props.history.push('/home');
     };
 
@@ -28,7 +28,7 @@ function LandingPage(props) {
                                 </span>
                                 <img className="testImg" src={LandingImg}/>
                                 <p>
-                                    <button className="btn btn-lg btn-default startBtn" onClick={onHomeClickHandler}>
+                                    <button className="btn btn-lg btn-default startBtn" onClick={onStartClickHandler}>
                                         시작하기
                                     </button>
                                 </p>
