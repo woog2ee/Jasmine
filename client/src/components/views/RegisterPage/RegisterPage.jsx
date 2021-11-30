@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../../_actions/user_action';
 import { withRouter } from 'react-router-dom';
-import { important } from 'polished';
 import Navbar from '../NavBar/NavBar';
 
 function RegisterPage(props) {

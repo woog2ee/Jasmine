@@ -3,23 +3,89 @@
     background: url(../img/forest.jpeg) no-repeat;
     background-size: cover;
     overflow: hidden;
+    position: relative;
+}
+#homeLogo{
+    margin-left: 2vw;
+}
+.main_board img{
+    position: absolute;
+}
+.rabbit{
+    z-index: 1;
+    width: 250px;
+    height: 250px;
+    margin-top: 21vw;
+    margin-left: 22vw;
+}
+#homeImg{
+    z-index: 0;
+    position: absolute;
+    background: url(../img/cave.png) no-repeat;
+    background-size: cover;
+    margin: 3vw 30vw;
+    width: 38vw;
+    height: 38vw;
+    display: flexbox;
+    cursor: pointer;
 }
 
+#homeImg span{
+    margin: 19vw auto 0 auto;
+    font-family: 'HSYuji-Regular';
+    color: rgb(196, 183, 196);
+    line-height: 90px;
+    font-size: 90px;
+    font-weight: 600;
+    border: none;
+    border-right: 0px;
+    border-top: 0px;
+    border-left: 0px;
+    border-bottom: 0px;
+}
+#homeImg button{
+    border: 0;
+    background: transparent;
+}
+.userFlower{
+    position: absolute;
+    width: max-content;
+    height: 70px;
+    line-height: 60px;
+    background-color: #d36fbe;
+    border-radius: 10px;
+    float: right;
+    margin: 40px auto 0 80%;
+    padding: 5px 1%;
+}
+.userFlower span{
+    font-family: 'CookieRunOTF-Bold';
+    font-size: 30px;
+    text-align: center;
+    margin-right: 5px;
+}
+.userFlower img {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin-top: -10px;
+    margin-left: 0;
+}
 .rock{
+    z-index: 2;
+    margin: 33vw 0 0 115vh;
     height: 300px;
     width: 300px;
     display: flexbox;
-    background: url(../img/rock1.png) no-repeat;
+    background: url(../img/bush.png) no-repeat;
     background-size: contain;
-    line-height: 300px;
     cursor: pointer;
 }
 
 .rock span{
-    margin: auto;
-    font-size: large;
+    margin: 6vw auto;
     font-family: 'HSYuji-Regular';
-    font-size: 3rem;
+    font-size: 40px;
     border: none;
     border-right: 0px;
     border-top: 0px;
@@ -29,12 +95,6 @@
 .rock button{
     border: 0;
     background: inherit;
-}
-#run_recording{
-    margin: 22vh 0 0 110vh;
-}
-#run_rock{
-    margin: -7vh 0 0 40vh;
 }
 .rock:last-child, .rock:hover {
     overflow: visible;

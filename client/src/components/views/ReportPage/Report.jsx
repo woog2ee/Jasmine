@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
@@ -33,7 +33,7 @@ function Report(props){
     useEffect(() => {
         axios.get('/api/report/vision', {
             params: {
-                userFrom: '6183c0dcffdd430bc33a46ac',
+                userFrom: userFrom,
                 timestamp: '2021-11-24T01:09:36.188+00:00'
                 // timestamp: props.timestamp
             },
@@ -47,7 +47,7 @@ function Report(props){
 
         axios.get('/api/report/voice', {
             params: {
-                userFrom: '6183c0dcffdd430bc33a46ac',
+                userFrom: userFrom,
                 timestamp: '2021-11-24T01:09:36.188+00:00'
                 // timestamp: props.timestamp
             },
@@ -61,7 +61,7 @@ function Report(props){
 
         axios.get('/api/report/word', {
             params: {
-                userFrom: '6183c0dcffdd430bc33a46ac',
+                userFrom: userFrom,
                 timestamp: '2021-11-24T01:09:36.188+00:00'
                 // timestamp: props.timestamp
             },
@@ -72,7 +72,7 @@ function Report(props){
             }
             setWord(response.data.list);
         });
-    }, []);
+    }, [userFrom,props.timestamp]);
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
