@@ -13,8 +13,6 @@ import koala from '../../../img/koala512.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 import useInterval from 'use-interval';
 import download from 'downloadjs';
-import fs from 'fs';
-// import path from 'path';
 
 const CONSTRAINTS = { video: true };
 const ShowButton = styled(animated.button)`
@@ -123,10 +121,12 @@ function FaceDetector(props) {
         
     };
     useInterval(() => {
-        setScript(script.concat(transcript));
-        console.log(transcript);
-        console.log(script);
-        resetTranscript();
+        if(!btnVisible){
+            setScript(script.concat(transcript));
+            console.log(transcript);
+            console.log(script);
+            resetTranscript();
+        }
     }, 10000);
     
     
@@ -264,37 +264,10 @@ function FaceDetector(props) {
     // audio recorder
     const onStop = (audioData) => {
         console.log('audioData', audioData);
-        // const filePath = path.join(__dirname,'..','..','..','..','..','..','/Jasmine_speech_audio.wav');
-        try{fs.unlink('../../../../../../Jasmine_speech_audio.wav', (err)=>{
-            if( err ) {console.log('not exist')};
-            console.log('file deleted');
-        });}
-        catch(e){
-            console.log(e);
-            console.log('not exist2');
-        }
         download(audioData.blob,'Jasmine_speech_audio.wav');
-        // let url = audioData.url;
-        // if (!url) {
-        //     alert("No Notion Page");
-        // return false;
-        // } else {
-        //     return fetch(url, {
-        //         method: 'GET'
-        //     }).then(function(resp) {
-        //         if (!resp|| !resp.ok) {
-        //             alert("Error");
-        //             return false;
-        //         }
-        //         return resp.blob();
-        //     }).then(function(blob) {
-        //         if(blob) download(blob,'Jasmine_speech_audio.wav');
-        //     });
-        // }
         
         // const sound = new File([audioData], "soundBlob", { lastModified: new Date().getTime(), type: "audio" });
-        // console.log(sound);
-        // sound.webkitRelativePath('./')
+
 
         // var a = document.createElement("a");
         // document.body.appendChild(a);
@@ -302,7 +275,7 @@ function FaceDetector(props) {
         // a.href = audioData.url;
         // a.download = "sample.wav";
         // a.click();
-        // window.URL.revokeObjectURL(audioData.url);
+        window.URL.revokeObjectURL(audioData.url);
 
         // blobToDataURL(audioData.blob, function (dataurl) {
         //     let body = {

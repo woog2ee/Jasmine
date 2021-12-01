@@ -60,19 +60,19 @@ function Navbar(props) {
                 <nav>
                     <ul className="nav masthead-nav">
                         <li className="active">
-                            <button className="fs-3 li-a" id="list-1" onClick={onHomeClickHandler}>
+                            <button className="fs-3 li-a" id="list-1" onClick={onHomeClickHandler} style={{color:'black'}}>
                                 홈
                             </button>
                         </li>
-                        <span className="bar">|</span>
+                        <span className="bar" style={{color:'black'}}>|</span>
                         <li className="active">
-                            <button className="fs-3 li-a" id="list-2" onClick={onRegisterClickHandler}>
+                            <button className="fs-3 li-a" id="list-2" onClick={onRegisterClickHandler} style={{color:'black'}}>
                                 회원가입
                             </button>
                         </li>
-                        <span className="bar">|</span>
+                        <span className="bar" style={{color:'black'}}>|</span>
                         <li className="active">
-                            <button className="fs-3 li-a" id="list-3" onClick={onLoginClickHandler}>
+                            <button className="fs-3 li-a" id="list-3" onClick={onLoginClickHandler} style={{color:'black'}}>
                                 {isLogin ? '로그아웃' : '로그인   '}
                             </button>
                         </li>

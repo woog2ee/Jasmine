@@ -7,7 +7,6 @@ import { withRouter } from 'react-router-dom';
 function Loading(props){
     const userFrom = localStorage.getItem('userId');
 
-
     return (
         <div className='report'>
             <div class="d-flex align-items-center">
