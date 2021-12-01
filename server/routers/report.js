@@ -45,7 +45,7 @@ router.put('/flower', (req, res) => {
 });
 
 router.get('/vision', (req, res) => {
-    Vision.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, vision) => {
+    Vision.findOne({ userFrom: req.query.userFrom, createdAt: req.query.timestamp }, (err, vision) => {
         if (err) {
             return res.status(400).send(err);
         } else {
@@ -78,7 +78,7 @@ router.post('/voiceandword', (req, res) => {
 })
 
 router.get('/voice', (req, res) => {
-    Voice.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, voice) => {
+    Voice.findOne({ userFrom: req.query.userFrom, createdAt: req.query.timestamp }, (err, voice) => {
         if (err) {
             return res.status(400).send(err);
         } else {
@@ -91,7 +91,7 @@ router.get('/voice', (req, res) => {
 });
 
 router.get('/word', (req, res) => {
-    Word.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, word) => {
+    Word.findOne({ userFrom: req.query.userFrom, createdAt: req.query.timestamp }, (err, word) => {
         if (err) {
             return res.status(400).send(err);
         } else {
