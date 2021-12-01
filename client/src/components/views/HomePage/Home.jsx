@@ -20,7 +20,7 @@ function Home() {
             } else {
                 alert('사용자 정보를 불러오는 데 실패했습니다.');
             }
-            setFlower((preFlower) => preFlower + response.data.user["flower"]);
+            setFlower(response.data.user["flower"]);
             setUserName(response.data.user["name"]);
         })
     })
