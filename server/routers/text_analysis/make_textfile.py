@@ -6,8 +6,10 @@ import base64
 import urllib
 import subprocess
 import numpy as np
+
 import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'NanumGothic'
+
 import warnings
 warnings.filterwarnings(action='ignore')
 
@@ -71,7 +73,7 @@ class TextMaker():
                                            'createdAt': upload_createdAt})
         for doc in upload_docs:
             stt_texts = doc['text']
-        stt_text = []
+        stt_text = ''
         for text in stt_texts:
             stt_text += text
             stt_text += ' '
@@ -207,16 +209,10 @@ class CommentMaker():
     
     
     # 스피치 분석 자료 생성
-    def create_speech_document(self, variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords,
-                               sentcount_img, keywords_img, stopwords_img, countwords_img):
+    def create_speech_document(self, variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords):
         self.make_parent_comment(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords)
         self.make_child_comment()
         self.make_score(variety, num_sent)
-        
-        self.sentcount_img  = sentcount_img
-        self.keywords_img   = keywords_img
-        self.stopwords_img  = stopwords_img
-        self.countwords_img = countwords_img
     
     
     
@@ -233,18 +229,18 @@ class CommentMaker():
             'score'           : self.score,
             'variety_cmt'     : self.variety_cmt,
             'sentcount_cmt'   : self.sentcount_cmt,
-            'sentcount_img'   : self.sentcount_img,
+
             
             'keywords_cmt'    : self.keywords_cmt,
-            'keywords_img'    : self.keywords_img,
+      
             'top3_keywords'   : self.top3_keywords,
             
             'stopwords_cmt'   : self.stopwords_cmt,
-            'stopwords_img'   : self.stopwords_img,
+          
             'top3_stopwords'  : self.top3_stopwords,
             
             'countwords_cmt'  : self.countwords_cmt,
-            'countwords_img'  : self.countwords_img,
+        
             'top3_countwords' : self.top3_countwords,
             
             'keywords_cmt_c'  : self.keywords_cmt_c,

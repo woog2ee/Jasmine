@@ -2,10 +2,11 @@ import os
 import time
 import base64
 import urllib
-import subprocess
 import numpy as np
+
 import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'NanumGothic'
+
 import warnings
 warnings.filterwarnings(action='ignore')
 
@@ -70,9 +71,7 @@ class AudioMaker():
         for doc in upload_docs:
             audio_url = doc['audioUrl']
 
-        audio_url_byte = audio_url.encode('ascii')
-        audio_url_base = base64.b64encode(audio_url_byte)
-        self.crawl_audio_url(audio_url_base)
+        self.crawl_audio_url(audio_url)
         self.convert_mp4_to_wav()
         return 'Jasmine_speech_audio.wav', upload_userFrom, upload_createdAt
 
@@ -82,15 +81,8 @@ class AudioMaker():
     def crawl_audio_url(self, url):
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
-<<<<<<< HEAD:server/routers/audio_analysis/make_audiofile.py
         driver = webdriver.Chrome('C:/Users/USER/chromedriver.exe', options=options)
         driver.get(url)
-=======
-        driver = webdriver.Chrome('C:/Users/sangh/chromedriver.exe', options=options)
-        url_byte = base64.b64decode(url)
-        url_origin = url_byte.decode('ascii')
-        driver.get(url_origin)
->>>>>>> 50a1adbf3aa3956588b214db08933e933a85adb4:audio_analysis/make_audiofile.py
         time.sleep(1)    
 
         html = driver.page_source

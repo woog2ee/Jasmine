@@ -59,6 +59,7 @@ router.get('/vision', (req, res) => {
 
 router.post('/voiceandword', (req, res) => {
     const spawn = require('child_process').spawn;
+
     var process_voice = spawn('python', [__dirname+'/audio_analysis/audio_analysis.py']);
     process_voice.stdout.on('data', function(data) {
         console.log(data.toString());
@@ -67,12 +68,11 @@ router.post('/voiceandword', (req, res) => {
         console.error(data.toString());
     });
 
-    const spawn = require('child_process').spawn;
-    var process_voice = spawn('python', [__dirname+'/text_analysis/text_analysis.py']);
-    process_voice.stdout.on('data', function(data) {
+    var process_text = spawn('python', [__dirname+'/text_analysis/text_analysis.py']);
+    process_text.stdout.on('data', function(data) {
         console.log(data.toString());
     });
-    process_voice.stderr.on('data', function(data){
+    process_text.stderr.on('data', function(data){
         console.error(data.toString());
     });
 })

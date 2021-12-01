@@ -143,10 +143,12 @@ function FaceDetector(props) {
         console.log(transcript);
         console.log(script);
         
+        let temp = ['안녕하세요 저는 구르미 무슨 맛일까에 대해서 발표할 이불입니다 저는 우선 구름은 여러 종류가 있는 것으로 알고 있는데요 만약 구름이 뚱뚱하고 무거운 소나기를 내릴 비라면 지방이 많은 느끼한 맛이 날 것 같습니다 왜냐하면 무겁기 때문입니다 무거우면 지방이 많은 곳이고 지방이 많으면 느끼한 맛이 나기 때문입니다 그다음으로 만약 깃털같이 높은 곳에 있는 구름이라면 맛이 잘 느껴지지 않을 것 같습니다 만약 그 맛이 느껴진다면 솜사탕 실 같은 얇은 느낌의 달달한 맛이 될 것 같습니다 아니면 오리털 파카에 우리 털이 조금 삐져나온 걸 혀에 넣었을 때 와 같은 비슷한 느낌을 것 같습니다 다음으로 그냥 일반 가을하늘이나 보험 하늘에 떠 있는 구름을 생각해본다면 그런 뭉게뭉게 한 구름은 퍽퍽한 두부 맛이 날 것 같습니다 왜냐하면 두부랑 색깔이 비슷하고 순두부와 비슷하게 생겼기 때문입니다 위의 내용을 정리해 보자면 저는 두 분은 아니 구름은 어떤 구름이냐에 따라서 맛이 다를 것이라고 생각합니다 하지만 모두 하늘에 떠 있는 구름이라는 공통점으로 물 비린내와 같은 그런 냄새가 날 것 같습니다 그렇지만 깃털처럼 생긴 가벼운 구름들은 털이나 얇은 솜사탕 실 같은 그런 식감을 갖고 있을 것 같으며 맛이 매우 희미할 것 같습니다 다음으로 뭉게뭉게 한 구름은 마지막으로 무거운 구름은 느끼한 맛이 날 것 같습니다 이상 발표를 마치겠습니다 감사합니다'];
         // mongoDB 저장
         let body = {
             userFrom: userFrom,
-            text: script,
+            text: temp,
+            //text: script,
             //text: transcript,
         };
 
@@ -268,7 +270,14 @@ function FaceDetector(props) {
     const onStop = (audioData) => {
         console.log('audioData', audioData);
 
-        blobToDataURL(audioData.blob, function (dataurl) {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = audioData.url;
+        a.download = "Jasmine_speech_audio.wav";
+        a.click();
+        window.URL.revokeObjectURL(audioData.url);
+        /* blobToDataURL(audioData.blob, function (dataurl) {
             let body = {
                 userFrom: userFrom,
                 audioUrl: dataurl,
@@ -280,7 +289,8 @@ function FaceDetector(props) {
                     alert('Audio error');
                 }
             });
-        });
+        }); */
+
     };
 
     const startAudio = () => {

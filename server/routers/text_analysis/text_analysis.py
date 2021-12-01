@@ -1,18 +1,24 @@
 import re
+import os
 import base64
 import numpy as np
 from PIL import Image
 from collections import Counter
 from wordcloud import WordCloud, ImageColorGenerator
+
 import matplotlib.pyplot as plt
-plt.rcParams['font.family'] = 'NanumGothic'
+from matplotlib import font_manager
+font_fname = 'C:/Users/USER/NanumBarunGothic.ttf'
+font_family = font_manager.FontProperties(fname=font_fname).get_name()
+plt.rcParams['font.family'] = font_family
+
 import warnings
 warnings.filterwarnings(action='ignore')
 
 from konlpy.tag import Okt, Kkma
 from nltk.tokenize import sent_tokenize
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.preprocessing import normalize
+from sklearn.preprocessing import normalize 
 from make_textfile import TextMaker
 from make_textfile import CommentMaker
 
@@ -23,7 +29,8 @@ class TextAnalyzer:
         self.okt = Okt()
         self.kkma = Kkma()
         self.stopwords = []
-        with open('./stopwords-ko.txt', 'r', encoding='UTF8') as file:
+        stopwords_path = '\\server\\routers\\text_analysis\\stopwords-ko.txt'
+        with open(os.getcwd()+stopwords_path, 'r', encoding='UTF8') as file:
             for line in file:
                 self.stopwords.append(line.strip())
                 
@@ -31,13 +38,16 @@ class TextAnalyzer:
 
     # 어휘 다양도 반환
     def text2variety(self, text):
-        pos = self.kkma.pos(text)
+        pos = self.okt.pos(text)
         count = Counter(pos)
 
         ttr_token = sum(count.values())
         ttr_type = len(count.keys())
-        ttr = (ttr_type / ttr_token) * 100
-        return round(ttr, 2)
+        try:
+            ttr = (ttr_type / ttr_token) * 100
+            return round(ttr, 2)
+        except:
+            return 0
              
             
 
@@ -92,9 +102,8 @@ class TextAnalyzer:
         plt.xticks([])
         plt.yticks([])
         plt.legend(loc='upper left', frameon=False, fontsize=10)
-        plt.savefig('./Jasmine_sentence_count.png')
-        sentcount_img = encode_image_tobase64('./Jasmine_sentence_count.png')
-        return sentcount_img, num_sent, len_sent, len_sent_blank_removed
+        plt.savefig(img_save_path+'\\Jasmine_sentence_count.png')
+        return num_sent, len_sent, len_sent_blank_removed
         
         #print(f' (공백포함) 문장 길이 평균값: {sum(len_sent)/len(len_sent)}')
         #print(f' (공백포함) 문장 길이 중앙값: {statistics.median(len_sent)}')
@@ -233,32 +242,31 @@ class WordAnalyzer:
 
     # 워드클라우드 시각화
     def visualize_wordcloud(self, text, wordtype):
+        wordcloud_path = os.getcwd()+'\\server\\routers\\text_analysis'
         if wordtype == 'keywords':
-            mask = np.array(Image.open('./wordcloud_keywords_rectangle.png'))
+            mask = np.array(Image.open(wordcloud_path+'\\wordcloud_keywords_rectangle.png'))
             words = self.text2keywords(text)
             words = self.words2wordscount(words, 'individual')
         
         elif wordtype == 'stopwords':
-            mask = np.array(Image.open('./wordcloud_stopwords_rectangle.png'))
+            mask = np.array(Image.open(wordcloud_path+'\\wordcloud_stopwords_rectangle.png'))
             words = self.text2stopwords(text)
             words = self.words2wordscount(words, 'none')
         
         elif wordtype == 'countwords':
-            mask = np.array(Image.open('./wordcloud_countwords_circle.png'))
+            mask = np.array(Image.open(wordcloud_path+'\\wordcloud_countwords_rectangle.png'))
             words = self.text2countwords(text)
             words = self.words2wordscount(words, 'count')
         
         image_colors = ImageColorGenerator(mask)
-        wordcloud = WordCloud(font_path='./NanumBarunGothic.ttf', background_color='white',
+        wordcloud = WordCloud(font_path=font_fname, background_color='white',
                               mask=mask, width=mask.shape[1], height=mask.shape[0], prefer_horizontal=0.99999)
         cloud = wordcloud.generate_from_frequencies(words)
         
         plt.figure(figsize=(8,8))
         plt.imshow(cloud.recolor(color_func=image_colors), interpolation='bilinear')
         plt.axis('off')
-        plt.savefig(f'./Jasmine_wordcloud_{wordtype}.png')
-        wordcloud_img = encode_image_tobase64(f'./Jasmine_wordcloud_{wordtype}.png')
-        return wordcloud_img
+        plt.savefig(img_save_path+f'\\Jasmine_wordcloud_{wordtype}.png')
 
 
 
@@ -272,22 +280,22 @@ def encode_image_tobase64(imagepath):
 
 if __name__ == '__main__':
     stttext, userFrom, createdAt = TextMaker().get_stt_text()     # 발표 텍스트 및 유저 정보 로드
+    img_save_path = os.getcwd()+'\\client\\public'
     
     TA = TextAnalyzer()     # 텍스트 분석 클래스
     WA = WordAnalyzer()     # 단어 분석 클래스
 
     variety = TA.text2variety(stttext)                                                               # 어휘 다양도
-    sentcount_img, num_sent, len_sent, len_sent_blank_removed = TA.visualize_text4count(stttext)     # 문장 길이 통계
+    num_sent, len_sent, len_sent_blank_removed = TA.visualize_text4count(stttext)     # 문장 길이 통계
 
     top3_keywords   = WA.text2keywords(stttext)[:3]                    # 키워드 상위 3개
     top3_stopwords  = WA.text2keywords(stttext)[:3]                    # 불용어 상위 3개
     top3_countwords = WA.text2countwords(stttext)[:3]                  # 빈도수 높은 단어 상위 3개
-    keywords_img   = WA.visualize_wordcloud(stttext, 'keywords')       # 키워드 워드클라우드
-    stopwords_img  = WA.visualize_wordcloud(stttext, 'stopwords')      # 불용어 워드클라우드
-    countwords_img = WA.visualize_wordcloud(stttext, 'countwords')     # 빈도수 높은 단어 워드클라우드
+    WA.visualize_wordcloud(stttext, 'keywords')       # 키워드 워드클라우드
+    WA.visualize_wordcloud(stttext, 'stopwords')      # 불용어 워드클라우드
+    WA.visualize_wordcloud(stttext, 'countwords')     # 빈도수 높은 단어 워드클라우드
 
     # 분석 자료 만들고 MongoDB에 업로드
     CM = CommentMaker(userFrom, createdAt)
-    CM.create_speech_document(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords,
-                              sentcount_img, keywords_img, stopwords_img, countwords_img)
+    CM.create_speech_document(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords)
     CM.upload_speech_document()

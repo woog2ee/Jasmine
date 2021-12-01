@@ -1,7 +1,5 @@
-import sys
-sys.path.append('/Users/sangh/anaconda3/Lib/site-packages')
-
 import re
+import os
 import wave
 import math
 import json
@@ -9,6 +7,7 @@ import base64
 import urllib3
 import subprocess
 import pandas as pd
+
 import warnings
 warnings.filterwarnings(action='ignore')
 
@@ -25,7 +24,6 @@ class AudioAnalyzer:
         y, sr = librosa.load(audiofile, sr=16000)
         self.y = y
         self.sr = sr
-        self.filename = re.sub('.wav', '', audiofile)
         self.cnt = None     # 전체 음성파일을 n초로 나눴을 때 파일 개수
         self.duration = self.get_duration(audiofile)
         self.etri_url = "http://aiopen.etri.re.kr:8000/WiseASR/PronunciationKor"
@@ -36,7 +34,6 @@ class AudioAnalyzer:
     # 음성파일 n초 단위로 분리
     def trim_audiofile(self, audiofile, n):
         # 파일 정보
-        filename = self.filename
         y = self.y
         sr = self.sr
         
@@ -51,7 +48,8 @@ class AudioAnalyzer:
         # n초 단위로 잘라서 저장
         for i in range(self.cnt):
             ny = y[sr*sec*i:sr*sec*(i+1)]
-            sf.write(f'./audiofiles/{filename}_{i}.wav', ny, sr, 'PCM_24')
+            speechaudio_path = '\\server\\routers\\audio_analysis\\audiofiles'
+            sf.write(os.getcwd()+speechaudio_path+f'\\Jasmine_speech_audio_{i}.wav', ny, sr, 'PCM_24')
     
     
         
@@ -188,7 +186,6 @@ class AudioAnalyzer:
 
 
 if __name__ == '__main__':
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     audiofile, userFrom, createdAt = AudioMaker().get_wav_audio()     # 오디오 파일 및 유저 정보 로드
     
     SA = SlientAnalyzer(audiofile)       # 묵음 분석 클래스
@@ -202,7 +199,8 @@ if __name__ == '__main__':
 
     # 30초 단위로 분리한 오디오로 분석
     for i in range(AA.cnt):
-        cur_audiofile = f'./audiofiles/{AA.filename}_{i}.wav'
+        speechaudio_path = '\\server\\routers\\audio_analysis\\audiofiles'
+        cur_audiofile = os.getcwd()+speechaudio_path+f'\\Jasmine_speech_audio_{i}.wav'
         cur_duration = AA.get_duration(cur_audiofile)
         if cur_duration <= 10:
             continue
