@@ -14,29 +14,31 @@ function Home() {
     const [userName, setUserName] = useState('');
 
     useEffect(() => {
-        let c=true;
-        const getData = () =>{
-            axios.get('/api/report/user', {
-                params: {
-                    userFrom: userFrom
-                }
-            }).then((response) => {
-                if (response.data.success) {
-                } else {
-                    alert('사용자 정보를 불러오는 데 실패했습니다.');
-                }
-                if(c){
-                    c=false;
-                    setFlower(() => response.data.user["flower"]);
-                    setUserName(response.data.user["name"]);
-                };
-            });
+        let c = true;
+        const getData = () => {
+            axios
+                .get('/api/report/user', {
+                    params: {
+                        userFrom: userFrom,
+                    },
+                })
+                .then((response) => {
+                    if (response.data.success) {
+                    } else {
+                        alert('사용자 정보를 불러오는 데 실패했습니다.');
+                    }
+                    if (c) {
+                        c = false;
+                        setFlower(() => response.data.user['flower']);
+                        setUserName(response.data.user['name']);
+                    }
+                });
         };
         getData();
         return () => {
             c = false;
-        }
-    },[])
+        };
+    }, []);
 
     return (
         <div className="main_board">

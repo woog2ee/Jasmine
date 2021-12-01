@@ -57,8 +57,27 @@ router.get('/vision', (req, res) => {
     });
 });
 
-router.get('/voice', (req, res) => {
+router.post('/voiceandword', (req, res) => {
+    const spawn = require('child_process').spawn;
 
+    var process_voice = spawn('python', [__dirname+'/audio_analysis/audio_analysis.py']);
+    process_voice.stdout.on('data', function(data) {
+        console.log(data.toString());
+    });
+    process_voice.stderr.on('data', function(data){
+        console.error(data.toString());
+    });
+
+    var process_text = spawn('python', [__dirname+'/text_analysis/text_analysis.py']);
+    process_text.stdout.on('data', function(data) {
+        console.log(data.toString());
+    });
+    process_text.stderr.on('data', function(data){
+        console.error(data.toString());
+    });
+})
+
+router.get('/voice', (req, res) => {
     Voice.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, voice) => {
         if (err) {
             return res.status(400).send(err);
