@@ -23,9 +23,9 @@ function Loading(props){
             <div className="simpleNavi" style={{marginLeft:'2vw'}}>
                 <img src={logo} alt="logo" />
             </div>
-            <div class="justify-content-center">
+            <div className="justify-content-center">
                 <div style={{width:'100vw'}}>
-                    <div class="spinner-border text-light" style={{width:'20rem', height: '20rem',margin:'9% auto 0 45%'}} role="status">
+                    <div className="spinner-border text-light" style={{width:'20rem', height: '20rem',margin:'9% auto 0 45%'}} role="status">
                     </div>
                 </div>
                 <div style={{width:'100%'}}>

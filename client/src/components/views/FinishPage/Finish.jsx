@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
@@ -7,7 +7,9 @@ import txtBsImg from '../../../img/bear.png';
 import { withRouter } from 'react-router-dom';
 
 function Finish(props){
-    const userFrom = localStorage.getItem('userId');
+    const date = '2021-12-01T10:47:43.844Z'
+    // const userFrom = localStorage.getItem('userId');
+    let userFrom = '61a31288885556a88bc4a138';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
@@ -58,15 +60,15 @@ function Finish(props){
         }
         comments.push(<br/>);
         let comment_arr = ['keywords_cmt_c','stopwords_cmt_c','countwords_cmt_c']
-        comment_arr.forEach( (txt)=>{
+        comment_arr.forEach( (txt,idx)=>{
             const tmp = word[txt]
-            comments.push(<><span key={tmp}>{tmp}</span><br/></>)
+            comments.push(<><span key={idx+'w'}>{tmp}</span><br/></>)
         });
         comments.push(<br/>);
         comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
-        comment_arr.forEach( (txt)=>{
+        comment_arr.forEach( (txt,idx)=>{
             const tmp = voice[txt]
-            comments.push(<><span key={txt}>{tmp}</span><br/></>)
+            comments.push(<><span key={idx+'v'}>{tmp}</span><br/></>)
         })
         return comments;
     };
@@ -76,7 +78,7 @@ function Finish(props){
             params: {
                 userFrom: userFrom,
                 // timestamp: props.timestamp
-                timestamp: '2021-12-01T05:34:07.919Z'
+                timestamp: date
             },
         }).then((response) => {
             if (response.data.success) {
@@ -90,7 +92,7 @@ function Finish(props){
             params: {
                 userFrom: userFrom,
                 // timestamp: props.timestamp
-                timestamp: '2021-12-01T05:34:07.919Z'
+                timestamp: date
             },
         }).then((response) => {
             if (response.data.success) {
@@ -104,7 +106,7 @@ function Finish(props){
             params: {
                 userFrom: userFrom,
                 // timestamp: props.timestamp
-                timestamp: '2021-12-01T05:34:07.919Z'
+                timestamp: date
             },
         }).then((response) => {
             if (response.data.success) {
@@ -127,7 +129,7 @@ function Finish(props){
         })
 
         mk_flowers();
-    }, [mk_flowers,userFrom]);
+    }, []);
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
@@ -148,7 +150,7 @@ function Finish(props){
     return (
         <div className='report'>
             <div className="simpleNavi">
-                <img src={logo} alt='logo'/>
+                <img key='logo' src={logo} alt='logo'/>
             </div>
             <div className='body'>
                 <div className='content' id="finish_ctn">
@@ -171,7 +173,7 @@ function Finish(props){
                     </div>
                     
                     <div className="stopButton" id="back">
-                        <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
+                        <form key='form' style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
                             <button type="submit">끝내기</button>
                         </form>
                     </div>

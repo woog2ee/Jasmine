@@ -8,7 +8,9 @@
     background-size: cover;
     overflow: hidden;
 }
-
+.form {
+    font-family: 'CookieRunOTF-Bold';
+}
 
 .simpleNavi img{
     width: 156px;
@@ -29,7 +31,7 @@
     /* float: center; */
     /* background-color:#999999; */
     transform: scaleX(-1);
-    margin: 7px auto;
+    margin: -190px auto;
     /* margin-left: 10px; */
     width: 63vw;
     height: 73vh;
