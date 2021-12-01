@@ -57,6 +57,7 @@ router.get('/vision', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 router.post('/voiceandword', (req, res) => {
     const spawn = require('child_process').spawn;
 
@@ -67,6 +68,9 @@ router.post('/voiceandword', (req, res) => {
     process_voice.stderr.on('data', function(data){
         console.error(data.toString());
     });
+=======
+router.get('/voice', (req, res) => {
+>>>>>>> 33069f72b881ebda7b5bf8e6e3916ef5a235a191
 
     var process_text = spawn('python', [__dirname+'/text_analysis/text_analysis.py']);
     process_text.stdout.on('data', function(data) {

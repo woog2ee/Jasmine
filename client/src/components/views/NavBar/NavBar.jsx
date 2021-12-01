@@ -12,13 +12,19 @@ function Navbar(props) {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        let c = true
         dispatch(auth()).then((response) => {
-            if (!response.payload.isAuth) {
-                setIsLogin(false);
-            } else {
-                setIsLogin(true);
+            if (c){
+                if (!response.payload.isAuth) {
+                    setIsLogin(false);
+                } else {
+                    setIsLogin(true);
+                }
             }
         });
+        return () => {
+            c = false;
+        }
     }, [])
 
     const onHomeClickHandler = () => {

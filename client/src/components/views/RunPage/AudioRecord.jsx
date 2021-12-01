@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import AudioReactRecorder, { RecordState } from 'audio-react-recorder'
 
 const AudioRecord = () => {
     const [stream, setStream] = useState();

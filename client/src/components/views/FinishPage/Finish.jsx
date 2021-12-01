@@ -43,7 +43,7 @@ function Finish(props){
         setFlower((preFlower) => preFlower + flower_cnt);
 
         for (let i = 0; i < flower_cnt; i++) {
-            flower_arr.push(<img key={i} src={miniFlower} alt='flower-rate'/>);
+            flower_arr.push(<img key={i} src={miniFlower} alt='flowerrate'/>);
         }
         setFlowers(flower_arr);
         return flower_arr;
@@ -74,7 +74,7 @@ function Finish(props){
     useEffect(() => {
         axios.get('/api/report/vision', {
             params: {
-                userFrom: '6183c0dcffdd430bc33a46ac',
+                userFrom: userFrom,
                 // timestamp: props.timestamp
                 timestamp: '2021-11-24T01:09:36.188+00:00'
             },
@@ -88,7 +88,7 @@ function Finish(props){
 
         axios.get('/api/report/voice', {
             params: {
-                userFrom: '6183c0dcffdd430bc33a46ac',
+                userFrom: userFrom,
                 // timestamp: props.timestamp
                 timestamp: '2021-11-24T01:09:36.188+00:00'
             },
@@ -102,7 +102,7 @@ function Finish(props){
 
         axios.get('/api/report/word', {
             params: {
-                userFrom: '6183c0dcffdd430bc33a46ac',
+                userFrom: userFrom,
                 // timestamp: props.timestamp
                 timestamp: '2021-11-24T01:09:36.188+00:00'
             },
@@ -127,8 +127,7 @@ function Finish(props){
         })
 
         mk_flowers();
-        total_comment = ""
-    }, []);
+    }, [mk_flowers,userFrom]);
 
     const onSubmitHandler = (event) => {
         event.preventDefault();

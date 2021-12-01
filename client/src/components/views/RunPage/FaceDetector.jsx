@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState} from 'react';
+import React, { useState} from 'react';
 import { useSpring, config, animated } from 'react-spring';
 import Axios from 'axios';
 import { withRouter } from 'react-router-dom';
@@ -12,6 +12,9 @@ import sloth from '../../../img/sloth512.png';
 import koala from '../../../img/koala512.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 import useInterval from 'use-interval';
+import download from 'downloadjs';
+import fs from 'fs';
+// import path from 'path';
 
 const CONSTRAINTS = { video: true };
 const ShowButton = styled(animated.button)`
@@ -47,30 +50,30 @@ function FaceDetector(props) {
 
     const [score, setScore] = useState(50);
     const [comment, setComment] = useState('');
-    const [isToggle, setToggle] = useState(false);
+    const [isToggle, setToggle] = useState(null);
 
     const appearSloth = useSpring({
         config: config.stiff,
-        x: 300,
+        x: 280,
         opacity: isToggle ? 1 : 0,
         y: -150,
     });
     const appearSlothText = useSpring({
         config: config.stiff,
-        x: 150,
+        x: 130,
         opacity: isToggle ? 1 : 0,
         y: 0,
     });
     const appearKoala = useSpring({
         config: config.stiff,
-        x: -740,
-        opacity: isToggle ? 0 : 1,
+        x: -690,
+        opacity: (isToggle!=false)? 0 : 1,
         y: 270,
     });
     const appearKoalaText = useSpring({
         config: config.stiff,
-        x: -240,
-        opacity: isToggle ? 0 : 1,
+        x: -200,
+        opacity: (isToggle!=false)? 0 : 1,
         y: 170,
     });
     const { x } = useSpring({
@@ -124,23 +127,7 @@ function FaceDetector(props) {
         console.log(transcript);
         console.log(script);
         resetTranscript();
-    }, 30000);
-    // useEffect(()=>{
-    //     let timerDict = useInterval(() => {
-    //         setScript(script.concat(transcript));
-    //         console.log(transcript);
-    //         console.log(script);
-    //         resetTranscript();
-    //     }, 30000);
-    // },[transcript])
-    // useEffect(()=>{
-    //     return () =>{
-    //         allStop();
-    //         setScript([]);
-    //         setScore(0);
-    //         setToggle(null);
-    //     }
-    // })
+    }, 10000);
     
     
     const dictStop = async() => {
@@ -167,10 +154,6 @@ function FaceDetector(props) {
                 }
             });
         },1000)
-        
-        
-        // mongoDB 저장
-        
     };
     
 
@@ -222,7 +205,7 @@ function FaceDetector(props) {
                         if (!isToggle) {
                             setToggle((isToggle) => true);
                         }
-                        figures.current.innerText = '         얼굴을 보여주세요.';
+                        figures.current.innerText = '         얼굴을 보여주세요.         ';
                     }
                     if (check) {
                         for (let i = 0; i < predictions.length; i++) {
@@ -235,7 +218,7 @@ function FaceDetector(props) {
                                 ) {
                                     figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                                     setScore((preScore) => preScore - 1);
-                                    if (!isToggle) {
+                                    if (isToggle != true) {
                                         setToggle((isToggle) => true);
                                     }
                                 } else {
@@ -276,33 +259,72 @@ function FaceDetector(props) {
             callback(e.target.result);
         };
         reader.readAsDataURL(blob);
-    }
+    };
 
     // audio recorder
     const onStop = (audioData) => {
         console.log('audioData', audioData);
+        // const filePath = path.join(__dirname,'..','..','..','..','..','..','/Jasmine_speech_audio.wav');
+        try{fs.unlink('../../../../../../Jasmine_speech_audio.wav', (err)=>{
+            if( err ) {console.log('not exist')};
+            console.log('file deleted');
+        });}
+        catch(e){
+            console.log(e);
+            console.log('not exist2');
+        }
+        download(audioData.blob,'Jasmine_speech_audio.wav');
+        // let url = audioData.url;
+        // if (!url) {
+        //     alert("No Notion Page");
+        // return false;
+        // } else {
+        //     return fetch(url, {
+        //         method: 'GET'
+        //     }).then(function(resp) {
+        //         if (!resp|| !resp.ok) {
+        //             alert("Error");
+        //             return false;
+        //         }
+        //         return resp.blob();
+        //     }).then(function(blob) {
+        //         if(blob) download(blob,'Jasmine_speech_audio.wav');
+        //     });
+        // }
+        
+        // const sound = new File([audioData], "soundBlob", { lastModified: new Date().getTime(), type: "audio" });
+        // console.log(sound);
+        // sound.webkitRelativePath('./')
 
-        blobToDataURL(audioData.blob, function (dataurl) {
-            let body = {
-                userFrom: userFrom,
-                audioUrl: dataurl,
-            };
+        // var a = document.createElement("a");
+        // document.body.appendChild(a);
+        // a.style = "display: none";
+        // a.href = audioData.url;
+        // a.download = "sample.wav";
+        // a.click();
+        // window.URL.revokeObjectURL(audioData.url);
 
-            Axios.post('/api/run/audio', body).then((response) => {
-                if (response.data.success) {
-                } else {
-                    alert('Audio error');
-                }
-            });
-        });
-    };
+        // blobToDataURL(audioData.blob, function (dataurl) {
+        //     let body = {
+        //         userFrom: userFrom,
+        //         audioUrl: dataurl,
+        //     };
+
+        //     Axios.post('/api/run/audio', body).then((response) => {
+        //         if (response.data.success) {
+        //         } else {
+        //             alert('Audio error');
+        //         }
+        //     });
+        // });
+    }
 
     const startAudio = () => {
         setRecordState(RecordState.START);
-    };
+    }
     const stopAudio = () => {
         setRecordState(RecordState.STOP);
-    };
+    }
 
     return (
         <div id="FD">
@@ -333,7 +355,6 @@ function FaceDetector(props) {
             )}
 
             <animated.img src={sloth} className="animal" id="sloth" style={appearSloth} />
-
             <animated.div className="text" id="sloth-text" ref={figures} style={appearSlothText} />
             {!btnVisible && <animated.img src={koala} className="animal" id="koala" style={appearKoala} />}
             {!btnVisible && (

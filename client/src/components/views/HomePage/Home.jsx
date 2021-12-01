@@ -3,6 +3,9 @@ import axios from 'axios';
 import logo from '../../../img/logo.png';
 import '../../../css/Home.css';
 import Rock from "./Rock";
+import miniFlower from '../../../img/mini_flower.png';
+
+import Start from "./Start.jsx";
 
 
 function Home() {
@@ -11,27 +14,46 @@ function Home() {
     const [userName, setUserName] = useState('');
 
     useEffect(() => {
-        axios.get('/api/report/user', {
-            params: {
-                userFrom: userFrom
-            }
-        }).then((response) => {
-            if (response.data.success) {
-            } else {
-                alert('사용자 정보를 불러오는 데 실패했습니다.');
-            }
-            setFlower(response.data.user["flower"]);
-            setUserName(response.data.user["name"]);
-        })
-    })
+        let c = true;
+        const getData = () => {
+            axios
+                .get('/api/report/user', {
+                    params: {
+                        userFrom: userFrom,
+                    },
+                })
+                .then((response) => {
+                    if (response.data.success) {
+                    } else {
+                        alert('사용자 정보를 불러오는 데 실패했습니다.');
+                    }
+                    if (c) {
+                        c = false;
+                        setFlower(() => response.data.user['flower']);
+                        setUserName(response.data.user['name']);
+                    }
+                });
+        };
+        getData();
+        return () => {
+            c = false;
+        };
+    }, []);
 
     return (
         <div className="main_board">
-            <div className="simpleNavi">
+            <div className="simpleNavi" id="homeLogo">
                 <img src={logo} alt="logo" />
+                <div className="userFlower">
+                    <span>{userName}님</span>
+                    <img src={miniFlower} alt="flower"/>
+                    <span>:</span>
+                    <span>{flower}</span>
+                </div>
             </div>
-            <Rock name="RecordingList" />
-            <Rock name="Run" />
+            <Start/>
+            <Rock/>
+            
         </div>
     );
 }
