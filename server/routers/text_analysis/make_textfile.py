@@ -66,11 +66,8 @@ class TextMaker():
         # 'stt는 있으나 내용 분석이 안올려진 발표'라면 해당 정보를 리턴
         complement_userFrom  = list(set(stt_userFrom) - set(text_userFrom))
         complement_createdAt = list(set(stt_createdAt) - set(text_createdAt))
-        try:
-            upload_userFrom  = complement_userFrom[0]
-            upload_createdAt = complement_createdAt[0]
-        except:
-            pass
+        upload_userFrom  = complement_userFrom[0]
+        upload_createdAt = complement_createdAt[0]
 
         upload_docs = stt_collection.find({'userFrom' : upload_userFrom,
                                            'createdAt': upload_createdAt})

@@ -64,11 +64,8 @@ class AudioMaker():
         # 'audio는 있으나 목소리 분석이 안올려진 발표'라면 해당 정보를 리턴
         complement_userFrom  = list(set(audio_userFrom) - set(voice_userFrom))
         complement_createdAt = list(set(audio_createdAt) - set(voice_createdAt))
-        try:
-            upload_userFrom  = complement_userFrom[0]
-            upload_createdAt = complement_createdAt[0]
-        except:
-            pass
+        upload_userFrom  = complement_userFrom[0]
+        upload_createdAt = complement_createdAt[0]
 
         # 오디오 파일 크롤링
         #upload_docs = audio_collection.find({'userFrom' : upload_userFrom,

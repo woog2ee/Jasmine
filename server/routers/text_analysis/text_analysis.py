@@ -15,8 +15,8 @@ plt.rcParams['font.family'] = font_family
 import warnings
 warnings.filterwarnings(action='ignore')
 
+import kss
 from konlpy.tag import Okt, Kkma
-from nltk.tokenize import sent_tokenize
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import normalize 
 from make_textfile import TextMaker
@@ -53,7 +53,7 @@ class TextAnalyzer:
 
     # 글을 문장 단위로 리턴
     def text2sentences(self, text):
-        sentences = sent_tokenize(text)
+        sentences = kss.split_sentences(text)
         return sentences
     
     
@@ -102,7 +102,7 @@ class TextAnalyzer:
         plt.xticks([])
         plt.yticks([])
         plt.legend(loc='upper left', frameon=False, fontsize=10)
-        plt.savefig(img_save_path+'\\Jasmine_sentence_count.png')
+        plt.savefig(img_save_path+'\\Jasmine_내용분석_문장 길이.png')
         return num_sent, len_sent, len_sent_blank_removed
         
         #print(f' (공백포함) 문장 길이 평균값: {sum(len_sent)/len(len_sent)}')
@@ -266,7 +266,7 @@ class WordAnalyzer:
         plt.figure(figsize=(8,8))
         plt.imshow(cloud.recolor(color_func=image_colors), interpolation='bilinear')
         plt.axis('off')
-        plt.savefig(img_save_path+f'\\Jasmine_wordcloud_{wordtype}.png')
+        plt.savefig(img_save_path+f'\\Jasmine_내용분석_워드클라우드 {wordtype}.png')
 
 
 
