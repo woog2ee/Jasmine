@@ -13,7 +13,7 @@ function Loading(props){
     useEffect(() => {
         sleep(100000).then(() => {
             axios.post('/api/report/voiceandword');
-            console.log("제발~~");
+            // console.log("제발~~");
         }).then(() => sleep(100000).then(() => props.history.push('/finish')));
     })
 
