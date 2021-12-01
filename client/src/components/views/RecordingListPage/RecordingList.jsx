@@ -42,7 +42,7 @@ function RecordingList(props) {
             }
             for (var i = 0; i < response.data.list.length; i++) {
                 var temp = (' ' + response.data.list[i]["createdAt"]).slice(1);
-                // console.log(temp);
+                console.log(temp);
                 setRecordTimeList(list => [...list, temp]);
             }
         });

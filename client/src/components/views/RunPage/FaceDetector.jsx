@@ -13,6 +13,8 @@ import koala from '../../../img/koala512.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 import useInterval from 'use-interval';
 import download from 'downloadjs';
+import fs from 'fs';
+// import path from 'path';
 
 const CONSTRAINTS = { video: true };
 const ShowButton = styled(animated.button)`
@@ -49,6 +51,7 @@ function FaceDetector(props) {
     const [score, setScore] = useState(50);
     const [comment, setComment] = useState('');
     const [isToggle, setToggle] = useState(null);
+    const [timestamp, setTimestamp] = useState();
 
     const appearSloth = useSpring({
         config: config.stiff,
@@ -95,6 +98,7 @@ function FaceDetector(props) {
             userFrom: userFrom,
             score: score,
             comment: comment,
+            createdAt: timestamp,
         };
 
         await allStop();
@@ -118,7 +122,9 @@ function FaceDetector(props) {
         if (!browserSupportsSpeechRecognition) {
             return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
         }
-        
+        const curr = new Date();
+        setTimestamp(curr);
+        console.log(curr);
     };
     useInterval(() => {
         if(!btnVisible){
@@ -144,6 +150,7 @@ function FaceDetector(props) {
             let body = {
                 userFrom: userFrom,
                 text: tmp,
+                createdAt: timestamp,
                 //text: transcript,
             };
     
@@ -264,32 +271,26 @@ function FaceDetector(props) {
     // audio recorder
     const onStop = (audioData) => {
         console.log('audioData', audioData);
-        download(audioData.blob,'Jasmine_speech_audio.wav');
-        
-        // const sound = new File([audioData], "soundBlob", { lastModified: new Date().getTime(), type: "audio" });
 
-
-        // var a = document.createElement("a");
-        // document.body.appendChild(a);
-        // a.style = "display: none";
-        // a.href = audioData.url;
-        // a.download = "sample.wav";
-        // a.click();
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = audioData.url;
+        a.download = "Jasmine_음성파일.wav";
+        a.click();
         window.URL.revokeObjectURL(audioData.url);
-
-        // blobToDataURL(audioData.blob, function (dataurl) {
-        //     let body = {
-        //         userFrom: userFrom,
-        //         audioUrl: dataurl,
-        //     };
-
-        //     Axios.post('/api/run/audio', body).then((response) => {
-        //         if (response.data.success) {
-        //         } else {
-        //             alert('Audio error');
-        //         }
-        //     });
-        // });
+        
+        let body = {
+            userFrom: userFrom,
+            createdAt: timestamp,
+        };
+        
+        Axios.post('/api/run/audio', body).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('Audio error');
+            }
+        });
     }
 
     const startAudio = () => {
