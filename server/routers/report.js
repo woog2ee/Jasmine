@@ -32,7 +32,7 @@ router.get('/user', (req, res) => {
 });
 
 router.put('/flower', (req, res) => {
-    User.findOneAndUpdate({ userFrom: req.body.userFrom }, {$set: {flower: req.body.flower}}, (err, user) => {
+    User.findOneAndUpdate({ _id: req.body.userFrom }, {$inc: {flower: req.body.flower}}, {new: true}, (err, user) => {
         if (err) {
             return res.status(400).send(err);
         } else {

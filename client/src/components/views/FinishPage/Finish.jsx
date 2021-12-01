@@ -15,6 +15,20 @@ function Finish(props){
     const [flowers, setFlowers] = useState([]);
 
     let total_comment = "참 잘했어요! 오늘처럼 발표해주세요.";
+
+    const get_flowers = () => {
+        axios.get('/api/report/user', {
+            params: {
+                userFrom: userFrom
+            }
+        }).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('사용자 정보를 불러오는 데 실패했습니다.');
+            }
+            setFlower((preFlower) => preFlower + response.data.user["flower"]);
+        })
+    }
     
     const mk_flowers = () => {
         let flower_cnt = 0;
@@ -72,6 +86,7 @@ function Finish(props){
     };
 
     useEffect(() => {
+        console.log(userFrom);
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
@@ -114,35 +129,28 @@ function Finish(props){
             setWord(response.data.list);
         });
 
-        axios.get('/api/report/user', {
-            params: {
-                userFrom: userFrom
-            }
-        }).then((response) => {
-            if (response.data.success) {
-            } else {
-                alert('사용자 정보를 불러오는 데 실패했습니다.');
-            }
-            setFlower((preFlower) => preFlower + response.data.user["flower"]);
-        })
-
+        get_flowers();
         mk_flowers();
-    }, [mk_flowers,userFrom]);
+    }, []);
 
-    const onSubmitHandler = (event) => {
-        event.preventDefault();
-
+    const post_flowers = () => {
         axios.put('/api/report/flower', {
             userFrom: userFrom,
             flower: flower
         }).then((response) => {
             if (response.data.success) {
+                console.log(response.data.user);
+                props.history.push('/home');
             } else {
                 alert('자스민 개수를 업데이트하는 데 실패했습니다.');
             }
         })
+    };
 
-        props.history.push('/home');
+    const onSubmitHandler = (event) => {
+        event.preventDefault();
+        
+        post_flowers();
     };
 
     return (
