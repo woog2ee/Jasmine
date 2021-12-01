@@ -34,7 +34,7 @@ function Report(props){
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
-                timestamp: '2021-11-24T01:09:36.188+00:00'
+                timestamp: '2021-12-01T05:34:07.919Z'
                 // timestamp: props.timestamp
             },
         }).then((response) => {
@@ -48,7 +48,7 @@ function Report(props){
         axios.get('/api/report/voice', {
             params: {
                 userFrom: userFrom,
-                timestamp: '2021-11-24T01:09:36.188+00:00'
+                timestamp: '2021-12-01T05:34:07.919Z'
                 // timestamp: props.timestamp
             },
         }).then((response) => {
@@ -62,7 +62,7 @@ function Report(props){
         axios.get('/api/report/word', {
             params: {
                 userFrom: userFrom,
-                timestamp: '2021-11-24T01:09:36.188+00:00'
+                timestamp: '2021-12-01T05:34:07.919Z'
                 // timestamp: props.timestamp
             },
         }).then((response) => {
