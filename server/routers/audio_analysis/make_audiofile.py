@@ -14,6 +14,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 import certifi
+img_save_path = os.getcwd()+'\\client\\public'
 
 
 
@@ -63,21 +64,26 @@ class AudioMaker():
         # 'audio는 있으나 목소리 분석이 안올려진 발표'라면 해당 정보를 리턴
         complement_userFrom  = list(set(audio_userFrom) - set(voice_userFrom))
         complement_createdAt = list(set(audio_createdAt) - set(voice_createdAt))
-        upload_userFrom  = complement_userFrom[0]
-        upload_createdAt = complement_createdAt[0]
+        try:
+            upload_userFrom  = complement_userFrom[0]
+            upload_createdAt = complement_createdAt[0]
+        except:
+            pass
 
-        upload_docs = audio_collection.find({'userFrom' : upload_userFrom,
-                                             'createdAt': upload_createdAt})
-        for doc in upload_docs:
-            audio_url = doc['audioUrl']
+        # 오디오 파일 크롤링
+        #upload_docs = audio_collection.find({'userFrom' : upload_userFrom,
+        #                                     'createdAt': upload_createdAt})
+        #for doc in upload_docs:
+        #    audio_url = doc['audioUrl']
 
-        self.crawl_audio_url(audio_url)
-        self.convert_mp4_to_wav()
-        return 'Jasmine_speech_audio.wav', upload_userFrom, upload_createdAt
+        # self.crawl_audio_url(audio_url)
+        # self.convert_mp4_to_wav()
+        #return 'Jasmine_speech_audio.wav', upload_userFrom, upload_createdAt
+        return upload_userFrom, upload_createdAt
 
 
 
-        # Data url로 오디오 파일 크롤링
+    # Data url로 오디오 파일 크롤링
     def crawl_audio_url(self, url):
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
@@ -88,7 +94,7 @@ class AudioMaker():
         html = driver.page_source
         soup = BeautifulSoup(html,'html.parser')
         audio_url = soup.find(type='audio/wav').get('src') 
-        urllib.request.urlretrieve(audio_url, 'Jasmine_speech_audio.mp4')
+        urllib.request.urlretrieve(audio_url, 'Jasmine_음성파일.mp4')
         driver.close()
 
 
@@ -99,7 +105,7 @@ class AudioMaker():
             os.remove('Jasmine_speech_audio.wav')
         except:
             pass
-        os.system('ffmpeg -i Jasmine_speech_audio.mp4 -acodec pcm_s16le -ar 16000 Jasmine_speech_audio.wav')
+        os.system('ffmpeg -i Jasmine_음성파일.mp4 -acodec pcm_s16le -ar 16000 Jasmine_음성파일.wav')
 
 
 
@@ -110,14 +116,9 @@ class CommentMaker():
         
         self.score         = 100
         self.slient_cmt    = None
-        self.speaktime_img = None
-        self.quiettime_img = None
-        
         self.tempo_cmt     = None
-        self.tempo_img     = None
         self.volume_cmt    = None
-        self.volume_img    = None
-        
+  
         self.slient_cmt_c  = None
         self.tempo_cmt_c   = None
         self.volume_cmt_c  = None
@@ -174,8 +175,8 @@ class CommentMaker():
             self.slient_cmt += '발표 중 불필요한 공백을 가지지 않고 말하도록 격려해주세요.'
         else:
             self.slient_cmt += '아이가 발표할 때 말을 오래 끌거나, 말을 오랫동안 하지 않는 경우 없이 적절하게 발표해 주었습니다.'
-        self.speaktime_img = visualize_result(speak_time, '발화 구간', '시간', 25)
-        self.quiettime_img = visualize_result(quiet_time, '묵음 구간', '시간', 10)
+        self.speaktime_img = visualize_result(speak_time, '발화 구간', 25)
+        self.quiettime_img = visualize_result(quiet_time, '묵음 구간', 10)
 
         
         # 목소리 속도 판단
@@ -193,7 +194,7 @@ class CommentMaker():
             self.tempo_cmt += '발표 중 떨지 않고 안정된 상태로 발표할 수 있도록 격려해주세요.'
         else:
             self.tempo_cmt += '아이가 발표할 때 너무 빠르거나 느리게 말하지 않고 적절한 목소리 속도로 잘 발표해 주었습니다.'
-        self.tempo_img = visualize_result(tempo, '시간', '목소리 속도', 25)
+        self.tempo_img = visualize_result(tempo, '목소리 속도', 25)
 
         
         # 목소리 크기 판단
@@ -215,7 +216,7 @@ class CommentMaker():
             self.volume_cmt += '발표 중 너무 들뜨지 않고 차분하게 발표할 수 있도록 격려해주세요.'
         else:
             self.volume_cmt += '아이가 발표할 때 너무 크거나 작게 말하지 않고 적절한 목소리 크기로 잘 발표해 주었습니다.' 
-        self.volume_img = visualize_result(avg_volume, '시간', '목소리 크기', 25)
+        self.volume_img = visualize_result(avg_volume, '목소리 크기', 25)
 
     
     
@@ -242,7 +243,7 @@ class CommentMaker():
 
             
         if (self.small_volume) and (self.big_volume):
-            self.volume_cmt_c = '목소리에 자신감을 가지고 또박또박 발표하면 좋을 것 같아요!'
+            self.volume_cmt_c = '목소리에 자신감을 가지고 발표하면 좋을 것 같아요!'
         elif self.small_volume:
             self.volume_cmt_c = '목소리를 더욱 크게 말하면 사람들이 잘 들을 수 있을 거에요!'
         elif self.big_volume:
@@ -319,20 +320,15 @@ class CommentMaker():
         audio_collection = AudioMaker().mongodb_connection('voices')
 
         # comment는 아이의 발표 결과에 따라 선정되며,
-        # iamage는 발표 분석 통계 자료를 base64로 인코딩함
+        # image는 별도의 폴더에 따로 저장됨
         audio_analysis = {
             'userFrom'     : self.userFrom,
             'createdAt'    : self.createdAt,
             
             'score'        : self.score,
             'slient_cmt'   : self.slient_cmt,
-            'speaktime_img': self.speaktime_img,
-            'quiettime_img': self.quiettime_img,
-            
             'tempo_cmt'    : self.tempo_cmt,
-            'tempo_img'    : self.tempo_img,
             'volume_cmt'   : self.volume_cmt,
-            'volume_img'   : self.volume_img,
             
             'slient_cmt_c' : self.slient_cmt_c,
             'tempo_cmt_c'  : self.tempo_cmt_c,
@@ -343,20 +339,21 @@ class CommentMaker():
 
 
 # 발표 분석 자료 시각화
-def visualize_result(value, xtitle, ytitle, yrange):
+def visualize_result(value, legend, yrange):
     num_value = np.arange(1, len(value)+1, 1)
     plt.cla()
-    plt.xlabel(xtitle, fontsize=14)
-    plt.ylabel(ytitle, fontsize=14)
-
+    
     plt.plot(num_value, value, marker='o', color='#a30fe2')
-    plt.plot(num_value, value, color='#f99dff')
+    plt.plot(num_value, value, label=legend, color='#f99dff')
     plt.ylim([min(value)-yrange, max(value)+yrange])
-    plt.xticks([])
-    plt.yticks([])
-    plt.savefig(f'./Jasmine_audio_{xtitle}_{ytitle}.png')
-    audio_img = encode_image_tobase64(f'./Jasmine_audio_{xtitle}_{ytitle}.png')
-    return audio_img
+    
+    plt.xticks(color='w')
+    plt.yticks(color='w')    
+    plt.tick_params(axis='x', bottom=False)
+    plt.tick_params(axis='y', left=False)
+    #plt.grid(True, axis='y')
+    plt.legend(loc='upper left', fontsize=12)
+    plt.savefig(img_save_path+f'\\Jasmine_목소리분석_{legend}.png')
 
 
 

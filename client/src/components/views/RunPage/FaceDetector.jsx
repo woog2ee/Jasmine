@@ -121,11 +121,13 @@ function FaceDetector(props) {
         
     };
     useInterval(() => {
-        setScript(script.concat(transcript));
-        console.log(transcript);
-        console.log(script);
-        resetTranscript();
-    }, 30000);
+        if(!btnVisible){
+            setScript(script.concat(transcript));
+            console.log(transcript);
+            console.log(script);
+            resetTranscript();
+        }
+    }, 10000);
     // useEffect(()=>{
     //     let timerDict = useInterval(() => {
     //         setScript(script.concat(transcript));
@@ -274,10 +276,23 @@ function FaceDetector(props) {
         document.body.appendChild(a);
         a.style = "display: none";
         a.href = audioData.url;
-        a.download = "Jasmine_speech_audio.wav";
+        a.download = "Jasmine_음성파일.wav";
         a.click();
         window.URL.revokeObjectURL(audioData.url);
-        /* blobToDataURL(audioData.blob, function (dataurl) {
+        
+        let body = {
+            userFrom: userFrom,
+        };
+        
+        Axios.post('/api/run/audio', body).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('Audio error');
+            }
+        });
+
+        /*
+        blobToDataURL(audioData.blob, function (dataurl) {
             let body = {
                 userFrom: userFrom,
                 audioUrl: dataurl,
@@ -289,8 +304,8 @@ function FaceDetector(props) {
                     alert('Audio error');
                 }
             });
-        }); */
-
+        }); 
+        */
     };
 
     const startAudio = () => {

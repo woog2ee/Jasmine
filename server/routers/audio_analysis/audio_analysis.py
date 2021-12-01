@@ -1,5 +1,6 @@
 import re
 import os
+import time
 import wave
 import math
 import json
@@ -49,7 +50,7 @@ class AudioAnalyzer:
         for i in range(self.cnt):
             ny = y[sr*sec*i:sr*sec*(i+1)]
             speechaudio_path = '\\server\\routers\\audio_analysis\\audiofiles'
-            sf.write(os.getcwd()+speechaudio_path+f'\\Jasmine_speech_audio_{i}.wav', ny, sr, 'PCM_24')
+            sf.write(os.getcwd()+speechaudio_path+f'\\Jasmine_음성파일_{i}.wav', ny, sr, 'PCM_24')
     
     
         
@@ -185,24 +186,38 @@ class AudioAnalyzer:
 
 
 
+# 기존 오디오 파일 삭제
+def remove_before_audio():
+    filepath = 'C:/Users/USER/Downloads/Jasmine_음성파일.wav'
+    if os.path.isfile(filepath):
+        os.remove(filepath)
+        time.sleep(1)
+    else:
+        pass
+
+
+
 if __name__ == '__main__':
-    audiofile, userFrom, createdAt = AudioMaker().get_wav_audio()     # 오디오 파일 및 유저 정보 로드
+    # 오디오 파일 및 유저 정보 로드
+    #remove_before_audio()
+    audiofile = 'C:/Users/USER/Downloads/Jasmine_음성파일.wav'
+    userFrom, createdAt = AudioMaker().get_wav_audio()     
     
     SA = SlientAnalyzer(audiofile)       # 묵음 분석 클래스
     AA = AudioAnalyzer(audiofile)        # 오디오 분석 클래스
-    AA.trim_audiofile(audiofile, 30)     # 30초 단위로 오디오 분리
+    AA.trim_audiofile(audiofile, 5)      # 5초 단위로 오디오 분리
     
     speak_time, quiet_time = SA.slient_analyze(audiofile)     # 발화 시작 및 끝 구간
     tempo       = []                                          # 발표 구간의 속도
     mean_volume = []                                          # 발표 구간의 최소 볼륨
     max_volume  = []                                          # 발표 구간의 최대 볼륨
 
-    # 30초 단위로 분리한 오디오로 분석
+    # 5초 단위로 분리한 오디오로 분석
     for i in range(AA.cnt):
         speechaudio_path = '\\server\\routers\\audio_analysis\\audiofiles'
-        cur_audiofile = os.getcwd()+speechaudio_path+f'\\Jasmine_speech_audio_{i}.wav'
+        cur_audiofile = os.getcwd()+speechaudio_path+f'\\Jasmine_음성파일_{i}.wav'
         cur_duration = AA.get_duration(cur_audiofile)
-        if cur_duration <= 10:
+        if cur_duration <= 2:
             continue
 
         cur_tempo = AA.detect_audio_bpm(cur_audiofile)

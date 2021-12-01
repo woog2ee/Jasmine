@@ -66,8 +66,11 @@ class TextMaker():
         # 'stt는 있으나 내용 분석이 안올려진 발표'라면 해당 정보를 리턴
         complement_userFrom  = list(set(stt_userFrom) - set(text_userFrom))
         complement_createdAt = list(set(stt_createdAt) - set(text_createdAt))
-        upload_userFrom  = complement_userFrom[0]
-        upload_createdAt = complement_createdAt[0]
+        try:
+            upload_userFrom  = complement_userFrom[0]
+            upload_createdAt = complement_createdAt[0]
+        except:
+            pass
 
         upload_docs = stt_collection.find({'userFrom' : upload_userFrom,
                                            'createdAt': upload_createdAt})
@@ -89,18 +92,12 @@ class CommentMaker():
         self.score            = None
         self.variety_cmt      = None
         self.sentcount_cmt    = None
-        self.sentcount_img    = None
         
         self.keywords_cmt     = None
-        self.keywords_img     = None
         self.top3_keywords    = None
-        
         self.stopwords_cmt    = None
-        self.stopwords_img    = None
         self.top3_stopwords   = None
-        
         self.countwords_cmt   = None
-        self.countwords_img   = None
         self.top3_countwords  = None
         
         self.keywords_cmt_c   = None
@@ -221,7 +218,7 @@ class CommentMaker():
         text_collection = TextMaker().mongodb_connection('words')
 
         # comment는 아이의 발표 결과에 따라 선정되며,
-        # image는 발표 분석 통계 자료를 base64로 인코딩함
+        # image는 별도의 폴더에 따로 저장됨
         text_analysis = {
             'userFrom'        : self.userFrom,
             'createdAt'       : self.createdAt, 
@@ -230,17 +227,11 @@ class CommentMaker():
             'variety_cmt'     : self.variety_cmt,
             'sentcount_cmt'   : self.sentcount_cmt,
 
-            
             'keywords_cmt'    : self.keywords_cmt,
-      
             'top3_keywords'   : self.top3_keywords,
-            
             'stopwords_cmt'   : self.stopwords_cmt,
-          
             'top3_stopwords'  : self.top3_stopwords,
-            
             'countwords_cmt'  : self.countwords_cmt,
-        
             'top3_countwords' : self.top3_countwords,
             
             'keywords_cmt_c'  : self.keywords_cmt_c,
