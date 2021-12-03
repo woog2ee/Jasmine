@@ -12,7 +12,7 @@ function Loading(props){
         return new Promise((r) => setTimeout(r, ms));
     }
     useEffect(() => {
-        sleep(1000).then(() => {
+        sleep(3000).then(() => {
             //axios.post('/api/report/voiceandword');
             // console.log("제발~~");
         }).then(() => sleep(1000).then(() => props.history.push('/finish')));

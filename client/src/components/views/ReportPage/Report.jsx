@@ -27,7 +27,7 @@ function Report(props){
         return (<>
                     <div className='totalscore'>총점 : {total_score.toFixed(2)}점</div>
                         <div className='subscore'>
-                            <span id='vision'>시선 : {vision_score}점</span>
+                            <span id='vision'>태도 : {vision_score}점</span>
                             <span id='voice'>목소리 : {voice_score}점</span>
                             <span id='contents'>내용 : {word_score}점</span></div></>);
     };
@@ -221,27 +221,6 @@ function Report(props){
                             <span>{voice['volume_cmt']}</span>
                         </div>
                     </div>
-                    {/* <div className='box' id='box9'>
-                        <span className='mini-title'>
-                            어휘 다양도
-                        </span>
-                        <div className='feedback-content subCmt'>
-                            <span>{word['variety_cmt']}</span>
-                        </div>
-                    </div> */}
-                    {/* <div className='secondrow'>
-                        <div className='graph'>
-                            그래프
-                        </div>
-                        <div className='summary'>
-                            발표 내용 요약
-                        </div>
-                    </div> */}
-                    {/* <div className='thirdrow'>
-                        <span className='mini-title' id='feedback-title'>피드백</span>
-                        <div className='feedback-content' style={{marginLeft:"20px"}}>
-                        </div>
-                    </div> */}
                     <div className='scoreboard'>
                     {gv_score()}
                     </div>

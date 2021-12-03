@@ -8,15 +8,30 @@ import { withRouter } from 'react-router-dom';
 
 function Finish(props){
     const date = '2021-12-01T10:47:43.844Z'
-    // const userFrom = localStorage.getItem('userId');
+    const userFrom2 = localStorage.getItem('userId');
     let userFrom = '61a31288885556a88bc4a138';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
     const [flower, setFlower] = useState(0);
     const [flowers, setFlowers] = useState([]);
+    let isUpdate = false;
 
     let total_comment = "참 잘했어요! 오늘처럼 발표해주세요.";
+
+    const get_flowers = () => {
+        axios.get('/api/report/user', {
+            params: {
+                userFrom: userFrom
+            }
+        }).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('사용자 정보를 불러오는 데 실패했습니다.');
+            }
+            setFlower((preFlower) => preFlower + response.data.user["flower"]);
+        })
+    }
     
     const mk_flowers = () => {
         let flower_cnt = 0;
@@ -42,7 +57,11 @@ function Finish(props){
         } else {
             flower_cnt = 3;
         }
-        setFlower((preFlower) => preFlower + flower_cnt);
+        if(!isUpdate){
+            setFlower((preFlower) => preFlower + flower_cnt);
+            isUpdate = true;
+        }
+        
 
         for (let i = 0; i < flower_cnt; i++) {
             flower_arr.push(<img key={i} src={miniFlower} alt='flowerrate'/>);
@@ -74,6 +93,7 @@ function Finish(props){
     };
 
     useEffect(() => {
+        console.log(userFrom);
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
@@ -116,41 +136,34 @@ function Finish(props){
             setWord(response.data.list);
         });
 
-        axios.get('/api/report/user', {
-            params: {
-                userFrom: userFrom
-            }
-        }).then((response) => {
-            if (response.data.success) {
-            } else {
-                alert('사용자 정보를 불러오는 데 실패했습니다.');
-            }
-            setFlower((preFlower) => preFlower + response.data.user["flower"]);
-        })
-
+        get_flowers();
         mk_flowers();
     }, []);
 
-    const onSubmitHandler = (event) => {
-        event.preventDefault();
-
+    const post_flowers = () => {
         axios.put('/api/report/flower', {
-            userFrom: userFrom,
+            userFrom: userFrom2,
             flower: flower
         }).then((response) => {
             if (response.data.success) {
+                console.log(response.data.user);
+                props.history.push('/home');
             } else {
                 alert('자스민 개수를 업데이트하는 데 실패했습니다.');
             }
         })
+    };
 
-        props.history.push('/home');
+    const onSubmitHandler = (event) => {
+        event.preventDefault();
+        
+        post_flowers();
     };
 
     return (
         <div className='report'>
             <div className="simpleNavi">
-                <img key='logo' src={logo} alt='logo'/>
+                <img key='logo' style={{paddingLeft:'2vw'}}src={logo} alt='logo'/>
             </div>
             <div className='body'>
                 <div className='content' id="finish_ctn">
