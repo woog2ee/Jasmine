@@ -1,5 +1,6 @@
 # Jasmine
-CAU 2021-2 Capstone Design Project Repository
+CAU 2021-2 Capstone Design Project Repository   
+Check more Detail at [Link]()   
 Check out Presentation at [Link](https://youtu.be/AJ_jO4Orc58)
 
 ## 👪 Teammates
