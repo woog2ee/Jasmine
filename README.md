@@ -7,7 +7,7 @@ Check out Presentation at [Link](https://youtu.be/AJ_jO4Orc58)
 - Team name: **자신만만 스피치 비타민, 자스민(Jasmine)**
 - **Seunguk Yu**: School of Computer Science & Engineering in CAU   
 - **Bolim Lee**: School of Computer Science & Engineering in CAU   
-- **Sanghwa Lee**: School of Computer Science & Engineering in CAU
+- **Sanghwa Lee**: School of Computer Science & Engineering in CAU, Leader
 
 ## 💡 Prototype
 **Entire Logic**: Overall UI logic for our Jasmine serivce
