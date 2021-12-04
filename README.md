@@ -10,7 +10,7 @@ Check out Presentation at [Link](https://youtu.be/AJ_jO4Orc58)
 - **Sanghwa Lee**: School of Computer Science & Engineering in CAU, Leader
 
 ## 💡 Prototype
-**Entire Logic**: Overall UI logic for our Jasmine serivce
+**Entire Logic**: Overall UI logic for our Jasmine service
 ![image](https://user-images.githubusercontent.com/80081345/144620776-15dbdcc2-a138-473c-84e4-6771fed889b6.png)
 
 **Landing Page**: Introduce our speech coaching service, allow user login & logout and starting service
