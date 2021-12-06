@@ -7,7 +7,7 @@ Check out Presentation at [Link](https://youtu.be/AJ_jO4Orc58)
 - Team name: **자신만만 스피치 비타민, 자스민(Jasmine)**
 - **Seunguk Yu**: School of Computer Science & Engineering in CAU   
 - **Bolim Lee**: School of Computer Science & Engineering in CAU   
-- **Sanghwa Lee**: School of Computer Science & Engineering in CAU, Leader
+- **Sanghwa Lee**: School of Computer Science & Engineering in CAU, Team Leader
 
 ## 💡 Prototype
 **Entire Logic**: Overall UI logic for our Jasmine service
@@ -19,13 +19,13 @@ Check out Presentation at [Link](https://youtu.be/AJ_jO4Orc58)
 **Action Page**: Start speech practice, allow checking our kid's speech analysis and user's flower(reward)
 ![image](https://user-images.githubusercontent.com/80081345/144620224-13cf2665-289a-42c4-ac5c-d60031539616.png)
 
-**Speech Page 1**: When the direction of the head is correct, a koala appears and compliments
+**Speech Page 1**: When the direction of the head is correct, a koala appears and compliments in real time
 ![image](https://user-images.githubusercontent.com/80081345/144621208-963cad27-afef-4665-831f-ff6a7321a71b.png)
 
-**Speech Page 2**: When the direction of the head is wrong, a sloth appears and gives caution
+**Speech Page 2**: When the direction of the head is wrong, a sloth appears and gives caution in real time
 ![image](https://user-images.githubusercontent.com/80081345/144621303-fcc0dc1e-a141-4732-b586-f6ffae88651f.png)
 
-**Speech Page 3**: When you can't see the child's face, a sloth appears and gives caution
+**Speech Page 3**: When you can't see the child's face, a sloth appears and gives caution in real time
 ![image](https://user-images.githubusercontent.com/80081345/144621706-bb0247dd-0495-4b6b-aebf-6d51da165ac7.png)
 
 **Analysis Page 1**: Voice analysis results are presented on the parent interface
@@ -38,7 +38,7 @@ Check out Presentation at [Link](https://youtu.be/AJ_jO4Orc58)
 ### 1. User sign up and Login at landing page
 ### 2. Start speech practice at action page
 ### 3. Make a presentation of kid's speech during the presentation is being recorded
-Attitude Analysis (Video processing): by Blazeface, Gaze-Detection   
+Attitude Analysis (Video processing): by Blazeface, Customized Gaze-Detection   
 Voice Analysis (Audio Processing): by Webrtcvad, Librosa, FFmpeg   
 Text Analysis (Nature Language Processing): by TextRank, Kss, Konlpy
 ### 4. Check the results of the presentation analysis
