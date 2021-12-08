@@ -12,3 +12,4 @@ wordcloud==1.8.1
 kss==2.5.1
 konlpy==0.5.2
 sklearn==0.24.2
+ffmpeg
