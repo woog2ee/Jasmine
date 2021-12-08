@@ -133,7 +133,7 @@ function FaceDetector(props) {
             console.log(script);
             resetTranscript();
         }
-    }, 10000);
+    }, 5000);
     
     
     const dictStop = async() => {

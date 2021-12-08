@@ -12,11 +12,11 @@ function Loading(props){
         return new Promise((r) => setTimeout(r, ms));
     }
     useEffect(() => {
-        sleep(3000).then(() => {
-            //axios.post('/api/report/voiceandword');
-            // console.log("제발~~");
-        }).then(() => sleep(1000).then(() => props.history.push('/finish')));
-    })
+        sleep(100000).then(() => {
+            console.log("제발~~");
+            axios.post('/api/report/voiceandword');
+        }).then(() => sleep(100000).then(() => props.history.push('/finish')));
+    },[])
 
     return (
         <div className='report'>
