@@ -149,7 +149,7 @@ function FaceDetector(props) {
 
             let body = {
                 userFrom: userFrom,
-                text: tmp,
+                text: transcript,
                 createdAt: timestamp,
                 //text: transcript,
             };

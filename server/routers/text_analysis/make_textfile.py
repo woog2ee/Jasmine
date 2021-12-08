@@ -71,11 +71,11 @@ class TextMaker():
         upload_docs = stt_collection.find({'userFrom' : upload_userFrom,'createdAt': upload_createdAt})
         for doc in upload_docs:
             stt_texts = doc['text']
-        stt_text = ''
-        for text in stt_texts:
-            stt_text += text
-            stt_text += ' '
-        return stt_text, upload_userFrom, upload_createdAt
+        #stt_text = ''
+        #for text in stt_texts:
+        #    stt_text += text
+        #    stt_text += ' '
+        return stt_texts, upload_userFrom, upload_createdAt
 
 
 

@@ -210,7 +210,7 @@ if __name__ == '__main__':
     tempo       = []                                          # 발표 구간의 속도
     mean_volume = []                                          # 발표 구간의 최소 볼륨
     max_volume  = []                                          # 발표 구간의 최대 볼륨
-    pronunc_score = []                                        # 발음평가 점수
+    #pronunc_score = []                                        # 발음평가 점수
 
     # 5초 단위로 분리한 오디오로 분석
     for i in range(AA.cnt):
@@ -222,16 +222,16 @@ if __name__ == '__main__':
 
         cur_tempo = AA.detect_audio_bpm(cur_audiofile)
         cur_mean_volume, cur_max_volume = AA.detect_audio_decibel(cur_audiofile)
-        cur_pronunc_score = AA.get_pronunciation_score(cur_audiofile, stt_texts[i])
+        #cur_pronunc_score = AA.get_pronunciation_score(cur_audiofile, stt_texts[i])
 
         tempo.append(cur_tempo)
         mean_volume.append(cur_mean_volume)
         max_volume.append(cur_max_volume)
-        pronunc_score.append(cur_pronunc_score)
+        #pronunc_score.append(cur_pronunc_score)
 
     # 분석 자료 만들고 MongoDB에 업로드
     CM = CommentMaker(userFrom, createdAt)
-    CM.create_speech_document(speak_time, quiet_time, tempo, mean_volume, max_volume, pronunc_score)
+    CM.create_speech_document(speak_time, quiet_time, tempo, mean_volume, max_volume)
     CM.upload_speech_document()
 
     # 분석한 오디오 파일 지우기

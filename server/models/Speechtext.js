@@ -10,7 +10,7 @@ const speechtextSchema = mongoose.Schema({
         type: String,
     },
     text: {
-        type: Array,
+        type: String,
     },
 });
 

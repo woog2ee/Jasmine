@@ -124,7 +124,7 @@ class CommentMaker():
         self.fast_tempo    = None
         self.small_volume  = None
         self.big_volume    = None
-        self.pronunc_score = None
+        #self.pronunc_score = None
         
         
         
@@ -171,13 +171,8 @@ class CommentMaker():
             self.slient_cmt += '발표 중 불필요한 공백을 가지지 않고 말하도록 격려해주세요.'
         else:
             self.slient_cmt += '아이가 발표할 때 말을 오래 끌거나, 말을 오랫동안 하지 않는 경우 없이 적절하게 발표해 주었습니다.'
-<<<<<<< HEAD:server/routers/audio_analysis/make_audiofile.py
         self.speaktime_img = visualize_result(speak_time, '발화 구간', 25)
         self.quiettime_img = visualize_result(quiet_time, '묵음 구간', 10)
-=======
-        self.speaktime_img = visualize_result(speak_time, '시간', '발화 구간', 25)
-        self.quiettime_img = visualize_result(quiet_time, '시간', '묵음 구간', 10)
->>>>>>> master:audio_analysis/make_audiofile.py
 
         
         # 목소리 속도 판단
@@ -309,11 +304,11 @@ class CommentMaker():
         
         
     # 스피치 분석 자료 생성
-    def create_speech_document(self, speak_time, quiet_time, tempo, mean_volume, max_volume, pronunc_score):
+    def create_speech_document(self, speak_time, quiet_time, tempo, mean_volume, max_volume):
         self.make_parent_comment(speak_time, quiet_time, tempo, mean_volume, max_volume)
         self.make_child_comment()
         self.make_score()
-        self.pronunc_score = pronunc_score
+        #self.pronunc_score = pronunc_score
         
         
         
@@ -335,7 +330,6 @@ class CommentMaker():
             'slient_cmt_c' : self.slient_cmt_c,
             'tempo_cmt_c'  : self.tempo_cmt_c,
             'volume_cmt_c' : self.volume_cmt_c,
-            '테스트' : str(self.pronunc_score)
         }
         audio_collection.insert(audio_analysis)
 

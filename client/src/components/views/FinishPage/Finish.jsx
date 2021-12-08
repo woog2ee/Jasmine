@@ -9,7 +9,6 @@ import { withRouter } from 'react-router-dom';
 function Finish({props}){
     const date = props.date;
     const userFrom = props.userFrom;
-    // let userFrom = '61a31288885556a88bc4a138';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
@@ -139,7 +138,7 @@ function Finish({props}){
 
     const post_flowers = () => {
         axios.put('/api/report/flower', {
-            userFrom: userFrom2,
+            userFrom: userFrom,
             flower: flower
         }).then((response) => {
             if (response.data.success) {
