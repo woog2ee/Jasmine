@@ -5,17 +5,27 @@ import Jasmine from '../../../img/Jasmine.png'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withRouter } from 'react-router-dom';
 
-function Loading(props){
+function Loading({props}){
     const userFrom = localStorage.getItem('userId');
 
     function sleep(ms) {
         return new Promise((r) => setTimeout(r, ms));
     }
     useEffect(() => {
-        sleep(100000).then(() => {
-            console.log("제발~~");
-            axios.post('/api/report/voiceandword');
-        }).then(() => sleep(100000).then(() => props.history.push('/finish')));
+        sleep(100000)
+            .then(() => {
+                console.log('제발~~');
+                axios.post('/api/report/voiceandword');
+            })
+            .then(() =>
+                sleep(100000).then(() =>
+                    props.history.push({
+                        pathname: '/loading',
+                        date: props.date,
+                        userFrom: props.userFrom,
+                    })
+                )
+            );
     },[])
 
     return (
