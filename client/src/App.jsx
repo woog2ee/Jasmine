@@ -7,7 +7,6 @@ import RegisterPage from './components/views/RegisterPage/RegisterPage';
 import Run from './components/views/RunPage/Run';
 import Loading from './components/views/FinishPage/Loading';
 import Finish from './components/views/FinishPage/Finish';
-import Loading from './components/views/FinishPage/Loading';
 import RecordingList from './components/views/RecordingListPage/RecordingList';
 import Report from './components/views/ReportPage/Report';
 import Home from './components/views/HomePage/Home';
