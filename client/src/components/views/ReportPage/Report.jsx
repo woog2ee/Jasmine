@@ -1,39 +1,43 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
 import { withRouter } from 'react-router-dom';
 
 function Report(props){
-    let userFrom = localStorage.getItem('userId');
+    const date = '2021-12-01T10:47:43.844Z'
+    // let userFrom = localStorage.getItem('userId');
+    let userFrom = '61a31288885556a88bc4a138';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
-
-    const mk_comments = () => {
-        let comments = [];
-        if (vision['score'] >= 70) {
-            comments.push(<><span>{userFrom}(이)의 발표태도가 좋아요.</span><br/></>)
+    
+    const gv_score = () => {
+        let vision_score, total_score;
+        let voice_score = parseInt(voice['score']);
+        let word_score = parseInt(word['score']);
+        if (vision["score"] < 0) {
+            vision_score = 0;
+        } else if (vision["score"] > 100) {
+            vision_score = 100;
         } else {
-            comments.push(<><span>{userFrom}(이)의 고개가 정면을 보고 있도록 도와주세요.</span><br/></>)
+            vision_score = vision["score"];
         }
-        comments.push(<br/>);
-        let comment_arr = ['variety_comment','sentcount_comment','keywords_comment',
-        'stopwords_comment','countwords_comment']
-        comment_arr.forEach( (txt)=>{
-            comments.push(<><span key={txt}>{txt}</span><br/></>)
-        })
-        
-        
-        return comments;
+        total_score = vision_score * 0.4 + voice_score * 0.4 + word_score * 0.2;
+        return (<>
+                    <div className='totalscore'>총점 : {total_score.toFixed(2)}점</div>
+                        <div className='subscore'>
+                            <span id='vision'>태도 : {vision_score}점</span>
+                            <span id='voice'>목소리 : {voice_score}점</span>
+                            <span id='contents'>내용 : {word_score}점</span></div></>);
     };
 
     useEffect(() => {
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
-                // timestamp: '2021-11-24T01:09:36.188+00:00'
-                timestamp: props.timestamp
+                timestamp: date
+                // timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {
@@ -41,13 +45,14 @@ function Report(props){
                 alert('발표 태도 분석을 불러오는 데 실패했습니다.');
             }
             setVision(response.data.list);
+            console.log(response.data.list);
         });
 
         axios.get('/api/report/voice', {
             params: {
                 userFrom: userFrom,
-                // timestamp: '2021-11-24T01:09:36.188+00:00'
-                timestamp: props.timestamp
+                timestamp: date
+                // timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {
@@ -60,8 +65,8 @@ function Report(props){
         axios.get('/api/report/word', {
             params: {
                 userFrom: userFrom,
-                // timestamp: '2021-11-24T01:09:36.188+00:00'
-                timestamp: props.timestamp
+                timestamp: date
+                // timestamp: props.timestamp
             },
         }).then((response) => {
             if (response.data.success) {
@@ -70,7 +75,7 @@ function Report(props){
             }
             setWord(response.data.list);
         });
-    }, []);
+    }, [userFrom,props.timestamp]);
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
@@ -80,7 +85,7 @@ function Report(props){
     return (
         <div className='report'>
             <div className="simpleNavi">
-                <img src={logo} alt='logo'/>
+                <img style={{marginLeft:'2vw'}} src={logo} alt='logo'/>
             </div>
             <div className='body'>
                 
@@ -93,11 +98,11 @@ function Report(props){
                         </h2>
                     </div>
                     <div className='box' id='box1'>
-                        <span className='mini-title'>
+                        <span className='mini-title' style={{zIndex:'1'}}>
                             키워드
                         </span>
                         <div className='wordcloud'>
-                            <img className="wcImg" src={'Jasmine_wordcloud_keywords.png'} alt='wordcloud'/>
+                            <img className="wcImg" src={'Jasmine_내용분석_워드클라우드 keywords.png'} alt='wordcloud'/>
                             <div className='rank'>
                                 <ul>
                                     <li>1위:{String(word['top3_keywords']).split(',')[0]}</li>
@@ -112,11 +117,11 @@ function Report(props){
                     </div>
                     
                     <div className='box' id='box2'>
-                        <span className='mini-title'>
+                        <span className='mini-title' style={{zIndex:'1'}}>
                             필요 없는 단어
                         </span>
                         <div className='wordcloud'>
-                            <img className="wcImg" src={'Jasmine_wordcloud_stopwords.png'} alt='wordcloud'/>
+                            <img className="wcImg" src={'Jasmine_내용분석_워드클라우드 stopwords.png'} alt='wordcloud'/>
                             <div className='rank'>
                                 <ul>
                                     <li>1위:{String(word['top3_stopwords']).split(',')[0]}</li>
@@ -150,7 +155,7 @@ function Report(props){
                             많이 사용한 단어
                         </span>
                         <div className='wordcloud'>
-                            <img className="wcImg" id="box3img" src={'Jasmine_wordcloud_countwords.png'} alt='wordcloud'/>
+                            <img className="wcImg" id="box3img" src={'Jasmine_내용분석_워드클라우드 countwords.png'} alt='wordcloud'/>
                             <div className='rank box3img'>
                                 <ul id="rank-box3">
                                     <li>1위:{String(word['top3_countwords']).split(',')[0]}</li>
@@ -168,7 +173,7 @@ function Report(props){
                             문장 사용
                         </span>
                         <div className='wordcloud'>
-                            <img className="scImg" src={'Jasmine_sentence_count.png'} alt='wordcloud'/>
+                            <img className="scImg" src={'Jasmine_내용분석_문장 길이.png'} alt='wordcloud'/>
                         </div>
                         <div className='feedback-content subCmt'>
                             <span>{word['sentcount_cmt']}</span>
@@ -179,7 +184,7 @@ function Report(props){
                             발화와 묵음 구간
                         </span>
                         <div className='wordcloud'>
-                            <img className="scImg" src={'Jasmine_audio_묵음 구간_시간.png'} alt='wordcloud'/>
+                            <img className="scImg" src={'Jasmine_목소리분석_묵음 구간.png'} alt='wordcloud'/>
                         </div>
                     </div>
                     
@@ -188,7 +193,7 @@ function Report(props){
                             발화와 묵음구간2
                         </span>
                         <div className='wordcloud'>
-                            <img className="scImg" src={'Jasmine_audio_발화 구간_시간.png'} alt='wordcloud'/>
+                            <img className="scImg" src={'Jasmine_목소리분석_발화 구간.png'} alt='wordcloud'/>
                         </div>
                     </div>
                     <div className='feedback-content subCmt'>
@@ -199,7 +204,7 @@ function Report(props){
                             발화 속도
                         </span>
                         <div className='wordcloud'>
-                            <img className="scImg" src={'Jasmine_audio_시간_목소리 속도.png'} alt='wordcloud'/>
+                            <img className="scImg" src={'Jasmine_목소리분석_목소리 속도.png'} alt='wordcloud'/>
                         </div>
                         <div className='feedback-content subCmt'>
                             <span>{voice['tempo_cmt']}</span>
@@ -210,41 +215,14 @@ function Report(props){
                             발화 크기
                         </span>
                         <div className='wordcloud'>
-                            <img className="scImg" src={'Jasmine_audio_시간_목소리 크기.png'} alt='wordcloud'/>
+                            <img className="scImg" src={'Jasmine_목소리분석_목소리 크기.png'} alt='wordcloud'/>
                         </div>
                         <div className='feedback-content subCmt'>
                             <span>{voice['volume_cmt']}</span>
                         </div>
                     </div>
-                    <div className='box' id='box9'>
-                        <span className='mini-title'>
-                            어휘 다양도
-                        </span>
-                        <div className='feedback-content subCmt'>
-                            <span>{word['variety_cmt']}</span>
-                        </div>
-                    </div>
-                    {/* <div className='secondrow'>
-                        <div className='graph'>
-                            그래프
-                        </div>
-                        <div className='summary'>
-                            발표 내용 요약
-                        </div>
-                    </div> */}
-                    <div className='thirdrow'>
-                        <span className='mini-title' id='feedback-title'>피드백</span>
-                        <div className='feedback-content' style={{marginLeft:"20px"}}>
-                            {mk_comments()}
-                        </div>
-                    </div>
                     <div className='scoreboard'>
-                        <div className='totalscore'>총점 : 100점</div>
-                        <div className='subscore'>
-                            <span id='vision'>시선 : {word['vision']}점</span>
-                            <span id='voice'>목소리 : {word['voice']}점</span>
-                            <span id='contents'>내용 : {word['score']}점</span>
-                        </div>
+                    {gv_score()}
                     </div>
                     <div className="stopButton" id="back">
                         <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
@@ -253,7 +231,6 @@ function Report(props){
                     </div>
                 </div>
             </div>
-            
         </div>
     )
 }

@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import logo from '../../../img/logo.png'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../css/Navi.css'
 import { withRouter } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { auth } from '../../../_actions/user_action';
 
 function Navbar(props) {
+    const [isLogin, setIsLogin] = useState(false);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        let c = true
+        dispatch(auth()).then((response) => {
+            if (c){
+                if (!response.payload.isAuth) {
+                    setIsLogin(false);
+                } else {
+                    setIsLogin(true);
+                }
+            }
+        });
+        return () => {
+            c = false;
+        }
+    }, [])
+
     const onHomeClickHandler = () => {
-        props.history.push('/home');
+        props.history.push('/');
     };
 
     const onRegisterClickHandler = () => {
@@ -15,17 +36,18 @@ function Navbar(props) {
     };
 
     const onLoginClickHandler = () => {
-        props.history.push('/login');
-    };
-
-    const onLogoutClickHandler = () => {
-        axios.get('/api/users/logout').then((response) => {
-            if (response.data.success) {
-                props.history.push('/login');
-            } else {
-                alert('로그아웃에 실패했습니다.');
-            }
-        });
+        if (isLogin) {
+            axios.get('/api/users/logout').then((response) => {
+                if (response.data.success) {
+                    alert('로그아웃 되었습니다.');
+                    setIsLogin(false);
+                } else {
+                    alert('로그아웃에 실패했습니다.');
+                }
+            });
+        } else {
+            props.history.push('/login');
+        }
     };
 
     return (
@@ -33,24 +55,26 @@ function Navbar(props) {
             <div className="inner">
                 {/* <h3 class="masthead-brand">Cover</h3> */}
                 <div className="logo masthead-brand">
-                    <img src = {logo} className="logoImg"/>
+                    <img src={logo} className="logoImg" />
                 </div>
                 <nav>
                     <ul className="nav masthead-nav">
                         <li className="active">
-                            <button className="fs-3 li-a" id="list-1" onClick={onHomeClickHandler}>홈</button>
+                            <button className="fs-3 li-a" id="list-1" onClick={onHomeClickHandler} style={{color:'black'}}>
+                                홈
+                            </button>
                         </li>
-                        <span className='bar'>|</span>
+                        <span className="bar" style={{color:'black'}}>|</span>
                         <li className="active">
-                            <button className="fs-3 li-a" id="list-2" onClick={onRegisterClickHandler}>회원가입</button>
+                            <button className="fs-3 li-a" id="list-2" onClick={onRegisterClickHandler} style={{color:'black'}}>
+                                회원가입
+                            </button>
                         </li>
-                        <span className='bar'>|</span>
+                        <span className="bar" style={{color:'black'}}>|</span>
                         <li className="active">
-                            <button className="fs-3 li-a" id="list-3" onClick={onLoginClickHandler}>로그인</button>
-                        </li>
-                        <span className='bar'>|</span>
-                        <li className="active">
-                        <button className="fs-3 li-a" id="list-3" onClick={onLogoutClickHandler}>로그아웃</button>
+                            <button className="fs-3 li-a" id="list-3" onClick={onLoginClickHandler} style={{color:'black'}}>
+                                {isLogin ? '로그아웃' : '로그인   '}
+                            </button>
                         </li>
                     </ul>
                 </nav>

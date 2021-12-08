@@ -32,7 +32,7 @@ router.get('/user', (req, res) => {
 });
 
 router.put('/flower', (req, res) => {
-    User.findOneAndUpdate({ userFrom: req.body.userFrom }, {$set: {flower: req.body.flower}}, (err, user) => {
+    User.findOneAndUpdate({ _id: req.body.userFrom }, {$inc: {flower: req.body.flower}}, {new: true}, (err, user) => {
         if (err) {
             return res.status(400).send(err);
         } else {
@@ -45,7 +45,7 @@ router.put('/flower', (req, res) => {
 });
 
 router.get('/vision', (req, res) => {
-    Vision.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, vision) => {
+    Vision.findOne({ userFrom: req.query.userFrom, createdAt: req.query.timestamp }, (err, vision) => {
         if (err) {
             return res.status(400).send(err);
         } else {
@@ -64,27 +64,21 @@ router.post('/voiceandword', (req, res) => {
     process_voice.stdout.on('data', function(data) {
         console.log(data.toString());
     });
-    process_voice.stderr.on('data', function(data) {
+    process_voice.stderr.on('data', function(data){
         console.error(data.toString());
-    });
-    process_voice.on('close', (code) => {
-        console.log('audio process exited');
     });
 
     var process_text = spawn('python', [__dirname+'/text_analysis/text_analysis.py']);
     process_text.stdout.on('data', function(data) {
         console.log(data.toString());
     });
-    process_text.stderr.on('data', function(data) {
+    process_text.stderr.on('data', function(data){
         console.error(data.toString());
-    });
-    process_text.on('close', (code) => {
-        console.log('text process exited');
     });
 })
 
 router.get('/voice', (req, res) => {
-    Voice.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, voice) => {
+    Voice.findOne({ userFrom: req.query.userFrom, createdAt: req.query.timestamp }, (err, voice) => {
         if (err) {
             return res.status(400).send(err);
         } else {
@@ -97,7 +91,7 @@ router.get('/voice', (req, res) => {
 });
 
 router.get('/word', (req, res) => {
-    Word.findOne({ userFrom: req.query.userFrom, timestamp: req.query.timestamp }, (err, word) => {
+    Word.findOne({ userFrom: req.query.userFrom, createdAt: req.query.timestamp }, (err, word) => {
         if (err) {
             return res.status(400).send(err);
         } else {

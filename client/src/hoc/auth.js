@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { auth } from '../_actions/user_action';
 
@@ -8,7 +7,6 @@ export default function (SpecificComponent, option, adminRoute = null) {
         const dispatch = useDispatch();
         useEffect(() => {
             dispatch(auth()).then((response) => {
-                console.log(dispatch);
                 if (!response.payload.isAuth) {
                     if (option) {
                         props.history.push('/login');
@@ -23,7 +21,7 @@ export default function (SpecificComponent, option, adminRoute = null) {
                     }
                 }
             });
-        }, []);
+        }, [props.history,dispatch]);
 
         return <SpecificComponent />;
     }

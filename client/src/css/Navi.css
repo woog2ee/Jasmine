@@ -4,9 +4,9 @@
     height:70px;
     float:left;
     margin-top: -15px;
-    
 }
 .li-a{
+    white-space: pre;
     border: none;
     background: transparent;
     padding: 15px 25px;

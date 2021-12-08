@@ -11,9 +11,9 @@
     margin: 10px auto;
     width: 60%;
     height: 80vh;
-    background-color: azure;
+    background-color: #B4C6A6;
     border-radius: 10px;
-    overflow: scroll;
+    overflow: auto;
     /* border: aliceblue 6px solid; */
 }
 
@@ -26,6 +26,7 @@
 }
 #recording_date {
     margin: auto 0 auto 4%;
+    font-size: 30px;
 }
 
 .time {
@@ -36,4 +37,9 @@
 }
 #recording_time {
     margin: auto 0 auto 40%;
+    font-size: 30px;
+}
+#end{
+    width: 57%;
+    margin: auto;
 }

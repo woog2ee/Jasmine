@@ -42,7 +42,7 @@ function RecordingList(props) {
             }
             for (var i = 0; i < response.data.list.length; i++) {
                 var temp = (' ' + response.data.list[i]["createdAt"]).slice(1);
-                // console.log(temp);
+                console.log(temp);
                 setRecordTimeList(list => [...list, temp]);
             }
         });
@@ -70,8 +70,8 @@ function RecordingList(props) {
                     <h1 className="title">나의 스피치 기록</h1>
                 </div>
                 <div className="list">
-                    {recordTimeList?.map((datetime) => (
-                        <form onSubmit={onReportHandler}>
+                    {recordTimeList?.map((datetime,idx) => (
+                        <form key={idx} onSubmit={onReportHandler}>
                             <Record type="submit" datetime={datetime}>
                                 <span className="date" id="recording_date">
                                     {datetime.substring(0, 10)}
@@ -83,7 +83,7 @@ function RecordingList(props) {
                         </form>
                     ))}
                 </div>
-                <div className="stopButton">
+                <div className="stopButton" id="end">
                     <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
                         <button type="submit">끝내기</button>
                     </form>

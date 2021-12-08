@@ -2,7 +2,6 @@ import re
 import os
 import math
 import time
-import base64
 import urllib
 import subprocess
 import numpy as np
@@ -69,8 +68,7 @@ class TextMaker():
         upload_userFrom  = complement_userFrom[0]
         upload_createdAt = complement_createdAt[0]
 
-        upload_docs = stt_collection.find({'userFrom' : upload_userFrom,
-                                           'createdAt': upload_createdAt})
+        upload_docs = stt_collection.find({'userFrom' : upload_userFrom,'createdAt': upload_createdAt})
         for doc in upload_docs:
             stt_texts = doc['text']
         stt_text = ''
@@ -223,7 +221,6 @@ class CommentMaker():
             'score'           : self.score,
             'variety_cmt'     : self.variety_cmt,
             'sentcount_cmt'   : self.sentcount_cmt,
-
             'keywords_cmt'    : self.keywords_cmt,
             'top3_keywords'   : self.top3_keywords,
             'stopwords_cmt'   : self.stopwords_cmt,

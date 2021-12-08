@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
@@ -7,19 +7,39 @@ import txtBsImg from '../../../img/bear.png';
 import { withRouter } from 'react-router-dom';
 
 function Finish(props){
-    const userFrom = localStorage.getItem('userId');
+    const date = '2021-12-01T10:47:43.844Z'
+    const userFrom2 = localStorage.getItem('userId');
+    let userFrom = '61a31288885556a88bc4a138';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
     const [flower, setFlower] = useState(0);
     const [flowers, setFlowers] = useState([]);
+    let isUpdate = false;
 
     let total_comment = "참 잘했어요! 오늘처럼 발표해주세요.";
+
+    const get_flowers = () => {
+        axios.get('/api/report/user', {
+            params: {
+                userFrom: userFrom
+            }
+        }).then((response) => {
+            if (response.data.success) {
+            } else {
+                alert('사용자 정보를 불러오는 데 실패했습니다.');
+            }
+            setFlower((preFlower) => preFlower + response.data.user["flower"]);
+        })
+    }
     
     const mk_flowers = () => {
         let flower_cnt = 0;
         let flower_arr = [];
-        let vision_score, voice_score, word_score, total_score;
+        let vision_score=0;
+        let voice_score = parseInt(voice['score']);
+        let word_score = parseInt(word['score']);
+        let total_score = 0;
 
         if (vision["score"] < 0) {
             vision_score = 0;
@@ -37,10 +57,14 @@ function Finish(props){
         } else {
             flower_cnt = 3;
         }
-        setFlower((preFlower) => preFlower + flower_cnt);
+        if(!isUpdate){
+            setFlower((preFlower) => preFlower + flower_cnt);
+            isUpdate = true;
+        }
+        
 
         for (let i = 0; i < flower_cnt; i++) {
-            flower_arr.push(<img key={i} src={miniFlower} alt='flower-rate'/>);
+            flower_arr.push(<img key={i} src={miniFlower} alt='flowerrate'/>);
         }
         setFlowers(flower_arr);
         return flower_arr;
@@ -53,27 +77,28 @@ function Finish(props){
         } else {
             comments.push(<><span key='vision2'>발표하는 모습이 멋있어요!<br/>다음에는 앞을 많이 쳐다보면 더욱 좋을 것 같아요.</span><br/></>)
         }
-        /*comments.push(<br/>);
-        let comment_arr = ['keywords_cmt_c','stopwords_cmt_c','countwords_cmt_c']
-        comment_arr.forEach( (txt)=>{
-            const tmp = word[txt]
-            comments.push(<><span key={txt}>{tmp}</span><br/></>)
-        })*/
         comments.push(<br/>);
-        let comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
-        comment_arr.forEach( (txt)=>{
+        let comment_arr = ['keywords_cmt_c','stopwords_cmt_c','countwords_cmt_c']
+        comment_arr.forEach( (txt,idx)=>{
+            const tmp = word[txt]
+            comments.push(<><span key={idx+'w'}>{tmp}</span><br/></>)
+        });
+        comments.push(<br/>);
+        comment_arr = ['slient_cmt_c','tempo_cmt_c','volume_cmt_c']
+        comment_arr.forEach( (txt,idx)=>{
             const tmp = voice[txt]
-            comments.push(<><span key={txt}>{tmp}</span><br/></>)
+            comments.push(<><span key={idx+'v'}>{tmp}</span><br/></>)
         })
         return comments;
     };
 
     useEffect(() => {
+        console.log(userFrom);
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
                 // timestamp: props.timestamp
-                timestamp: '2021-11-24T01:09:36.188+00:00'
+                timestamp: date
             },
         }).then((response) => {
             if (response.data.success) {
@@ -87,7 +112,7 @@ function Finish(props){
             params: {
                 userFrom: userFrom,
                 // timestamp: props.timestamp
-                timestamp: '2021-11-24T01:09:36.188+00:00'
+                timestamp: date
             },
         }).then((response) => {
             if (response.data.success) {
@@ -101,7 +126,7 @@ function Finish(props){
             params: {
                 userFrom: userFrom,
                 // timestamp: props.timestamp
-                timestamp: '2021-11-24T01:09:36.188+00:00'
+                timestamp: date
             },
         }).then((response) => {
             if (response.data.success) {
@@ -111,45 +136,37 @@ function Finish(props){
             setWord(response.data.list);
         });
 
-        axios.get('/api/report/user', {
-            params: {
-                userFrom: userFrom
-            }
-        }).then((response) => {
-            if (response.data.success) {
-            } else {
-                alert('사용자 정보를 불러오는 데 실패했습니다.');
-            }
-            setFlower((preFlower) => preFlower + response.data.user["flower"]);
-        })
-
+        get_flowers();
         mk_flowers();
-        total_comment = ""
     }, []);
 
-    const onSubmitHandler = (event) => {
-        event.preventDefault();
-
+    const post_flowers = () => {
         axios.put('/api/report/flower', {
-            userFrom: userFrom,
+            userFrom: userFrom2,
             flower: flower
         }).then((response) => {
             if (response.data.success) {
+                console.log(response.data.user);
+                props.history.push('/home');
             } else {
                 alert('자스민 개수를 업데이트하는 데 실패했습니다.');
             }
         })
+    };
 
-        props.history.push('/home');
+    const onSubmitHandler = (event) => {
+        event.preventDefault();
+        
+        post_flowers();
     };
 
     return (
         <div className='report'>
             <div className="simpleNavi">
-                <img src={logo} alt='logo'/>
+                <img key='logo' style={{paddingLeft:'2vw'}}src={logo} alt='logo'/>
             </div>
             <div className='body'>
-                <div className='content'>
+                <div className='content' id="finish_ctn">
                     <div className="question" id="report_question">
                         <h1 className='title'>오늘도 수고했어요~</h1>
                     </div>
@@ -163,13 +180,13 @@ function Finish(props){
                     </div>
                     <div className='thirdrow third-finish'>
                         <span className='finish-span' id='feedback-title'><img src={txtBsImg} />자스민이 하고싶은 말</span>
-                        <div className='feedback-content finish-feedback-content'>
+                        <div className='feedback-content finish-feedback-content' id="finish-fb">
                             {mk_comments()}
                         </div>
                     </div>
                     
                     <div className="stopButton" id="back">
-                        <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
+                        <form key='form' style={{ display: 'flex', flexDirection: 'column' }} onSubmit={onSubmitHandler}>
                             <button type="submit">끝내기</button>
                         </form>
                     </div>
