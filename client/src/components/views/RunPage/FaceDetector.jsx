@@ -105,7 +105,7 @@ function FaceDetector(props) {
 
         Axios.post('/api/run/vision', body).then((response) => {
             if (response.data.success) {
-                props.history.push('/loading');
+                props.history.push({ pathname: '/loading', date: timestamp, userFrom: userFrom });
             } else {
                 alert('Vision error');
             }
