@@ -6,10 +6,10 @@ import miniFlower from '../../../img/mini_flower.png';
 import txtBsImg from '../../../img/bear.png';
 import { withRouter } from 'react-router-dom';
 
-function Finish(props){
-    const date = '2021-12-01T10:47:43.844Z'
-    const userFrom2 = localStorage.getItem('userId');
-    let userFrom = '61a31288885556a88bc4a138';
+function Finish({props}){
+    const date = props.date;
+    const userFrom = props.userFrom;
+    // let userFrom = '61a31288885556a88bc4a138';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
@@ -97,7 +97,6 @@ function Finish(props){
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
-                // timestamp: props.timestamp
                 timestamp: date
             },
         }).then((response) => {
@@ -111,7 +110,6 @@ function Finish(props){
         axios.get('/api/report/voice', {
             params: {
                 userFrom: userFrom,
-                // timestamp: props.timestamp
                 timestamp: date
             },
         }).then((response) => {
@@ -125,7 +123,6 @@ function Finish(props){
         axios.get('/api/report/word', {
             params: {
                 userFrom: userFrom,
-                // timestamp: props.timestamp
                 timestamp: date
             },
         }).then((response) => {
@@ -136,7 +133,7 @@ function Finish(props){
             setWord(response.data.list);
         });
 
-        get_flowers();
+        // get_flowers();
         mk_flowers();
     }, []);
 
