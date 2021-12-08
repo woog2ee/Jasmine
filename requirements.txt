@@ -1,0 +1,15 @@
+urllib3==1.26.7
+pandas==1.2.4
+librosa==0.8.1
+SoundFile==0.10.3
+numpy==1.21.4
+matplotlib==3.3.4
+pymongo==3.12.1
+certifi==2021.10.08
+requests==2.26.0
+webrtcvad==2.0.10
+wordcloud==1.8.1
+kss==2.5.1
+konlpy==0.5.2
+sklearn==0.24.2
+ffmpeg
