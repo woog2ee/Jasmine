@@ -129,7 +129,7 @@ function Finish(props){
             setWord(response.data.list);
         });
 
-        get_flowers();
+        // get_flowers();
         mk_flowers();
     }, []);
 
