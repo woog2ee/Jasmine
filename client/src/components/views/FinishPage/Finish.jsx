@@ -6,9 +6,9 @@ import miniFlower from '../../../img/mini_flower.png';
 import txtBsImg from '../../../img/bear.png';
 import { withRouter } from 'react-router-dom';
 
-function Finish({props}){
-    const date = props.date;
-    const userFrom = props.userFrom;
+function Finish({state}){
+    const date = state.date;
+    const userFrom = state.userFrom;
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
