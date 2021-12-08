@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const audioSchema = mongoose.Schema({
+const audioSchema = mongoose.Schema(
+{
     userFrom: {
         type: Schema.Types.ObjectID,
         ref: 'User',

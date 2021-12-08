@@ -25,7 +25,7 @@ const ShowButton = styled(animated.button)`
     width: 300px;
     padding: 2rem;
     height: 30%;
-    margin: 8% auto;
+    margin: 0 auto;
     font-size: 30px;
     cursor: pointer;
     font-family: 'CookieRunOTF-Bold';
@@ -57,25 +57,25 @@ function FaceDetector(props) {
         config: config.stiff,
         x: 280,
         opacity: isToggle ? 1 : 0,
-        y: -150,
+        y: -350,
     });
     const appearSlothText = useSpring({
         config: config.stiff,
         x: 130,
         opacity: isToggle ? 1 : 0,
-        y: 0,
+        y: -200,
     });
     const appearKoala = useSpring({
         config: config.stiff,
         x: -690,
         opacity: (isToggle!=false)? 0 : 1,
-        y: 270,
+        y: 100,
     });
     const appearKoalaText = useSpring({
         config: config.stiff,
         x: -200,
         opacity: (isToggle!=false)? 0 : 1,
-        y: 170,
+        y: 0,
     });
     const { x } = useSpring({
         loop: true,
@@ -133,7 +133,7 @@ function FaceDetector(props) {
             console.log(script);
             resetTranscript();
         }
-    }, 10000);
+    }, 5000);
     
     
     const dictStop = async() => {

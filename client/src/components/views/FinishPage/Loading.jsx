@@ -12,11 +12,11 @@ function Loading(props){
         return new Promise((r) => setTimeout(r, ms));
     }
     useEffect(() => {
-        sleep(1000).then(() => {
-            //axios.post('/api/report/voiceandword');
-            // console.log("제발~~");
-        }).then(() => sleep(1000).then(() => props.history.push('/finish')));
-    })
+        sleep(100000).then(() => {
+            console.log("제발~~");
+            axios.post('/api/report/voiceandword');
+        }).then(() => sleep(100000).then(() => props.history.push('/finish')));
+    },[])
 
     return (
         <div className='report'>
@@ -25,7 +25,7 @@ function Loading(props){
             </div>
             <div className="justify-content-center">
                 <div style={{width:'100vw'}}>
-                    <div class="spinner-border text-light" style={{width:'20rem', height: '20rem',margin:'9% auto 0 45%'}} role="status">
+                    <div className="spinner-border text-light" style={{width:'20rem', height: '20rem',margin:'9% auto 0 45%'}} role="status">
                     </div>
                 </div>
                 <div style={{width:'100%'}}>

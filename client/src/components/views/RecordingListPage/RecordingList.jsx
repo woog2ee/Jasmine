@@ -70,8 +70,8 @@ function RecordingList(props) {
                     <h1 className="title">나의 스피치 기록</h1>
                 </div>
                 <div className="list">
-                    {recordTimeList?.map((datetime) => (
-                        <form key={datetime} onSubmit={onReportHandler}>
+                    {recordTimeList?.map((datetime,idx) => (
+                        <form key={idx} onSubmit={onReportHandler}>
                             <Record type="submit" datetime={datetime}>
                                 <span className="date" id="recording_date">
                                     {datetime.substring(0, 10)}
