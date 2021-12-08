@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState} from 'react';
+import React, { useState} from 'react';
 import { useSpring, config, animated } from 'react-spring';
 import Axios from 'axios';
 import { withRouter } from 'react-router-dom';
@@ -12,6 +12,9 @@ import sloth from '../../../img/sloth512.png';
 import koala from '../../../img/koala512.png';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 import useInterval from 'use-interval';
+import download from 'downloadjs';
+import fs from 'fs';
+// import path from 'path';
 
 const CONSTRAINTS = { video: true };
 const ShowButton = styled(animated.button)`
@@ -47,30 +50,31 @@ function FaceDetector(props) {
 
     const [score, setScore] = useState(50);
     const [comment, setComment] = useState('');
-    const [isToggle, setToggle] = useState(false);
+    const [isToggle, setToggle] = useState(null);
+    const [timestamp, setTimestamp] = useState();
 
     const appearSloth = useSpring({
         config: config.stiff,
-        x: 300,
+        x: 280,
         opacity: isToggle ? 1 : 0,
         y: -150,
     });
     const appearSlothText = useSpring({
         config: config.stiff,
-        x: 150,
+        x: 130,
         opacity: isToggle ? 1 : 0,
         y: 0,
     });
     const appearKoala = useSpring({
         config: config.stiff,
-        x: -740,
-        opacity: isToggle ? 0 : 1,
+        x: -690,
+        opacity: (isToggle!=false)? 0 : 1,
         y: 270,
     });
     const appearKoalaText = useSpring({
         config: config.stiff,
-        x: -240,
-        opacity: isToggle ? 0 : 1,
+        x: -200,
+        opacity: (isToggle!=false)? 0 : 1,
         y: 170,
     });
     const { x } = useSpring({
@@ -82,7 +86,6 @@ function FaceDetector(props) {
 
     const allStop = async () => {
         console.log('end~~~');
-        // stop dictaphone'
         dictStop();
         camera.current = null;
         // camera_temp.current = null;
@@ -95,6 +98,7 @@ function FaceDetector(props) {
             userFrom: userFrom,
             score: score,
             comment: comment,
+            createdAt: timestamp,
         };
 
         await allStop();
@@ -118,7 +122,9 @@ function FaceDetector(props) {
         if (!browserSupportsSpeechRecognition) {
             return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
         }
-        
+        const curr = new Date();
+        setTimestamp(curr);
+        console.log(curr);
     };
     useInterval(() => {
         if(!btnVisible){
@@ -127,42 +133,36 @@ function FaceDetector(props) {
             console.log(script);
             resetTranscript();
         }
-    }, 10000);
-    // useEffect(()=>{
-    //     let timerDict = useInterval(() => {
-    //         setScript(script.concat(transcript));
-    //         console.log(transcript);
-    //         console.log(script);
-    //         resetTranscript();
-    //     }, 30000);
-    // },[transcript])
-    
+    }, 5000);
     
     
     const dictStop = async() => {
-        SpeechRecognition.stopListening();
-        setScript(script.concat(transcript));
-        console.log(transcript);
-        console.log(script);
-        
-        let temp = ['안녕하세요 저는 구르미 무슨 맛일까에 대해서 발표할 이불입니다 저는 우선 구름은 여러 종류가 있는 것으로 알고 있는데요 만약 구름이 뚱뚱하고 무거운 소나기를 내릴 비라면 지방이 많은 느끼한 맛이 날 것 같습니다 왜냐하면 무겁기 때문입니다 무거우면 지방이 많은 곳이고 지방이 많으면 느끼한 맛이 나기 때문입니다 그다음으로 만약 깃털같이 높은 곳에 있는 구름이라면 맛이 잘 느껴지지 않을 것 같습니다 만약 그 맛이 느껴진다면 솜사탕 실 같은 얇은 느낌의 달달한 맛이 될 것 같습니다 아니면 오리털 파카에 우리 털이 조금 삐져나온 걸 혀에 넣었을 때 와 같은 비슷한 느낌을 것 같습니다 다음으로 그냥 일반 가을하늘이나 보험 하늘에 떠 있는 구름을 생각해본다면 그런 뭉게뭉게 한 구름은 퍽퍽한 두부 맛이 날 것 같습니다 왜냐하면 두부랑 색깔이 비슷하고 순두부와 비슷하게 생겼기 때문입니다 위의 내용을 정리해 보자면 저는 두 분은 아니 구름은 어떤 구름이냐에 따라서 맛이 다를 것이라고 생각합니다 하지만 모두 하늘에 떠 있는 구름이라는 공통점으로 물 비린내와 같은 그런 냄새가 날 것 같습니다 그렇지만 깃털처럼 생긴 가벼운 구름들은 털이나 얇은 솜사탕 실 같은 그런 식감을 갖고 있을 것 같으며 맛이 매우 희미할 것 같습니다 다음으로 뭉게뭉게 한 구름은 마지막으로 무거운 구름은 느끼한 맛이 날 것 같습니다 이상 발표를 마치겠습니다 감사합니다'];
-        // mongoDB 저장
-        let body = {
-            userFrom: userFrom,
-            text: temp,
-            //text: script,
-            //text: transcript,
-        };
+        setTimeout(async function(){
+            const tmp = script.concat(transcript);
+            SpeechRecognition.stopListening();
+            // setScript(script.concat(transcript));
+            // setScript(() => [...script,transcript]);
+            
+            console.log(transcript);
+            // console.log(script);
+            console.log(tmp);
 
-        await Axios.post('/api/run/speechtext', body).then((response) => {
-            if (response.data.success) {
-            } else {
-                alert('Speechtext error');
-            }
-        });
-
-        resetTranscript();
+            let body = {
+                userFrom: userFrom,
+                text: tmp,
+                createdAt: timestamp,
+                //text: transcript,
+            };
+    
+            await Axios.post('/api/run/speechtext', body).then((response) => {
+                if (response.data.success) {
+                } else {
+                    alert('Speechtext error');
+                }
+            });
+        },1000)
     };
+    
 
     const run = async () => {
         const model = await blazeface.load();
@@ -212,7 +212,7 @@ function FaceDetector(props) {
                         if (!isToggle) {
                             setToggle((isToggle) => true);
                         }
-                        figures.current.innerText = '         얼굴을 보여주세요.';
+                        figures.current.innerText = '         얼굴을 보여주세요.         ';
                     }
                     if (check) {
                         for (let i = 0; i < predictions.length; i++) {
@@ -225,7 +225,7 @@ function FaceDetector(props) {
                                 ) {
                                     figures.current.innerText = '얼굴을 정면으로 향해주세요.';
                                     setScore((preScore) => preScore - 1);
-                                    if (!isToggle) {
+                                    if (isToggle != true) {
                                         setToggle((isToggle) => true);
                                     }
                                 } else {
@@ -266,7 +266,7 @@ function FaceDetector(props) {
             callback(e.target.result);
         };
         reader.readAsDataURL(blob);
-    }
+    };
 
     // audio recorder
     const onStop = (audioData) => {
@@ -282,6 +282,7 @@ function FaceDetector(props) {
         
         let body = {
             userFrom: userFrom,
+            createdAt: timestamp,
         };
         
         Axios.post('/api/run/audio', body).then((response) => {
@@ -290,30 +291,14 @@ function FaceDetector(props) {
                 alert('Audio error');
             }
         });
-
-        /*
-        blobToDataURL(audioData.blob, function (dataurl) {
-            let body = {
-                userFrom: userFrom,
-                audioUrl: dataurl,
-            };
-
-            Axios.post('/api/run/audio', body).then((response) => {
-                if (response.data.success) {
-                } else {
-                    alert('Audio error');
-                }
-            });
-        }); 
-        */
-    };
+    }
 
     const startAudio = () => {
         setRecordState(RecordState.START);
-    };
+    }
     const stopAudio = () => {
         setRecordState(RecordState.STOP);
-    };
+    }
 
     return (
         <div id="FD">
@@ -344,7 +329,6 @@ function FaceDetector(props) {
             )}
 
             <animated.img src={sloth} className="animal" id="sloth" style={appearSloth} />
-
             <animated.div className="text" id="sloth-text" ref={figures} style={appearSlothText} />
             {!btnVisible && <animated.img src={koala} className="animal" id="koala" style={appearKoala} />}
             {!btnVisible && (

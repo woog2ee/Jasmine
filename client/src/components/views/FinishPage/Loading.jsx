@@ -11,10 +11,10 @@ function Loading(props){
     }
     useEffect(() => {
         sleep(100000).then(() => {
-            axios.post('/api/report/voiceandword');
             console.log("제발~~");
+            axios.post('/api/report/voiceandword');
         }).then(() => sleep(100000).then(() => props.history.push('/finish')));
-    })
+    },[])
 
     return (
         <div className='report'>

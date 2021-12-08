@@ -120,7 +120,7 @@ class CommentMaker():
         # 어휘 다양도 판단
         self.variety_cmt = f'어휘 다양도는 아이가 사용한 전체 낱말 중에서 다르게 사용한 낱말의 비율이 얼마인지 측정합니다. '
         self.variety_cmt += '쉽게 말해 아이가 얼마나 다양한 어휘를 구사했는지에 대한 지표로 유아의 경우 20 ~ 40으로 나타난다고 합니다. '
-        self.variety_cmt += '이번 발표에서 아이의 어휘 다양도는 {variety}%로 확인됩니다. '
+        self.variety_cmt += f'이번 발표에서 아이의 어휘 다양도는 {variety}%로 확인됩니다. '
         if variety < 30:
             self.variety_cmt += '아이의 어휘 다양도는 평균 혹은 조금 낮은 편으로 확인되며, 독서활동을 통해 아이가 더욱 다양한 단어를 구사할 수 있도록 지도해주세요.'
         else:

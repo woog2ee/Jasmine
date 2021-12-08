@@ -126,6 +126,7 @@ class CommentMaker():
         self.fast_tempo    = None
         self.small_volume  = None
         self.big_volume    = None
+        self.pronunc_score = None
         
         
         
@@ -305,10 +306,11 @@ class CommentMaker():
         
         
     # 스피치 분석 자료 생성
-    def create_speech_document(self, speak_time, quiet_time, tempo, mean_volume, max_volume):
+    def create_speech_document(self, speak_time, quiet_time, tempo, mean_volume, max_volume, pronunc_score):
         self.make_parent_comment(speak_time, quiet_time, tempo, mean_volume, max_volume)
         self.make_child_comment()
         self.make_score()
+        self.pronunc_score = pronunc_score
         
         
         
@@ -329,7 +331,8 @@ class CommentMaker():
             
             'slient_cmt_c' : self.slient_cmt_c,
             'tempo_cmt_c'  : self.tempo_cmt_c,
-            'volume_cmt_c' : self.volume_cmt_c
+            'volume_cmt_c' : self.volume_cmt_c,
+            '테스트' : str(self.pronunc_score)
          }
         audio_collection.insert(audio_analysis)
 

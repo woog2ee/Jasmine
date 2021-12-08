@@ -7,6 +7,9 @@ const visionSchema = mongoose.Schema(
             type: Schema.Types.ObjectID,
             ref: 'User',
         },
+        createdAt: {
+            type: String,
+        },
         score: {
             type: Number,
             default: 0,

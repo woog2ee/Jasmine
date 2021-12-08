@@ -7,6 +7,9 @@ const audioSchema = mongoose.Schema(
             type: Schema.Types.ObjectID,
             ref: 'User',
         },
+        createdAt: {
+            type: String,
+        },
         audioUrl: {
             type: String,
         },

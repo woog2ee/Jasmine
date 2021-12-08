@@ -7,6 +7,9 @@ const speechtextSchema = mongoose.Schema(
             type: Schema.Types.ObjectID,
             ref: 'User',
         },
+        createdAt: {
+            type: String,
+        },
         text: {
             type: Array,
         },

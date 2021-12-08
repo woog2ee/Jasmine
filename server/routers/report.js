@@ -64,16 +64,22 @@ router.post('/voiceandword', (req, res) => {
     process_voice.stdout.on('data', function(data) {
         console.log(data.toString());
     });
-    process_voice.stderr.on('data', function(data){
+    process_voice.stderr.on('data', function(data) {
         console.error(data.toString());
+    });
+    process_voice.on('close', (code) => {
+        console.log('audio process exited');
     });
 
     var process_text = spawn('python', [__dirname+'/text_analysis/text_analysis.py']);
     process_text.stdout.on('data', function(data) {
         console.log(data.toString());
     });
-    process_text.stderr.on('data', function(data){
+    process_text.stderr.on('data', function(data) {
         console.error(data.toString());
+    });
+    process_text.on('close', (code) => {
+        console.log('text process exited');
     });
 })
 

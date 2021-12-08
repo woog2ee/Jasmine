@@ -289,7 +289,7 @@ if __name__ == '__main__':
     num_sent, len_sent, len_sent_blank_removed = TA.visualize_text4count(stttext)     # 문장 길이 통계
 
     top3_keywords   = WA.text2keywords(stttext)[:3]                    # 키워드 상위 3개
-    top3_stopwords  = WA.text2keywords(stttext)[:3]                    # 불용어 상위 3개
+    top3_stopwords  = WA.text2stopwords(stttext)[:3]                   # 불용어 상위 3개
     top3_countwords = WA.text2countwords(stttext)[:3]                  # 빈도수 높은 단어 상위 3개
     WA.visualize_wordcloud(stttext, 'keywords')       # 키워드 워드클라우드
     WA.visualize_wordcloud(stttext, 'stopwords')      # 불용어 워드클라우드
