@@ -4,9 +4,12 @@ import logo from '../../../img/logo.png'
 import Jasmine from '../../../img/Jasmine.png'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withRouter } from 'react-router-dom';
+import { useLocation } from "react-router";
 
-function Loading({state}){
-    const userFrom = localStorage.getItem('userId');
+function Loading(props){
+    const location = useLocation();
+    const date = location.state.dates;
+    const userFrom = location.state.userFrom;
 
     function sleep(ms) {
         return new Promise((r) => setTimeout(r, ms));
@@ -21,8 +24,8 @@ function Loading({state}){
                 sleep(100000).then(() =>
                     props.history.push({
                         pathname: '/loading',
-                        date: state.date,
-                        userFrom: state.userFrom,
+                        date: date,
+                        userFrom: userFrom,
                     })
                 )
             );

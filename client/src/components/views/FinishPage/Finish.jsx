@@ -5,10 +5,12 @@ import '../../../css/Report.css'
 import miniFlower from '../../../img/mini_flower.png';
 import txtBsImg from '../../../img/bear.png';
 import { withRouter } from 'react-router-dom';
+import { useLocation } from "react-router";
 
-function Finish({state}){
-    const date = state.date;
-    const userFrom = state.userFrom;
+function Finish(props){
+    const location = useLocation();
+    const date = location.state.dates;
+    const userFrom = location.state.userFrom;
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
