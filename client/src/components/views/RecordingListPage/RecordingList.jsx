@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import '../../../css/RecordingList.css';
 import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router';
 
 const Record = styled.button`
     outline: none;
@@ -57,7 +58,14 @@ function RecordingList(props) {
     const onReportHandler = (event, datetime) => {
         event.preventDefault();
 
-        props.history.push({ pathname: '/report', date: datetime, userFrom: localStorage.getItem('userId') });
+        const history = useHistory();
+        history.push({
+            pathname: '/loading',
+            state: {
+                date: timestamp,
+                userFrom: localStorage.getItem('userId')
+            }
+        });
     };
 
     return (
