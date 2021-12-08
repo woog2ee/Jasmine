@@ -5,7 +5,7 @@ import Jasmine from '../../../img/Jasmine.png'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withRouter } from 'react-router-dom';
 
-function Loading({props}){
+function Loading({state}){
     const userFrom = localStorage.getItem('userId');
 
     function sleep(ms) {
@@ -21,8 +21,8 @@ function Loading({props}){
                 sleep(100000).then(() =>
                     props.history.push({
                         pathname: '/loading',
-                        date: props.date,
-                        userFrom: props.userFrom,
+                        date: state.date,
+                        userFrom: state.userFrom,
                     })
                 )
             );
