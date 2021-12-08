@@ -6,8 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 function Report(props){
     const date = '2021-12-01T10:47:43.844Z'
-    // let userFrom = localStorage.getItem('userId');
-    let userFrom = '61a31288885556a88bc4a138';
+    const userFrom = localStorage.getItem('userId');
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);

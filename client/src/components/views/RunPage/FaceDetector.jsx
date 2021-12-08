@@ -126,7 +126,7 @@ function FaceDetector(props) {
         setTimestamp(curr);
         console.log(curr);
     };
-    useInterval(() => {
+    /*useInterval(() => {
         if(!btnVisible){
             setScript(script.concat(transcript));
             console.log(transcript);
@@ -134,7 +134,7 @@ function FaceDetector(props) {
             resetTranscript();
         }
     }, 5000);
-    
+    */
     
     const dictStop = async() => {
         setTimeout(async function(){
