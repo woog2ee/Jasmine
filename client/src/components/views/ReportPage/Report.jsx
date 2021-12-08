@@ -4,9 +4,9 @@ import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
 import { withRouter } from 'react-router-dom';
 
-function Report(props){
+function Report({props}){
     const date = props.date;
-    let userFrom = localStorage.getItem('userId');
+    let userFrom = props.userFrom;
     // let userFrom = '61a31288885556a88bc4a138';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
