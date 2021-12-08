@@ -12,13 +12,13 @@ function Loading({props}){
         return new Promise((r) => setTimeout(r, ms));
     }
     useEffect(() => {
-        sleep(100000)
+        sleep(60000)
             .then(() => {
                 console.log('제발~~');
                 axios.post('/api/report/voiceandword');
             })
             .then(() =>
-                sleep(100000).then(() =>
+                sleep(60000).then(() =>
                     props.history.push({
                         pathname: '/loading',
                         date: props.date,
