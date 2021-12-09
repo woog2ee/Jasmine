@@ -30,6 +30,7 @@ const Record = styled.button`
 function RecordingList(props) {
     // db에서 recording 가져오기
     const [recordTimeList, setRecordTimeList] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         axios.get('/api/report/list', {
@@ -58,11 +59,10 @@ function RecordingList(props) {
     const onReportHandler = (event, datetime) => {
         event.preventDefault();
 
-        const history = useHistory();
         history.push({
             pathname: '/loading',
             state: {
-                date: timestamp,
+                date: datetime,
                 userFrom: localStorage.getItem('userId')
             }
         });

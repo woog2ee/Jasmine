@@ -53,6 +53,7 @@ function FaceDetector(props) {
     const [comment, setComment] = useState('');
     const [isToggle, setToggle] = useState(null);
     const [timestamp, setTimestamp] = useState();
+    const history = useHistory();
 
     const appearSloth = useSpring({
         config: config.stiff,
@@ -104,7 +105,6 @@ function FaceDetector(props) {
 
         await allStop();
 
-        const history = useHistory();
 
         Axios.post('/api/run/vision', body).then((response) => {
             if (response.data.success) {

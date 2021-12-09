@@ -6,22 +6,21 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { withRouter } from 'react-router-dom';
 import { useLocation } from "react-router";
 
-function Loading(props){
-    const location = useLocation();
-    const date = location.state.dates;
-    const userFrom = location.state.userFrom;
+const date = this.props.location.state.date;
+const userFrom = this.props.location.state.userFrom;
 
+function Loading(props){
     function sleep(ms) {
         return new Promise((r) => setTimeout(r, ms));
     }
     useEffect(() => {
-        sleep(60000)
+        sleep(3000) // DB 저장 시간
             .then(() => {
                 console.log('제발~~');
                 axios.post('/api/report/voiceandword');
             })
             .then(() =>
-                sleep(60000).then(() =>
+                sleep(60000).then(() => // 발표 분석 시간
                     props.history.push({
                         pathname: '/loading',
                         date: date,
