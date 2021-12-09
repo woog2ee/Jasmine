@@ -48,24 +48,42 @@ class AudioMaker():
 
 
 
+    # 해당 collection에서 원하는 정보 리턴
+    def mongodb_find(self, docs, column):
+        find_all  = []
+        for doc in docs:
+            try:
+                find  = doc[column]
+                find_all.append(find)
+            except:
+                pass
+        return find_all
+
+
+
     # 오디오 url로 wav 파일 변환
     def get_wav_audio(self):
         # DB에 audio가 올려진 발표 정보
         audio_collection = self.mongodb_connection('audios')
         audio_docs = list(audio_collection.find())
-        audio_userFrom, audio_createdAt = self.mongodb_userinfo(audio_docs)
+        audio_docid = self.mongodb_find(audio_docs, '_id')
 
         # DB에 목소리 분석이 올려진 발표 정보
         voice_collection = self.mongodb_connection('voices')
         voice_docs = list(voice_collection.find())
-        voice_userFrom, voice_createdAt = self.mongodb_userinfo(voice_docs)
+        voice_docid = self.mongodb_find(voice_docs, 'audioId')
 
-        # 'audio는 있으나 목소리 분석이 안올려진 발표'라면 해당 정보를 리턴
-        complement_userFrom  = list(set(audio_userFrom) - set(voice_userFrom))
-        complement_createdAt = list(set(audio_createdAt) - set(voice_createdAt))
-        upload_userFrom  = complement_userFrom[0]
-        upload_createdAt = complement_createdAt[0]
+        # '목소리 분석이 안올려진 발표'라면 해당 정보를 리턴
+        complement_docid  = list(set(audio_docid) - set(voice_docid))
+        try:
+            upload_docid  = complement_docid[0]
+        except:
+            pass
 
+        upload_docs = audio_collection.find({'_id' : upload_docid})
+        for doc in upload_docs:
+            upload_userFrom = doc['userFrom']
+            upload_createdAt = doc['createdAt']
         # 오디오 파일 크롤링
         #upload_docs = audio_collection.find({'userFrom' : upload_userFrom,
         #                                     'createdAt': upload_createdAt})
@@ -75,7 +93,7 @@ class AudioMaker():
         # self.crawl_audio_url(audio_url)
         # self.convert_mp4_to_wav()
         #return 'Jasmine_speech_audio.wav', upload_userFrom, upload_createdAt
-        return upload_userFrom, upload_createdAt
+        return upload_userFrom, upload_createdAt, upload_docid
 
 
 
@@ -106,9 +124,10 @@ class AudioMaker():
 
 
 class CommentMaker():
-    def __init__(self, userFrom, createdAt):
+    def __init__(self, userFrom, createdAt, docid):
         self.userFrom  = userFrom
         self.createdAt = createdAt
+        self.audioId   = docid
         
         self.score         = 100
         self.slient_cmt    = None
@@ -304,11 +323,10 @@ class CommentMaker():
         
         
     # 스피치 분석 자료 생성
-    def create_speech_document(self, speak_time, quiet_time, tempo, mean_volume, max_volume, pronunc_score):
+    def create_speech_document(self, speak_time, quiet_time, tempo, mean_volume, max_volume):
         self.make_parent_comment(speak_time, quiet_time, tempo, mean_volume, max_volume)
         self.make_child_comment()
         self.make_score()
-        self.pronunc_score = pronunc_score
         
         
         
@@ -321,6 +339,7 @@ class CommentMaker():
         audio_analysis = {
             'userFrom'     : self.userFrom,
             'createdAt'    : self.createdAt,
+            'audioId'      : self.audioId,
             
             'score'        : self.score,
             'slient_cmt'   : self.slient_cmt,
