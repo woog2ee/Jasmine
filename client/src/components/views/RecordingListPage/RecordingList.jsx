@@ -60,7 +60,7 @@ function RecordingList(props) {
         props.history.push({
             pathname: '/loading',
             state: {
-                date: timestamp,
+                date: datetime,
                 userFrom: localStorage.getItem('userId')
             }
         });
