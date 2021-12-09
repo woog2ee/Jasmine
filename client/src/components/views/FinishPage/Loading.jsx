@@ -10,13 +10,13 @@ function Loading(props){
         return new Promise((r) => setTimeout(r, ms));
     }
     useEffect(() => {
-        sleep(100000)
+        sleep(60000) // DB 저장 시간
             .then(() => {
                 console.log('제발~~');
                 axios.post('/api/report/voiceandword');
             })
             .then(() =>
-                sleep(100000).then(() =>
+                sleep(60000).then(() => // 발표 분석 시간
                     props.history.push({
                         pathname: '/finish',
                         state: {
@@ -39,9 +39,9 @@ function Loading(props){
                     </div>
                 </div>
                 <div style={{width:'100%'}}>
-                    <div style={{margin:'0 40%'}}>
+                    <div style={{margin:'0 37%'}}>
                         <img src={Jasmine} alt="jasmine" style={{width: '10rem', height: '10rem'}}/>
-                        <span className="text-light" style={{marginLeft:'2rem',fontSize: '30px',fontWeight: '250',fontFamily: 'HSYuji-Regular'}}>Loading...</span>
+                        <span className="text-light" style={{marginLeft:'2rem',fontSize: '30px',fontWeight: '250',fontFamily: 'HSYuji-Regular'}}>잠시만 기다려주세요.</span>
                     </div>
                 </div>
             </div>

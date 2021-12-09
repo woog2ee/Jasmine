@@ -171,13 +171,8 @@ class CommentMaker():
             self.slient_cmt += '발표 중 불필요한 공백을 가지지 않고 말하도록 격려해주세요.'
         else:
             self.slient_cmt += '아이가 발표할 때 말을 오래 끌거나, 말을 오랫동안 하지 않는 경우 없이 적절하게 발표해 주었습니다.'
-<<<<<<< HEAD:server/routers/audio_analysis/make_audiofile.py
         self.speaktime_img = visualize_result(speak_time, '발화 구간', 25)
         self.quiettime_img = visualize_result(quiet_time, '묵음 구간', 10)
-=======
-        self.speaktime_img = visualize_result(speak_time, '시간', '발화 구간', 25)
-        self.quiettime_img = visualize_result(quiet_time, '시간', '묵음 구간', 10)
->>>>>>> master:audio_analysis/make_audiofile.py
 
         
         # 목소리 속도 판단
@@ -335,7 +330,6 @@ class CommentMaker():
             'slient_cmt_c' : self.slient_cmt_c,
             'tempo_cmt_c'  : self.tempo_cmt_c,
             'volume_cmt_c' : self.volume_cmt_c,
-            '테스트' : str(self.pronunc_score)
         }
         audio_collection.insert(audio_analysis)
 
@@ -356,7 +350,15 @@ def visualize_result(value, legend, yrange):
     plt.tick_params(axis='y', left=False)
     #plt.grid(True, axis='y')
     plt.legend(loc='upper left', fontsize=12)
-    plt.savefig(img_save_path+f'\\Jasmine_목소리분석_{legend}.png')
+    if legend == '발화 구간':
+        savename = 'speaktime'
+    elif legend == '묵음 구간':
+        savename = 'slienttime'
+    elif legend == '목소리 속도':
+        savename = 'speed'
+    elif legend == '목소리 크기':
+        savename = 'volume'
+    plt.savefig(img_save_path+f'\\Jasmine_voice_{savename}.png')
 
 
 

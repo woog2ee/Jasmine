@@ -16,7 +16,7 @@ function Finish(props){
 
     let total_comment = "참 잘했어요! 오늘처럼 발표해주세요.";
 
-    const get_flowers = () => {
+    /*const get_flowers = () => {
         axios.get('/api/report/user', {
             params: {
                 userFrom: userFrom
@@ -28,7 +28,7 @@ function Finish(props){
             }
             setFlower((preFlower) => preFlower + response.data.user["flower"]);
         })
-    }
+    }*/
     
     const mk_flowers = () => {
         let flower_cnt = 0;
