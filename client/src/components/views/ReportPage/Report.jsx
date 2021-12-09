@@ -3,12 +3,11 @@ import axios from 'axios';
 import logo from '../../../img/logo.png'
 import '../../../css/Report.css'
 import { withRouter } from 'react-router-dom';
-import { useLocation } from "react-router";
-
-const date = this.props.location.state.date;
-const userFrom = this.props.location.state.userFrom;
 
 function Report(props){
+    const date = props.location.state.date;
+    const userFrom = props.location.state.userFrom;
+    // let userFrom = '61a31288885556a88bc4a138';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);

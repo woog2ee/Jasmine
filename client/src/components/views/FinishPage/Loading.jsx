@@ -4,12 +4,12 @@ import logo from '../../../img/logo.png'
 import Jasmine from '../../../img/Jasmine.png'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withRouter } from 'react-router-dom';
-import { useLocation } from "react-router";
-
-const date = this.props.location.state.date;
-const userFrom = this.props.location.state.userFrom;
 
 function Loading(props){
+    console.log(props)
+    //const userFrom = props.location.state.userFrom;
+    //const date = props.location.state.date;
+
     function sleep(ms) {
         return new Promise((r) => setTimeout(r, ms));
     }
@@ -23,8 +23,8 @@ function Loading(props){
                 sleep(60000).then(() => // 발표 분석 시간
                     props.history.push({
                         pathname: '/loading',
-                        date: date,
-                        userFrom: userFrom,
+                        date: props.location.state.date,
+                        userFrom: props.location.state.userFrom,
                     })
                 )
             );

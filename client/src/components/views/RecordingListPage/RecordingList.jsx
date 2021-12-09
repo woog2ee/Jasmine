@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 import '../../../css/RecordingList.css';
 import { withRouter } from 'react-router-dom';
-import { useHistory } from 'react-router';
 
 const Record = styled.button`
     outline: none;
@@ -30,7 +29,6 @@ const Record = styled.button`
 function RecordingList(props) {
     // db에서 recording 가져오기
     const [recordTimeList, setRecordTimeList] = useState([]);
-    const history = useHistory();
 
     useEffect(() => {
         axios.get('/api/report/list', {
@@ -59,7 +57,7 @@ function RecordingList(props) {
     const onReportHandler = (event, datetime) => {
         event.preventDefault();
 
-        history.push({
+        props.history.push({
             pathname: '/loading',
             state: {
                 date: datetime,
