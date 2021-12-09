@@ -14,6 +14,8 @@ import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 import useInterval from 'use-interval';
 import download from 'downloadjs';
 import fs from 'fs';
+import 'moment-timezone';
+import moment from 'moment';
 // import path from 'path';
 
 const CONSTRAINTS = { video: true };
@@ -128,8 +130,8 @@ function FaceDetector(props) {
         if (!browserSupportsSpeechRecognition) {
             return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
         }
-        let curr = new Date();
-        curr = curr.getTime() + (3600000*9);
+        moment().tz("Asia/Seoul");
+        var curr = moment().format('YYYY-MM-DD HH:mm:ss');
         setTimestamp(curr);
         console.log(curr);
     };
