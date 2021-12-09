@@ -6,9 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { withRouter } from 'react-router-dom';
 
 function Loading(props){
-    const date = props.location.state.date;
-    const userFrom = props.location.state.userFrom;
-
     function sleep(ms) {
         return new Promise((r) => setTimeout(r, ms));
     }
@@ -21,9 +18,9 @@ function Loading(props){
             .then(() =>
                 sleep(100000).then(() =>
                     props.history.push({
-                        pathname: '/loading',
-                        date: date,
-                        userFrom: userFrom,
+                        pathname: '/finish',
+                        date: props.location.state.date,
+                        userFrom: props.location.state.userFrom,
                     })
                 )
             );
