@@ -102,7 +102,7 @@ function Report(props){
                             <img className="wcImg" src={'Jasmine_text_wordcloud_keywords.png'} alt='wordcloud'/>
                             <div className='rank'>
                                 <ul>
-                                    <li>1위:{String(word['top3_keywords']).split(',')[0]}</li>
+                                    <li>1위: {String(word['top3_keywords']).split(',')[0]}</li>
                                     <li>2위:{String(word['top3_keywords']).split(',')[1]}</li>
                                     <li>3위:{String(word['top3_keywords']).split(',')[2]}</li>
                                 </ul>
@@ -121,7 +121,7 @@ function Report(props){
                             <img className="wcImg" src={'Jasmine_text_wordcloud_stopwords.png'} alt='wordcloud'/>
                             <div className='rank'>
                                 <ul>
-                                    <li>1위:{String(word['top3_stopwords']).split(',')[0]}</li>
+                                    <li>1위: {String(word['top3_stopwords']).split(',')[0]}</li>
                                     <li>2위:{String(word['top3_stopwords']).split(',')[1]}</li>
                                     <li>3위:{String(word['top3_stopwords']).split(',')[2]}</li>
                                 </ul>
@@ -155,7 +155,7 @@ function Report(props){
                             <img className="wcImg" id="box3img" src={'Jasmine_text_wordcloud_countwords.png'} alt='wordcloud'/>
                             <div className='rank box3img'>
                                 <ul id="rank-box3">
-                                    <li>1위:{String(word['top3_countwords']).split(',')[0]}</li>
+                                    <li>1위: {String(word['top3_countwords']).split(',')[0]}</li>
                                     <li>2위:{String(word['top3_countwords']).split(',')[1]}</li>
                                     <li>3위:{String(word['top3_countwords']).split(',')[2]}</li>
                                 </ul>

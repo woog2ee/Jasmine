@@ -30,19 +30,14 @@ function Finish(props){
         })
     }*/
     
-    const mk_flowers = () => {
+    function mk_flowers(vision_score, voice_score, word_score) {
         let flower_cnt = 0;
         let flower_arr = [];
-        let vision_score=0;
-        const voice_score = voice['score'];
-        const word_score = word['score'];
 
-        if (vision["score"] < 0) {
+        if (vision_score < 0) {
             vision_score = 0;
-        } else if (vision["score"] > 100) {
+        } else if (vision_score > 100) {
             vision_score = 100;
-        } else {
-            vision_score = vision["score"];
         }
 
         const total_score = vision_score * 0.4 + voice_score * 0.4 + word_score * 0.2;
@@ -57,13 +52,12 @@ function Finish(props){
             setFlower((preFlower) => preFlower + flower_cnt);
             isUpdate = true;
         }
-        
 
         for (let i = 0; i < flower_cnt; i++) {
             flower_arr.push(<img key={i} src={miniFlower} alt='flowerrate'/>);
         }
         setFlowers(flower_arr);
-        console.log(flower_cnt, total_score, vision_score, voice_score, word_score);
+        console.log(vision_score, voice_score, word_score, total_score, flower_cnt);
         return flower_arr;
     }
 
@@ -89,11 +83,14 @@ function Finish(props){
         return comments;
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         const date = props.location.state.date;
         const userFrom = props.location.state.userFrom;
+        let vision_score = 0;
+        let voice_score = 0;
+        let word_score = 0;
 
-        axios.get('/api/report/vision', {
+        await axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
                 timestamp: date
@@ -104,9 +101,11 @@ function Finish(props){
                 alert('발표 태도 분석을 불러오는 데 실패했습니다.');
             }
             setVision(response.data.list);
+            vision_score = response.data.list["score"];
+            console.log(vision_score)
         });
 
-        axios.get('/api/report/voice', {
+        await axios.get('/api/report/voice', {
             params: {
                 userFrom: userFrom,
                 timestamp: date
@@ -117,9 +116,11 @@ function Finish(props){
                 alert('발표 음성 분석을 불러오는 데 실패했습니다.');
             }
             setVoice(response.data.list);
+            voice_score = response.data.list["score"];
+            console.log(voice_score)
         });
 
-        axios.get('/api/report/word', {
+        await axios.get('/api/report/word', {
             params: {
                 userFrom: userFrom,
                 timestamp: date
@@ -130,10 +131,13 @@ function Finish(props){
                 alert('발표 대본 분석을 불러오는 데 실패했습니다.');
             }
             setWord(response.data.list);
+            word_score = response.data.list["score"];
+            console.log(word_score)
         });
 
         // get_flowers();
-        mk_flowers();
+        console.log(vision_score, voice_score, word_score);
+        await mk_flowers(vision_score, voice_score, word_score);
     }, []);
 
     const post_flowers = () => {

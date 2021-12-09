@@ -289,11 +289,11 @@ if __name__ == '__main__':
     num_sent, len_sent, len_sent_blank_removed = TA.visualize_text4count(stttext)     # 문장 길이 통계
 
     keywords      = WA.text2keywords(stttext)                   
-    top3_keywords = WA.words2wordscount(keywords, 'individual')[:3]         # 키워드 상위 3개
+    top3_keywords = list(WA.words2wordscount(keywords, 'individual'))[:3]         # 키워드 상위 3개
     stopwords      = WA.text2stopwords(stttext)                   
-    top3_stopwords = WA.words2wordscount(stopwords, 'none')[:3]             # 불용어 상위 3개
+    top3_stopwords = list(WA.words2wordscount(stopwords, 'none'))[:3]             # 불용어 상위 3개
     countwords      = WA.text2countwords(stttext)                 
-    top3_countwords = WA.words2wordscount(countwords, 'countwords')[:3]     # 빈도수 높은 단어 상위 3개
+    top3_countwords = list(WA.words2wordscount(countwords, 'countwords'))[:3]     # 빈도수 높은 단어 상위 3개
     WA.visualize_wordcloud(stttext, 'keywords')       # 키워드 워드클라우드
     WA.visualize_wordcloud(stttext, 'stopwords')      # 불용어 워드클라우드
     WA.visualize_wordcloud(stttext, 'countwords')     # 빈도수 높은 단어 워드클라우드
