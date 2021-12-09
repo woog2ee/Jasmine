@@ -19,8 +19,10 @@ function Loading(props){
                 sleep(60000).then(() => // 발표 분석 시간
                     props.history.push({
                         pathname: '/finish',
-                        date: props.location.state.date,
-                        userFrom: props.location.state.userFrom,
+                        state: {
+                            date: props.location.state.date,
+                            userFrom: props.location.state.userFrom
+                        }
                     })
                 )
             );
