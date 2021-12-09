@@ -30,23 +30,17 @@ function Finish(props){
         })
     }*/
     
-    const mk_flowers = () => {
+    const mk_flowers = (vision_score, voice_score, word_score) => {
         let flower_cnt = 0;
         let flower_arr = [];
-        let vision_score=0;
-        let voice_score = parseInt(voice['score']);
-        let word_score = parseInt(word['score']);
-        let total_score = 0;
 
-        if (vision["score"] < 0) {
+        if (vision_score < 0) {
             vision_score = 0;
-        } else if (vision["score"] > 100) {
+        } else if (vision_score > 100) {
             vision_score = 100;
-        } else {
-            vision_score = vision["score"];
         }
 
-        total_score = vision_score * 0.4 + voice_score * 0.4 + word_score * 0.2;
+        const total_score = vision_score * 0.4 + voice_score * 0.4 + word_score * 0.2;
         if (total_score >= 80) {
             flower_cnt = 5;
         } else if (total_score >= 50) {
@@ -63,6 +57,7 @@ function Finish(props){
             flower_arr.push(<img key={i} src={miniFlower} alt='flowerrate'/>);
         }
         setFlowers(flower_arr);
+        console.log(vision_score, voice_score, word_score, total_score, flower_cnt);
         return flower_arr;
     }
 
@@ -91,6 +86,9 @@ function Finish(props){
     useEffect(() => {
         const date = props.location.state.date;
         const userFrom = props.location.state.userFrom;
+        let vision_score = 0;
+        let voice_score = 0;
+        let word_score = 0;
 
         axios.get('/api/report/vision', {
             params: {
@@ -103,6 +101,7 @@ function Finish(props){
                 alert('발표 태도 분석을 불러오는 데 실패했습니다.');
             }
             setVision(response.data.list);
+            vision_score = response.data.list["score"];
         });
 
         axios.get('/api/report/voice', {
@@ -116,6 +115,7 @@ function Finish(props){
                 alert('발표 음성 분석을 불러오는 데 실패했습니다.');
             }
             setVoice(response.data.list);
+            voice_score = response.data.list["score"];
         });
 
         axios.get('/api/report/word', {
@@ -129,10 +129,11 @@ function Finish(props){
                 alert('발표 대본 분석을 불러오는 데 실패했습니다.');
             }
             setWord(response.data.list);
+            word_score = response.data.list["score"];
         });
 
         // get_flowers();
-        mk_flowers();
+        mk_flowers(vision_score, voice_score, word_score);
     }, []);
 
     const post_flowers = () => {
