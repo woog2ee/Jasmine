@@ -19,8 +19,10 @@ function Loading(props){
                 sleep(100000).then(() =>
                     props.history.push({
                         pathname: '/finish',
-                        date: props.location.state.date,
-                        userFrom: props.location.state.userFrom,
+                        state: {
+                            date: props.location.state.date,
+                            userFrom: props.location.state.userFrom
+                        }
                     })
                 )
             );
