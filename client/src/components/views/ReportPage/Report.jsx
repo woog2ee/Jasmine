@@ -5,9 +5,6 @@ import '../../../css/Report.css'
 import { withRouter } from 'react-router-dom';
 
 function Report(props){
-    const date = props.location.state.date;
-    const userFrom = props.location.state.userFrom;
-    // let userFrom = '61a31288885556a88bc4a138';
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
@@ -33,6 +30,9 @@ function Report(props){
     };
 
     useEffect(() => {
+        const date = props.location.state.date;
+        const userFrom = props.location.state.userFrom;
+        
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
@@ -72,7 +72,7 @@ function Report(props){
             }
             setWord(response.data.list);
         });
-    }, [userFrom,props.timestamp]);
+    }, []);
 
     const onSubmitHandler = (event) => {
         event.preventDefault();

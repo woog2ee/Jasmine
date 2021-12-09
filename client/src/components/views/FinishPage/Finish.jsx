@@ -5,12 +5,8 @@ import '../../../css/Report.css'
 import miniFlower from '../../../img/mini_flower.png';
 import txtBsImg from '../../../img/bear.png';
 import { withRouter } from 'react-router-dom';
-import { useLocation } from "react-router";
 
 function Finish(props){
-    const location = useLocation();
-    const date = location.state.dates;
-    const userFrom = location.state.userFrom;
     const [vision, setVision] = useState([]);
     const [voice, setVoice] = useState([]);
     const [word, setWord] = useState([]);
@@ -20,7 +16,7 @@ function Finish(props){
 
     let total_comment = "참 잘했어요! 오늘처럼 발표해주세요.";
 
-    const get_flowers = () => {
+    /*const get_flowers = () => {
         axios.get('/api/report/user', {
             params: {
                 userFrom: userFrom
@@ -32,7 +28,7 @@ function Finish(props){
             }
             setFlower((preFlower) => preFlower + response.data.user["flower"]);
         })
-    }
+    }*/
     
     const mk_flowers = () => {
         let flower_cnt = 0;
@@ -94,7 +90,9 @@ function Finish(props){
     };
 
     useEffect(() => {
-        console.log(userFrom);
+        const date = props.location.state.date;
+        const userFrom = props.location.state.userFrom;
+
         axios.get('/api/report/vision', {
             params: {
                 userFrom: userFrom,
@@ -140,7 +138,7 @@ function Finish(props){
 
     const post_flowers = () => {
         axios.put('/api/report/flower', {
-            userFrom: userFrom,
+            userFrom: props.location.state.userFrom,
             flower: flower
         }).then((response) => {
             if (response.data.success) {
