@@ -199,18 +199,18 @@ def get_stt_texts(createdAt):
 if __name__ == '__main__':
     # 오디오 파일 및 유저 정보 로드
     audiofile = 'C:/Users/USER/Downloads/Jasmine_음성파일.wav'
-    userFrom, createdAt = AudioMaker().get_wav_audio()     
+    userFrom, createdAt, docid = AudioMaker().get_wav_audio()     
     
     SA = SlientAnalyzer(audiofile)           # 묵음 분석 클래스
     AA = AudioAnalyzer(audiofile)            # 오디오 분석 클래스
     AA.trim_audiofile(audiofile, 5)          # 5초 단위로 오디오 분리
-    stt_texts = get_stt_texts(createdAt)     # 5초 단위 발표 텍스트
+    #stt_texts = get_stt_texts(createdAt)     # 5초 단위 발표 텍스트
     
     speak_time, quiet_time = SA.slient_analyze(audiofile)     # 발화 시작 및 끝 구간
     tempo       = []                                          # 발표 구간의 속도
     mean_volume = []                                          # 발표 구간의 최소 볼륨
     max_volume  = []                                          # 발표 구간의 최대 볼륨
-    pronunc_score = []                                        # 발음평가 점수
+    #pronunc_score = []                                        # 발음평가 점수
 
     # 5초 단위로 분리한 오디오로 분석
     for i in range(AA.cnt):
@@ -222,16 +222,16 @@ if __name__ == '__main__':
 
         cur_tempo = AA.detect_audio_bpm(cur_audiofile)
         cur_mean_volume, cur_max_volume = AA.detect_audio_decibel(cur_audiofile)
-        cur_pronunc_score = AA.get_pronunciation_score(cur_audiofile, stt_texts[i])
+        #cur_pronunc_score = AA.get_pronunciation_score(cur_audiofile, stt_texts[i])
 
         tempo.append(cur_tempo)
         mean_volume.append(cur_mean_volume)
         max_volume.append(cur_max_volume)
-        pronunc_score.append(cur_pronunc_score)
+        #pronunc_score.append(cur_pronunc_score)
 
     # 분석 자료 만들고 MongoDB에 업로드
-    CM = CommentMaker(userFrom, createdAt)
-    CM.create_speech_document(speak_time, quiet_time, tempo, mean_volume, max_volume, pronunc_score)
+    CM = CommentMaker(userFrom, createdAt, docid)
+    CM.create_speech_document(speak_time, quiet_time, tempo, mean_volume, max_volume)
     CM.upload_speech_document()
 
     # 분석한 오디오 파일 지우기

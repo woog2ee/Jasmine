@@ -49,40 +49,57 @@ class TextMaker():
         return userFrom_all, createdAt_all
 
     
+
+    # 해당 collection에서 원하는 정보 리턴
+    def mongodb_find(self, docs, column):
+        find_all  = []
+        for doc in docs:
+            try:
+                find  = doc[column]
+                find_all.append(find)
+            except:
+                pass
+        return find_all
+
+    
     
     # stt text를 반환
     def get_stt_text(self):
         # DB에 stt가 올려진 발표 정보
         stt_collection = self.mongodb_connection('speechtexts')
         stt_docs = list(stt_collection.find())
-        stt_userFrom, stt_createdAt = self.mongodb_userinfo(stt_docs)
+        stt_docid = self.mongodb_find(stt_docs, '_id')
 
         # DB에 내용 분석이 올려진 발표 정보
         text_collection = self.mongodb_connection('words')
         text_docs = list(text_collection.find())
-        text_userFrom, text_createdAt = self.mongodb_userinfo(text_docs)
+        text_docid = self.mongodb_find(text_docs, 'speechtextId')
 
-        # 'stt는 있으나 내용 분석이 안올려진 발표'라면 해당 정보를 리턴
-        complement_userFrom  = list(set(stt_userFrom) - set(text_userFrom))
-        complement_createdAt = list(set(stt_createdAt) - set(text_createdAt))
-        upload_userFrom  = complement_userFrom[0]
-        upload_createdAt = complement_createdAt[0]
+        # '내용 분석이 안올려진 발표'라면 해당 정보를 리턴
+        complement_docid  = list(set(stt_docid) - set(text_docid))
+        try:
+            upload_docid  = complement_docid[0]
+        except:
+            pass
 
-        upload_docs = stt_collection.find({'userFrom' : upload_userFrom,'createdAt': upload_createdAt})
+        upload_docs = stt_collection.find({'_id' : upload_docid})
         for doc in upload_docs:
             stt_texts = doc['text']
+            upload_userFrom = doc['userFrom']
+            upload_createdAt = doc['createdAt']
         #stt_text = ''
         #for text in stt_texts:
         #    stt_text += text
         #    stt_text += ' '
-        return stt_texts, upload_userFrom, upload_createdAt
+        return stt_texts, upload_userFrom, upload_createdAt, upload_docid
 
 
 
 class CommentMaker():
-    def __init__(self, userFrom, createdAt):
-        self.userFrom  = userFrom
-        self.createdAt = createdAt
+    def __init__(self, userFrom, createdAt, docid):
+        self.userFrom     = userFrom
+        self.createdAt    = createdAt
+        self.speechtextId = docid
         
         self.score            = None
         self.variety_cmt      = None
@@ -109,7 +126,7 @@ class CommentMaker():
             score = variety / 3
         else:
             score = variety / 2.5
-        score *= 3.5
+        score *= 3
         if score >= 100:
             self.score = 100
         else:
@@ -220,7 +237,8 @@ class CommentMaker():
         # image는 별도의 폴더에 따로 저장됨
         text_analysis = {
             'userFrom'        : self.userFrom,
-            'createdAt'       : self.createdAt, 
+            'createdAt'       : self.createdAt,
+            'speechtextId'    : self.speechtextId,
             
             'score'           : self.score,
             'variety_cmt'     : self.variety_cmt,

@@ -94,10 +94,10 @@ class TextAnalyzer:
         num_len_sent = np.arange(1, len(len_sent)+1, 1)
         num_len_sent_blank_removed = np.arange(1, len(len_sent_blank_removed)+1, 1)
 
-        plt.xlabel('문장 순서')
-        plt.ylabel('문장 길이')
-        plt.bar(num_len_sent, len_sent, label='공백포함', color='#f99dff')
-        plt.bar(num_len_sent_blank_removed, len_sent_blank_removed, label='공백제외', color='#c54ac7')
+        #plt.xlabel('문장 순서')
+        #plt.ylabel('문장 길이')
+        plt.bar(num_len_sent, len_sent, label='공백포함 문장길이', color='#f99dff', fontsize=12)
+        plt.bar(num_len_sent_blank_removed, len_sent_blank_removed, label='공백제외 문장길이', color='#c54ac7', fontsize=12)
         #plt.tick_params(left=False, bottom=False)
         plt.xticks([])
         plt.yticks([])
@@ -279,7 +279,7 @@ def encode_image_tobase64(imagepath):
 
 
 if __name__ == '__main__':
-    stttext, userFrom, createdAt = TextMaker().get_stt_text()     # 발표 텍스트 및 유저 정보 로드
+    stttext, userFrom, createdAt, docid = TextMaker().get_stt_text()     # 발표 텍스트 및 유저 정보 로드
     img_save_path = os.getcwd()+'\\client\\public'
     
     TA = TextAnalyzer()     # 텍스트 분석 클래스
@@ -296,6 +296,6 @@ if __name__ == '__main__':
     WA.visualize_wordcloud(stttext, 'countwords')     # 빈도수 높은 단어 워드클라우드
 
     # 분석 자료 만들고 MongoDB에 업로드
-    CM = CommentMaker(userFrom, createdAt)
+    CM = CommentMaker(userFrom, createdAt, docid)
     CM.create_speech_document(variety, num_sent, len_sent, top3_keywords, top3_stopwords, top3_countwords)
     CM.upload_speech_document()
