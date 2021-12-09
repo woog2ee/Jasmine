@@ -369,6 +369,7 @@ def visualize_result(value, legend, yrange):
     plt.tick_params(axis='y', left=False)
     #plt.grid(True, axis='y')
     plt.legend(loc='upper left', fontsize=12)
+    
     if legend == '발화 구간':
         savename = 'speaktime'
     elif legend == '묵음 구간':

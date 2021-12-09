@@ -96,12 +96,12 @@ class TextAnalyzer:
 
         #plt.xlabel('문장 순서')
         #plt.ylabel('문장 길이')
-        plt.bar(num_len_sent, len_sent, label='공백포함 문장길이', color='#f99dff', fontsize=12)
-        plt.bar(num_len_sent_blank_removed, len_sent_blank_removed, label='공백제외 문장길이', color='#c54ac7', fontsize=12)
+        plt.bar(num_len_sent, len_sent, label='공백포함 문장길이', color='#f99dff')
+        plt.bar(num_len_sent_blank_removed, len_sent_blank_removed, label='공백제외 문장길이', color='#c54ac7')
         #plt.tick_params(left=False, bottom=False)
         plt.xticks([])
         plt.yticks([])
-        plt.legend(loc='upper left', frameon=False, fontsize=10)
+        plt.legend(loc='upper left', fontsize=12, frameon=False)
         plt.savefig(img_save_path+'\\Jasmine_text_sentcount.png')
         return num_sent, len_sent, len_sent_blank_removed
         
@@ -228,9 +228,9 @@ class WordAnalyzer:
         if counttype == 'count':
             dict_key = list(wordscount.keys())
             for i in dict_key:
-                if len(i) == 1:
-                    del(wordscount[i])
-                    continue
+                #if len(i) == 1:
+                #    del(wordscount[i])
+                #    continue
                 
                 if wordscount[i] == 1:
                     del(wordscount[i])
@@ -288,9 +288,12 @@ if __name__ == '__main__':
     variety = TA.text2variety(stttext)                                                               # 어휘 다양도
     num_sent, len_sent, len_sent_blank_removed = TA.visualize_text4count(stttext)     # 문장 길이 통계
 
-    top3_keywords   = WA.text2keywords(stttext)[:3]                    # 키워드 상위 3개
-    top3_stopwords  = WA.text2stopwords(stttext)[:3]                   # 불용어 상위 3개
-    top3_countwords = WA.text2countwords(stttext)[:3]                  # 빈도수 높은 단어 상위 3개
+    keywords      = WA.text2keywords(stttext)                   
+    top3_keywords = WA.words2wordscount(keywords, 'individual')[:3]         # 키워드 상위 3개
+    stopwords      = WA.text2stopwords(stttext)                   
+    top3_stopwords = WA.words2wordscount(stopwords, 'none')[:3]             # 불용어 상위 3개
+    countwords      = WA.text2countwords(stttext)                 
+    top3_countwords = WA.words2wordscount(countwords, 'countwords')[:3]     # 빈도수 높은 단어 상위 3개
     WA.visualize_wordcloud(stttext, 'keywords')       # 키워드 워드클라우드
     WA.visualize_wordcloud(stttext, 'stopwords')      # 불용어 워드클라우드
     WA.visualize_wordcloud(stttext, 'countwords')     # 빈도수 높은 단어 워드클라우드

@@ -34,9 +34,8 @@ function Finish(props){
         let flower_cnt = 0;
         let flower_arr = [];
         let vision_score=0;
-        let voice_score = parseInt(voice['score']);
-        let word_score = parseInt(word['score']);
-        let total_score = 0;
+        const voice_score = voice['score'];
+        const word_score = word['score'];
 
         if (vision["score"] < 0) {
             vision_score = 0;
@@ -46,7 +45,7 @@ function Finish(props){
             vision_score = vision["score"];
         }
 
-        total_score = vision_score * 0.4 + voice_score * 0.4 + word_score * 0.2;
+        const total_score = vision_score * 0.4 + voice_score * 0.4 + word_score * 0.2;
         if (total_score >= 80) {
             flower_cnt = 5;
         } else if (total_score >= 50) {
@@ -64,6 +63,7 @@ function Finish(props){
             flower_arr.push(<img key={i} src={miniFlower} alt='flowerrate'/>);
         }
         setFlowers(flower_arr);
+        console.log(flower_cnt, total_score, vision_score, voice_score, word_score);
         return flower_arr;
     }
 
