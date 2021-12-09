@@ -2,7 +2,6 @@ import React, { useState} from 'react';
 import { useSpring, config, animated } from 'react-spring';
 import Axios from 'axios';
 import { withRouter } from 'react-router-dom';
-import { useHistory } from 'react-router';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
@@ -104,11 +103,9 @@ function FaceDetector(props) {
 
         await allStop();
 
-        const history = useHistory();
-
         Axios.post('/api/run/vision', body).then((response) => {
             if (response.data.success) {
-                history.push({
+                props.history.push({
                     pathname: '/loading',
                     state: {
                         date: timestamp,

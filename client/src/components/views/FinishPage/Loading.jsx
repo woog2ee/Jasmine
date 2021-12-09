@@ -4,12 +4,10 @@ import logo from '../../../img/logo.png'
 import Jasmine from '../../../img/Jasmine.png'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withRouter } from 'react-router-dom';
-import { useLocation } from "react-router";
 
 function Loading(props){
-    const location = useLocation();
-    const date = location.state.dates;
-    const userFrom = location.state.userFrom;
+    const date = props.location.state.date;
+    const userFrom = props.location.state.userFrom;
 
     function sleep(ms) {
         return new Promise((r) => setTimeout(r, ms));
