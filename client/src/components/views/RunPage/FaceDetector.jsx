@@ -128,7 +128,8 @@ function FaceDetector(props) {
         if (!browserSupportsSpeechRecognition) {
             return <span>브라우저가 음성인식을 지원하지 않습니다.</span>;
         }
-        const curr = new Date();
+        let curr = new Date();
+        curr = curr.getTime() + (3600000*9);
         setTimestamp(curr);
         console.log(curr);
     };
@@ -152,6 +153,7 @@ function FaceDetector(props) {
             console.log(transcript);
             // console.log(script);
             console.log(tmp);
+            console.log(timestamp);
 
             let body = {
                 userFrom: userFrom,

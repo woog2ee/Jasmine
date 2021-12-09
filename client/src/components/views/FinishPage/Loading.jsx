@@ -10,7 +10,7 @@ function Loading(props){
         return new Promise((r) => setTimeout(r, ms));
     }
     useEffect(() => {
-        sleep(3000) // DB 저장 시간
+        sleep(60000) // DB 저장 시간
             .then(() => {
                 console.log('제발~~');
                 axios.post('/api/report/voiceandword');

@@ -26,8 +26,8 @@ function App() {
                     <Route exact path="/loading" component={Auth(Loading, true)} />
                     <Route exact path="/finish" component={Auth(Finish, true)} />
                     <Route exact path="/list" component={Auth(RecordingList, true)} />
+                    <Route exact path="/report" component={Auth(Report, true)} />
                 </Switch>
-                <Route exact path="/report" component={Auth(Report, true)} />
             </div>
         </Router>
     );

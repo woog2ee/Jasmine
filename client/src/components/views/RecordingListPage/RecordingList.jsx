@@ -58,7 +58,7 @@ function RecordingList(props) {
         event.preventDefault();
 
         props.history.push({
-            pathname: '/loading',
+            pathname: '/report',
             state: {
                 date: datetime,
                 userFrom: localStorage.getItem('userId')
@@ -77,7 +77,7 @@ function RecordingList(props) {
                 </div>
                 <div className="list">
                     {recordTimeList?.map((datetime,idx) => (
-                        <form key={idx} onSubmit={onReportHandler(datetime)}>
+                        <form key={idx} onSubmit={(event) => onReportHandler(event,datetime)}>
                             <Record type="submit" datetime={datetime}>
                                 <span className="date" id="recording_date">
                                     {datetime.substring(0, 10)}

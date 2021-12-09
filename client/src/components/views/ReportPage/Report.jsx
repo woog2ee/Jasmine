@@ -99,7 +99,7 @@ function Report(props){
                             키워드
                         </span>
                         <div className='wordcloud'>
-                            <img className="wcImg" src={'Jasmine_내용분석_워드클라우드 keywords.png'} alt='wordcloud'/>
+                            <img className="wcImg" src={'Jasmine_text_wordcloud_keywords.png'} alt='wordcloud'/>
                             <div className='rank'>
                                 <ul>
                                     <li>1위:{String(word['top3_keywords']).split(',')[0]}</li>
@@ -118,7 +118,7 @@ function Report(props){
                             필요 없는 단어
                         </span>
                         <div className='wordcloud'>
-                            <img className="wcImg" src={'Jasmine_내용분석_워드클라우드 stopwords.png'} alt='wordcloud'/>
+                            <img className="wcImg" src={'Jasmine_text_wordcloud_stopwords.png'} alt='wordcloud'/>
                             <div className='rank'>
                                 <ul>
                                     <li>1위:{String(word['top3_stopwords']).split(',')[0]}</li>
@@ -152,7 +152,7 @@ function Report(props){
                             많이 사용한 단어
                         </span>
                         <div className='wordcloud'>
-                            <img className="wcImg" id="box3img" src={'Jasmine_내용분석_워드클라우드 countwords.png'} alt='wordcloud'/>
+                            <img className="wcImg" id="box3img" src={'Jasmine_text_wordcloud_countwords.png'} alt='wordcloud'/>
                             <div className='rank box3img'>
                                 <ul id="rank-box3">
                                     <li>1위:{String(word['top3_countwords']).split(',')[0]}</li>
@@ -170,7 +170,7 @@ function Report(props){
                             문장 사용
                         </span>
                         <div className='wordcloud'>
-                            <img className="scImg" src={'Jasmine_내용분석_문장 길이.png'} alt='wordcloud'/>
+                            <img className="scImg" src={'Jasmine_text_sentcount.png'} alt='wordcloud'/>
                         </div>
                         <div className='feedback-content subCmt'>
                             <span>{word['sentcount_cmt']}</span>
@@ -181,7 +181,7 @@ function Report(props){
                             발화와 묵음 구간
                         </span>
                         <div className='wordcloud'>
-                            <img className="scImg" src={'Jasmine_목소리분석_묵음 구간.png'} alt='wordcloud'/>
+                            <img className="scImg" src={'Jasmine_voice_slienttime.png'} alt='wordcloud'/>
                         </div>
                     </div>
                     
@@ -190,7 +190,7 @@ function Report(props){
                             발화와 묵음구간2
                         </span>
                         <div className='wordcloud'>
-                            <img className="scImg" src={'Jasmine_목소리분석_발화 구간.png'} alt='wordcloud'/>
+                            <img className="scImg" src={'Jasmine_voice_speaktime.png'} alt='wordcloud'/>
                         </div>
                     </div>
                     <div className='feedback-content subCmt'>
@@ -201,7 +201,7 @@ function Report(props){
                             발화 속도
                         </span>
                         <div className='wordcloud'>
-                            <img className="scImg" src={'Jasmine_목소리분석_목소리 속도.png'} alt='wordcloud'/>
+                            <img className="scImg" src={'Jasmine_voice_speed.png'} alt='wordcloud'/>
                         </div>
                         <div className='feedback-content subCmt'>
                             <span>{voice['tempo_cmt']}</span>
@@ -212,7 +212,7 @@ function Report(props){
                             발화 크기
                         </span>
                         <div className='wordcloud'>
-                            <img className="scImg" src={'Jasmine_목소리분석_목소리 크기.png'} alt='wordcloud'/>
+                            <img className="scImg" src={'Jasmine_voice_volume.png'} alt='wordcloud'/>
                         </div>
                         <div className='feedback-content subCmt'>
                             <span>{voice['volume_cmt']}</span>

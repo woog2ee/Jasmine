@@ -109,7 +109,11 @@ class CommentMaker():
             score = variety / 3
         else:
             score = variety / 2.5
-        self.score = math.floor(score)
+        score *= 3.5
+        if score >= 100:
+            self.score = 100
+        else:
+            self.score = math.floor(score)
     
     
     

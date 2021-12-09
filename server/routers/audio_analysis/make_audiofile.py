@@ -124,7 +124,7 @@ class CommentMaker():
         self.fast_tempo    = None
         self.small_volume  = None
         self.big_volume    = None
-        #self.pronunc_score = None
+        self.pronunc_score = None
         
         
         
@@ -304,11 +304,11 @@ class CommentMaker():
         
         
     # 스피치 분석 자료 생성
-    def create_speech_document(self, speak_time, quiet_time, tempo, mean_volume, max_volume):
+    def create_speech_document(self, speak_time, quiet_time, tempo, mean_volume, max_volume, pronunc_score):
         self.make_parent_comment(speak_time, quiet_time, tempo, mean_volume, max_volume)
         self.make_child_comment()
         self.make_score()
-        #self.pronunc_score = pronunc_score
+        self.pronunc_score = pronunc_score
         
         
         
@@ -350,7 +350,15 @@ def visualize_result(value, legend, yrange):
     plt.tick_params(axis='y', left=False)
     #plt.grid(True, axis='y')
     plt.legend(loc='upper left', fontsize=12)
-    plt.savefig(img_save_path+f'\\Jasmine_목소리분석_{legend}.png')
+    if legend == '발화 구간':
+        savename = 'speaktime'
+    elif legend == '묵음 구간':
+        savename = 'slienttime'
+    elif legend == '목소리 속도':
+        savename = 'speed'
+    elif legend == '목소리 크기':
+        savename = 'volume'
+    plt.savefig(img_save_path+f'\\Jasmine_voice_{savename}.png')
 
 
 
