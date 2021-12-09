@@ -58,7 +58,6 @@ function Finish(props){
             setFlower((preFlower) => preFlower + flower_cnt);
             isUpdate = true;
         }
-        
 
         for (let i = 0; i < flower_cnt; i++) {
             flower_arr.push(<img key={i} src={miniFlower} alt='flowerrate'/>);
