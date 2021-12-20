@@ -1,7 +1,7 @@
 # Jasmine
 CAU 2021-2 Capstone Design Project Repository   
 Check more Detail at [Link](http://www.swaicau.com/bbs/board.php?bo_table=program8&wr_id=25)   
-Check out Presentation at [Link](https://youtu.be/AJ_jO4Orc58)
+Check out Presentation at [Link](https://youtu.be/AJ_jO4Orc58) - Youtube Link
 
 ## 👪 Teammates
 - Team name: **자신만만 스피치 비타민, 자스민(Jasmine)**
@@ -32,7 +32,9 @@ Check out Presentation at [Link](https://youtu.be/AJ_jO4Orc58)
 ![image](https://user-images.githubusercontent.com/80081345/144621825-ac4b2991-24ce-4df7-b8fc-55ae33320c2b.png)
 
 **Analysis Page 2**: Text analysis results are presented on the parent interface
-![image](https://user-images.githubusercontent.com/80081345/144622052-24386582-c083-46aa-811a-cfcc61e0b2ef.png)
+<img width="1440" alt="report첫화면" src="https://user-images.githubusercontent.com/55435898/146735119-31296701-df0e-47e3-89ad-e622c184f56f.png">
+
+
 
 ## 🚂 Pipeline
 ### 1. User sign up and Login at landing page
