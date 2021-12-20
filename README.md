@@ -10,6 +10,10 @@ Check out Presentation at [Link](https://youtu.be/AJ_jO4Orc58) - Youtube Link
 - **Sanghwa Lee**: School of Computer Science & Engineering in CAU, Team Leader
 
 ## 💡 Prototype
+**Flow**
+
+<img width="710" alt="스크린샷 2021-12-20 오후 5 26 12" src="https://user-images.githubusercontent.com/55435898/146735866-f4df9525-deda-4423-bd5e-39ee8b804397.png">
+
 **Entire Logic**: Overall UI logic for our Jasmine service
 ![image](https://user-images.githubusercontent.com/80081345/144620776-15dbdcc2-a138-473c-84e4-6771fed889b6.png)
 
